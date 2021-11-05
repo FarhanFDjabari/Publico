@@ -1,21 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-import 'package:publico/presentation/pages/auth/forget_password_page.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:publico/presentation/widgets/primary_button.dart';
 import 'package:publico/styles/colors.dart';
 import 'package:publico/styles/text_styles.dart';
 
-class LoginPage extends StatefulWidget {
-  static const routeName = '/login';
-  const LoginPage({Key? key}) : super(key: key);
+class ForgetPasswordPage extends StatelessWidget {
+  static const routeName = '/reset-password';
+  ForgetPasswordPage({Key? key}) : super(key: key);
 
-  @override
-  State<LoginPage> createState() => _LoginPageState();
-}
-
-class _LoginPageState extends State<LoginPage> {
   final _formKey = GlobalKey<FormState>();
-  bool _isObscured = true;
 
   @override
   Widget build(BuildContext context) {
@@ -34,7 +27,7 @@ class _LoginPageState extends State<LoginPage> {
                 ),
                 const SizedBox(height: 20),
                 Text(
-                  'Masuk Untuk Admin Aplikasi',
+                  'Atur Ulang Kata Sandi Anda',
                   style: kTextTheme.subtitle1!.copyWith(
                     fontWeight: FontWeight.w500,
                     fontSize: 16,
@@ -62,41 +55,7 @@ class _LoginPageState extends State<LoginPage> {
                     }
                     return null;
                   },
-                ),
-                const SizedBox(height: 15),
-                TextFormField(
-                  keyboardType: TextInputType.visiblePassword,
-                  decoration: InputDecoration(
-                    hintText: 'Kata Sandi',
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    suffixIcon: IconButton(
-                      onPressed: () {
-                        setState(() {
-                          _isObscured = !_isObscured;
-                        });
-                      },
-                      icon: Icon(_isObscured
-                          ? Icons.visibility_off
-                          : Icons.visibility),
-                    ),
-                  ),
-                  style: kTextTheme.bodyText2!.copyWith(
-                    color: kRichBlack,
-                  ),
-                  obscureText: _isObscured,
                   autofocus: false,
-                  autocorrect: false,
-                  validator: (value) {
-                    if (value!.isEmpty) {
-                      return 'Kata sandi tidak boleh kosong';
-                    }
-                    return null;
-                  },
                 ),
                 const SizedBox(height: 30),
                 PrimaryButton(
@@ -110,7 +69,7 @@ class _LoginPageState extends State<LoginPage> {
                     height: 45,
                     child: Center(
                       child: Text(
-                        'Masuk Admin',
+                        'Atur Ulang Kata Sandi',
                         style: kTextTheme.button!.copyWith(
                           color: kRichWhite,
                         ),
@@ -121,13 +80,9 @@ class _LoginPageState extends State<LoginPage> {
                 const SizedBox(height: 8),
                 TextButton(
                   onPressed: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (_) => ForgetPasswordPage(),
-                        ));
+                    Navigator.pop(context);
                   },
-                  child: Text('Lupa Kata Sandi Anda?',
+                  child: Text('Ingat Kata Sandi Anda?',
                       style: kTextTheme.bodyText2!.copyWith(
                         color: kGrey,
                       )),

@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:publico/presentation/pages/auth/forget_password_page.dart';
 import 'package:publico/presentation/pages/auth/login_page.dart';
+import 'package:publico/presentation/pages/auth/register_page.dart';
 import 'package:publico/presentation/pages/onboarding/onboarding_page.dart';
-import 'package:publico/presentation/pages/register_page.dart';
 import 'package:publico/presentation/pages/splash_screen.dart';
 import 'package:publico/styles/colors.dart';
 import 'package:publico/styles/text_styles.dart';
@@ -25,7 +26,7 @@ class MyApp extends StatelessWidget {
         colorScheme: kColorScheme,
         textTheme: kTextTheme,
       ),
-      home: const OnboardingPage(),
+      home: const SplashScreen(),
       onGenerateRoute: (settings) {
         switch (settings.name) {
           case OnboardingPage.routeName:
@@ -36,6 +37,8 @@ class MyApp extends StatelessWidget {
             return MaterialPageRoute(builder: (_) => const LoginPage());
           case RegisterPage.routeName:
             return MaterialPageRoute(builder: (_) => const RegisterPage());
+          case ForgetPasswordPage.routeName:
+            return MaterialPageRoute(builder: (_) => ForgetPasswordPage());
           default:
             return MaterialPageRoute(builder: (_) {
               return const Scaffold(
