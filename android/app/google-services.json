@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "493623031730",
+    "project_id": "publico-188f6",
+    "storage_bucket": "publico-188f6.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:493623031730:android:c007930336b3995586d6ab",
+        "android_client_info": {
+          "package_name": "com.publico.publico"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "493623031730-c9ajb9cu5hues6dqi82t96v463lhdpe7.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCmTdyjIU-7JTrpus4ZwPK1dOPKC_PNY0M"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "493623031730-c9ajb9cu5hues6dqi82t96v463lhdpe7.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
