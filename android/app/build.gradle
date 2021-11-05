@@ -44,8 +44,9 @@ android {
     defaultConfig {
         // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
         applicationId "com.publico.publico"
-        minSdkVersion 16
+        minSdkVersion 19
         targetSdkVersion 30
+        multiDexEnabled true
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
     }
@@ -63,6 +64,13 @@ flutter {
     source '../..'
 }
 
+apply plugin: 'com.google.gms.google-services'
+apply plugin: 'com.google.firebase.crashlytics'
+
 dependencies {
+    implementation platform('com.google.firebase:firebase-bom:29.0.0')
+    implementation("com.android.support:multidex:2.0.1")
+    implementation 'com.google.firebase:firebase-analytics'
+    implementation 'com.google.firebase:firebase-crashlytics:18.2.4'
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 }

@@ -1,3 +1,4 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:publico/presentation/pages/auth/forget_password_page.dart';
 import 'package:publico/presentation/pages/auth/login_page.dart';
@@ -9,8 +10,9 @@ import 'package:publico/styles/text_styles.dart';
 
 import 'injection.dart' as di;
 
-void main() {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   di.init();
   runApp(const MyApp());
 }
