@@ -5,6 +5,7 @@ import 'package:publico/data/repositories/repository_impl.dart';
 import 'package:publico/domain/repositories/repository.dart';
 import 'package:publico/domain/usecases/login_with_email_and_password.dart';
 import 'package:publico/domain/usecases/logout.dart';
+import 'package:publico/domain/usecases/send_forget_password.dart';
 import 'package:publico/domain/usecases/sign_up_with_email_and_password.dart';
 import 'package:publico/presentation/bloc/auth/auth_cubit.dart';
 
@@ -17,6 +18,7 @@ void init() {
       loginWithEmailAndPassword: locator(),
       signUpWithEmailAndPassword: locator(),
       logout: locator(),
+      sendForgetPassword: locator(),
     ),
   );
 
@@ -24,6 +26,7 @@ void init() {
   locator.registerLazySingleton(() => LoginWithEmailAndPassword(locator()));
   locator.registerLazySingleton(() => SignUpWithEmailAndPassword(locator()));
   locator.registerLazySingleton(() => Logout(locator()));
+  locator.registerLazySingleton(() => SendForgetPassword(locator()));
 
   // repository
   locator.registerLazySingleton<Repository>(

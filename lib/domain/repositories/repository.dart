@@ -7,5 +7,6 @@ abstract class Repository {
       String email, String password);
   Future<Either<Failure, User>> signUpWithEmailPassword(
       String email, String password);
+  Future<Either<Failure, void>> sendForgetPasswordSignal(String email);
   Future<Either<Failure, void>> logout();
 }

@@ -1,9 +1,11 @@
 import 'package:firebase_auth/firebase_auth.dart' as auth;
 import 'package:publico/data/models/user_model.dart';
+import 'package:publico/util/exception.dart';
 
 abstract class RemoteDataSources {
   Future<UserModel> loginWithEmailPassword(String email, String password);
   Future<UserModel> signUpWithEmailPassword(String email, String password);
+  Future<void> sendForgetPasswordSignal(String email);
   Future<void> logout();
 }
 
@@ -29,7 +31,7 @@ class RemoteDataSourcesImpl extends RemoteDataSources {
         emailVerified: credential.user!.emailVerified,
       );
     } catch (error) {
-      throw Exception(error.toString());
+      throw AuthException(error.toString());
     }
   }
 
@@ -50,7 +52,16 @@ class RemoteDataSourcesImpl extends RemoteDataSources {
         emailVerified: credential.user!.emailVerified,
       );
     } catch (error) {
-      throw Exception(error.toString());
+      throw AuthException(error.toString());
+    }
+  }
+
+  @override
+  Future<void> sendForgetPasswordSignal(String email) async {
+    try {
+      await firebaseAuth.sendPasswordResetEmail(email: email);
+    } catch (error) {
+      throw AuthException(error.toString());
     }
   }
 
@@ -59,7 +70,7 @@ class RemoteDataSourcesImpl extends RemoteDataSources {
     try {
       await firebaseAuth.signOut();
     } catch (error) {
-      throw Exception(error.toString());
+      throw AuthException(error.toString());
     }
   }
 }

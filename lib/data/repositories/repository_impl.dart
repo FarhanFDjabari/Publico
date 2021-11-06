@@ -3,6 +3,7 @@ import 'package:get_storage/get_storage.dart';
 import 'package:publico/data/datasources/remote_datasources.dart';
 import 'package:publico/domain/entities/user.dart';
 import 'package:publico/domain/repositories/repository.dart';
+import 'package:publico/util/exception.dart';
 import 'package:publico/util/failure.dart';
 
 class RepositoryImpl extends Repository {
@@ -18,8 +19,8 @@ class RepositoryImpl extends Repository {
           await remoteDataSources.loginWithEmailPassword(email, password);
       await GetStorage().write('uid', result.uid);
       return Right(result.toEntity());
-    } on Exception catch (e) {
-      return const Left(CommonFailure('Auth Error'));
+    } on AuthException catch (e) {
+      return Left(ServerFailure(e.message));
     }
   }
 
@@ -30,8 +31,8 @@ class RepositoryImpl extends Repository {
       final result =
           await remoteDataSources.signUpWithEmailPassword(email, password);
       return Right(result.toEntity());
-    } on Exception {
-      return const Left(CommonFailure('Register Error'));
+    } on AuthException catch (e) {
+      return Left(ServerFailure(e.message));
     }
   }
 
@@ -41,8 +42,18 @@ class RepositoryImpl extends Repository {
       await remoteDataSources.logout();
       await GetStorage().remove('uid');
       return const Right(null);
-    } on Exception {
-      return const Left(CommonFailure('logout Error'));
+    } on AuthException catch (e) {
+      return Left(ServerFailure('Logout Error: ${e.message}'));
+    }
+  }
+
+  @override
+  Future<Either<Failure, void>> sendForgetPasswordSignal(String email) async {
+    try {
+      await remoteDataSources.sendForgetPasswordSignal(email);
+      return const Right(null);
+    } on AuthException catch (e) {
+      return Left(ServerFailure(e.message));
     }
   }
 }

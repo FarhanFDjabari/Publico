@@ -19,6 +19,11 @@ class AuthDeleteSuccess extends AuthState {
   List<Object> get props => [];
 }
 
+class AuthForgetPasswordSent extends AuthState {
+  @override
+  List<Object> get props => [];
+}
+
 class AuthSuccess extends AuthState {
   final User user;
   const AuthSuccess(this.user);
