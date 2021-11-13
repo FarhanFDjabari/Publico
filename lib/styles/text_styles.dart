@@ -10,8 +10,12 @@ final TextStyle kSubtitle = GoogleFonts.poppins(
     fontSize: 15, fontWeight: FontWeight.w400, letterSpacing: 0.15);
 final TextStyle kBodyText = GoogleFonts.poppins(
     fontSize: 13, fontWeight: FontWeight.w400, letterSpacing: 0.25);
+final TextStyle kCaptionText = GoogleFonts.poppins(
+    fontSize: 12, fontWeight: FontWeight.w500, letterSpacing: 0.25);
 final TextStyle kButton = GoogleFonts.poppins(
     fontSize: 15, fontWeight: FontWeight.w500, letterSpacing: 0.25);
+final TextStyle kOverline = GoogleFonts.poppins(
+    fontSize: 10, fontWeight: FontWeight.w300, letterSpacing: 0.25);
 
 // text theme
 final kTextTheme = TextTheme(
@@ -19,5 +23,7 @@ final kTextTheme = TextTheme(
   headline6: kHeading6,
   subtitle1: kSubtitle,
   bodyText2: kBodyText,
+  caption: kCaptionText,
   button: kButton,
+  overline: kOverline,
 );
