@@ -5,7 +5,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:publico/presentation/bloc/auth/auth_cubit.dart';
 import 'package:publico/presentation/pages/admin/infographics_tab.dart';
+import 'package:publico/presentation/pages/admin/post/add_source_page.dart';
 import 'package:publico/presentation/pages/admin/post/infographic_post_page.dart';
+import 'package:publico/presentation/pages/admin/post/post_theme_page.dart';
+import 'package:publico/presentation/pages/admin/post/video_materi_post_page.dart';
+import 'package:publico/presentation/pages/admin/post/video_singkat_post_page.dart';
 import 'package:publico/presentation/pages/admin/video_materi_tab.dart';
 import 'package:publico/presentation/pages/admin/video_singkat_tab.dart';
 import 'package:publico/presentation/pages/auth/forget_password_page.dart';
@@ -76,6 +80,14 @@ class MyApp extends StatelessWidget {
             case InfographicPostPage.routeName:
               return MaterialPageRoute(
                   builder: (_) => const InfographicPostPage());
+            case PostThemePage.routeName:
+              return MaterialPageRoute(builder: (_) => const PostThemePage());
+            case VideoMateriPostPage.routeName:
+              return MaterialPageRoute(
+                  builder: (_) => const VideoMateriPostPage());
+            case VideoSingkatPostPage.routeName:
+              return MaterialPageRoute(
+                  builder: (_) => const VideoSingkatPostPage());
             case VideoMateriTab.routeName:
               return MaterialPageRoute(builder: (_) => const VideoMateriTab());
             case VideoSingkatTab.routeName:
@@ -85,6 +97,10 @@ class MyApp extends StatelessWidget {
               return CupertinoPageRoute(
                 builder: (_) => const InfographicsDetailPage(),
                 settings: settings,
+              );
+            case AddSourcePage.routeName:
+              return CupertinoPageRoute(
+                builder: (_) => const AddSourcePage(),
               );
             case VideoMateriDetailPage.routeName:
               final id = settings.arguments as String;

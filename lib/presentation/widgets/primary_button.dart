@@ -4,7 +4,7 @@ class PrimaryButton extends ElevatedButton {
   final double borderRadius;
   final Widget child;
   final Color? primaryColor;
-  final Function() onPressed;
+  final Function()? onPressed;
 
   PrimaryButton(
       {Key? key,
@@ -17,7 +17,8 @@ class PrimaryButton extends ElevatedButton {
           onPressed: onPressed,
           style: ElevatedButton.styleFrom(
             shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(borderRadius)),
+              borderRadius: BorderRadius.circular(borderRadius),
+            ),
             primary: primaryColor,
             elevation: 0,
             textStyle: const TextStyle(

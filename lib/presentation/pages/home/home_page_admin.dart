@@ -6,9 +6,9 @@ import 'package:publico/presentation/pages/admin/infographics_tab.dart';
 import 'package:publico/presentation/pages/admin/video_materi_tab.dart';
 import 'package:publico/presentation/pages/admin/video_singkat_tab.dart';
 import 'package:publico/presentation/pages/splash_screen.dart';
+import 'package:publico/presentation/widgets/chip_button.dart';
 import 'package:publico/presentation/widgets/loading_button.dart';
 import 'package:publico/styles/colors.dart';
-import 'package:publico/styles/text_styles.dart';
 
 class HomePageAdmin extends StatefulWidget {
   static const routeName = '/home-admin';
@@ -22,6 +22,7 @@ class HomePageAdmin extends StatefulWidget {
 class _HomePageAdminState extends State<HomePageAdmin>
     with SingleTickerProviderStateMixin {
   late TabController tabController;
+  int _selectedIndex = 0;
 
   @override
   void initState() {
@@ -108,48 +109,80 @@ class _HomePageAdminState extends State<HomePageAdmin>
               },
             ),
           ],
-          bottom: TabBar(
-            controller: tabController,
-            tabs: [
-              Tab(
-                child: Text(
-                  'Infografis',
-                  style: kTextTheme.subtitle1!.copyWith(
-                    fontSize: 14,
+        ),
+        body: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Expanded(
+                    child: InkWell(
+                      borderRadius: BorderRadius.circular(16),
+                      onTap: () {
+                        setState(() {
+                          _selectedIndex = 0;
+                        });
+                        tabController.animateTo(0);
+                      },
+                      child: ChipButton(
+                        title: 'Infografis',
+                        selectedIndex: _selectedIndex,
+                        itemIndex: 0,
+                      ),
+                    ),
                   ),
-                ),
+                  const SizedBox(width: 10),
+                  Expanded(
+                    child: InkWell(
+                      onTap: () {
+                        setState(() {
+                          _selectedIndex = 1;
+                        });
+                        tabController.animateTo(1);
+                      },
+                      borderRadius: BorderRadius.circular(16),
+                      child: ChipButton(
+                        title: 'Video Materi',
+                        selectedIndex: _selectedIndex,
+                        itemIndex: 1,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 10),
+                  Expanded(
+                    child: InkWell(
+                      onTap: () {
+                        setState(() {
+                          _selectedIndex = 2;
+                        });
+                        tabController.animateTo(2);
+                      },
+                      borderRadius: BorderRadius.circular(16),
+                      child: ChipButton(
+                        title: 'Video Singkat',
+                        selectedIndex: _selectedIndex,
+                        itemIndex: 2,
+                      ),
+                    ),
+                  ),
+                ],
               ),
-              Tab(
-                child: Text(
-                  'Video Materi',
-                  style: kTextTheme.subtitle1!.copyWith(
-                    fontSize: 14,
-                  ),
-                ),
-              ),
-              Tab(
-                child: Text(
-                  'Video Singkat',
-                  style: kTextTheme.subtitle1!.copyWith(
-                    fontSize: 14,
-                  ),
+              const SizedBox(height: 15),
+              Expanded(
+                child: TabBarView(
+                  controller: tabController,
+                  physics: const NeverScrollableScrollPhysics(),
+                  children: const [
+                    InfographicsTab(),
+                    VideoMateriTab(),
+                    VideoSingkatTab(),
+                  ],
                 ),
               ),
             ],
-            unselectedLabelColor: kLightGrey,
-            labelColor: kMikadoOrange,
-            indicatorColor: kMikadoOrange,
-            indicatorSize: TabBarIndicatorSize.label,
-            indicatorWeight: 4,
           ),
-        ),
-        body: TabBarView(
-          controller: tabController,
-          children: const [
-            InfographicsTab(),
-            VideoMateriTab(),
-            VideoSingkatTab(),
-          ],
         ),
       ),
     );

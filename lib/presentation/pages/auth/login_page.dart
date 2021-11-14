@@ -54,6 +54,7 @@ class _LoginPageState extends State<LoginPage> {
                   controller: _emailController,
                   keyboardType: TextInputType.emailAddress,
                   decoration: InputDecoration(
+                    labelText: 'Alamat Email',
                     hintText: 'Alamat Email',
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10),
@@ -77,7 +78,10 @@ class _LoginPageState extends State<LoginPage> {
                   controller: _passwordController,
                   keyboardType: TextInputType.visiblePassword,
                   decoration: InputDecoration(
+                    labelText: 'Kata Sandi',
                     hintText: 'Kata Sandi',
+                    helperMaxLines: 1,
+                    helperText: 'minimal 8 karakter',
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10),
                     ),

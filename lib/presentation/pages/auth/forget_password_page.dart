@@ -44,6 +44,7 @@ class ForgetPasswordPage extends StatelessWidget {
                   controller: _emailController,
                   keyboardType: TextInputType.emailAddress,
                   decoration: InputDecoration(
+                    labelText: 'Alamat Email',
                     hintText: 'Alamat Email',
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10),

@@ -91,6 +91,7 @@ class _SearchPageState extends State<SearchPage> {
                   hintStyle: kTextTheme.bodyText2!.copyWith(
                     color: kLightGrey,
                   ),
+                  prefixIcon: const Icon(Icons.search),
                   suffixIcon: IconButton(
                     onPressed: () {
                       _searchQueryController.clear();
