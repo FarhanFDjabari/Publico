@@ -84,14 +84,13 @@ class _SearchPageState extends State<SearchPage> {
                   contentPadding:
                       const EdgeInsets.symmetric(vertical: 0.0, horizontal: 15),
                   border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(32),
+                    borderRadius: BorderRadius.circular(10),
                   ),
                   isDense: true,
                   hintText: 'Individu dan pemerintah',
                   hintStyle: kTextTheme.bodyText2!.copyWith(
                     color: kLightGrey,
                   ),
-                  prefixIcon: const Icon(Icons.search),
                   suffixIcon: IconButton(
                     onPressed: () {
                       _searchQueryController.clear();

@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:publico/presentation/bloc/auth/auth_cubit.dart';
+import 'package:publico/presentation/pages/admin/edit/edit_sources_page.dart';
+import 'package:publico/presentation/pages/admin/edit/infographic_edit_page.dart';
 import 'package:publico/presentation/pages/admin/infographics_tab.dart';
 import 'package:publico/presentation/pages/admin/post/add_source_page.dart';
 import 'package:publico/presentation/pages/admin/post/infographic_post_page.dart';
@@ -95,7 +97,7 @@ class MyApp extends StatelessWidget {
             case InfographicsDetailPage.routeName:
               final id = settings.arguments as String;
               return CupertinoPageRoute(
-                builder: (_) => const InfographicsDetailPage(),
+                builder: (_) => InfographicsDetailPage(postId: id),
                 settings: settings,
               );
             case AddSourcePage.routeName:
@@ -105,13 +107,25 @@ class MyApp extends StatelessWidget {
             case VideoMateriDetailPage.routeName:
               final id = settings.arguments as String;
               return CupertinoPageRoute(
-                builder: (_) => const VideoMateriDetailPage(),
+                builder: (_) => VideoMateriDetailPage(videoId: id),
                 settings: settings,
               );
             case VideoSingkatDetailPage.routeName:
               final id = settings.arguments as String;
               return CupertinoPageRoute(
-                builder: (_) => const VideoSingkatDetailPage(),
+                builder: (_) => VideoSingkatDetailPage(videoId: id),
+                settings: settings,
+              );
+            case InfographicEditPage.routeName:
+              final id = settings.arguments as String;
+              return CupertinoPageRoute(
+                builder: (_) => const InfographicPostPage(),
+                settings: settings,
+              );
+            case EditSourcesPage.routeName:
+              final id = settings.arguments as String;
+              return CupertinoPageRoute(
+                builder: (_) => const EditSourcesPage(),
                 settings: settings,
               );
             default:
