@@ -144,10 +144,10 @@ class _AddSourcePageState extends State<AddSourcePage> {
               Column(
                 children: illustrations
                     .map((illustration) => Container(
-                          margin: const EdgeInsets.only(bottom: 5),
-                          height: 180,
+                          margin: const EdgeInsets.only(bottom: 5, top: 5),
+                          padding: const EdgeInsets.all(0),
                           child: Stack(
-                            fit: StackFit.expand,
+                            fit: StackFit.loose,
                             children: [
                               ClipRRect(
                                 borderRadius: BorderRadius.circular(10),

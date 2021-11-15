@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 
 const Color kRichWhite = Color(0xFFFFFFFF);
@@ -7,9 +9,16 @@ const Color kPrussianBlue = Color(0xFF003566);
 const Color kMikadoOrange = Color(0xFFFB681E);
 const Color kLightOrange = Color(0xFFFFB38D);
 const Color kDavysGrey = Color(0xFF4B5358);
+const Color kRed = Color(0xFFDF4759);
 const Color kGrey = Color(0xFF727272);
 const Color kLightGrey = Color(0xFFB6B6B6);
 const Color kLightGrey2 = Color(0xFFEAEAEA);
+
+final LinearGradient kLinearGradient = LinearGradient(
+  colors: [kMikadoOrange, kMikadoOrange.withOpacity(0.5)],
+  begin: const Alignment(-0.5222991704940796, -1.7212408781051636),
+  end: const Alignment(1.721240758895874, -2.448887825012207),
+);
 
 const kColorScheme = ColorScheme(
   primary: kMikadoOrange,
@@ -18,7 +27,7 @@ const kColorScheme = ColorScheme(
   secondaryVariant: kPrussianBlue,
   surface: kRichBlack,
   background: kRichWhite,
-  error: Colors.red,
+  error: kRed,
   onPrimary: kMikadoOrange,
   onSecondary: Colors.black,
   onSurface: Colors.black,

@@ -76,7 +76,7 @@ class _VideoSingkatDetailPageState extends State<VideoSingkatDetailPage> {
             children: [
               Container(
                 width: double.infinity,
-                height: MediaQuery.of(context).size.height * 0.7,
+                padding: const EdgeInsets.all(0),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10),
                   color: kLightGrey2,
@@ -93,7 +93,7 @@ class _VideoSingkatDetailPageState extends State<VideoSingkatDetailPage> {
                                 : _videoController!.play();
                           },
                           child: Stack(
-                            fit: StackFit.expand,
+                            fit: StackFit.loose,
                             alignment: Alignment.center,
                             children: [
                               AspectRatio(
@@ -122,13 +122,16 @@ class _VideoSingkatDetailPageState extends State<VideoSingkatDetailPage> {
                           ),
                         ),
                       )
-                    : const Center(
-                        child: CircularProgressIndicator(
-                          color: kMikadoOrange,
+                    : SizedBox(
+                        height: MediaQuery.of(context).size.height * 0.7,
+                        child: const Center(
+                          child: CircularProgressIndicator(
+                            color: kMikadoOrange,
+                          ),
                         ),
                       ),
               ),
-              const SizedBox(height: 5),
+              const SizedBox(height: 10),
               SizedBox(
                 child: Text(
                   'Exposure image of business profit growth',

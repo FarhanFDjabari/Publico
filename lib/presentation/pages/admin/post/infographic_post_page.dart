@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:publico/presentation/pages/admin/post/add_source_page.dart';
@@ -14,12 +16,15 @@ class InfographicPostPage extends StatefulWidget {
 }
 
 class _InfographicPostPageState extends State<InfographicPostPage> {
+  final _titleController = TextEditingController();
   List sources = [];
   String? selectedTheme;
   bool isValidate = false;
 
   void formCheck() {
-    if (sources.isNotEmpty && selectedTheme != null) {
+    if (_titleController.text.isNotEmpty &&
+        sources.isNotEmpty &&
+        selectedTheme != null) {
       if (isValidate) {
         return;
       } else {
@@ -108,8 +113,40 @@ class _InfographicPostPageState extends State<InfographicPostPage> {
                 hint: Text(
                   'Pilih Tema',
                   style: kTextTheme.bodyText2!.copyWith(
-                    color: kLightGrey,
+                    color: kGrey,
                   ),
+                ),
+              ),
+              const SizedBox(height: 15),
+              Text(
+                '   Judul',
+                style: kTextTheme.caption!.copyWith(
+                  color: kMikadoOrange,
+                ),
+              ),
+              TextField(
+                controller: _titleController,
+                autofocus: false,
+                decoration: InputDecoration(
+                  hintText: 'Masukkan judul',
+                  isDense: true,
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10),
+                    borderSide: const BorderSide(
+                      color: kMikadoOrange,
+                    ),
+                  ),
+                ),
+                onChanged: (value) {
+                  Timer(const Duration(milliseconds: 750), () {
+                    formCheck();
+                  });
+                },
+                style: kTextTheme.bodyText2!.copyWith(
+                  color: kRichBlack,
                 ),
               ),
               const SizedBox(height: 15),
@@ -149,11 +186,10 @@ class _InfographicPostPageState extends State<InfographicPostPage> {
               ),
               OutlinedButton(
                 onPressed: () {
-                  Navigator.push(
-                      context,
-                      CupertinoPageRoute(
-                        builder: (_) => const AddSourcePage(),
-                      ));
+                  Navigator.pushNamed(
+                    context,
+                    AddSourcePage.routeName,
+                  );
                 },
                 style: OutlinedButton.styleFrom(
                   shape: RoundedRectangleBorder(

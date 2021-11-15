@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:publico/presentation/pages/detail/infographics_detail_page.dart';
+import 'package:publico/presentation/pages/detail/video_singkat_detail_page.dart';
 import 'package:publico/presentation/widgets/publico_staggered_tile.dart';
 import 'package:publico/styles/colors.dart';
 
@@ -37,7 +37,7 @@ class _ExplorePageState extends State<ExplorePage> {
               onTap: () {
                 Navigator.pushNamed(
                   context,
-                  InfographicsDetailPage.routeName,
+                  VideoSingkatDetailPage.routeName,
                   arguments: 'secret',
                 );
               },

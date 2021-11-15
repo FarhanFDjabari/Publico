@@ -4,20 +4,23 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:publico/presentation/pages/admin/edit/infographic_edit_page.dart';
 import 'package:publico/styles/colors.dart';
 import 'package:publico/styles/text_styles.dart';
 
-class InfographicsDetailPage extends StatefulWidget {
-  static const routeName = '/infographics-detail';
+class AdminInfographicsDetailPage extends StatefulWidget {
+  static const routeName = '/admin-infographics-detail';
   final String postId;
-  const InfographicsDetailPage({Key? key, required this.postId})
+  const AdminInfographicsDetailPage({Key? key, required this.postId})
       : super(key: key);
 
   @override
-  _InfographicsDetailPageState createState() => _InfographicsDetailPageState();
+  _AdminInfographicsDetailPageState createState() =>
+      _AdminInfographicsDetailPageState();
 }
 
-class _InfographicsDetailPageState extends State<InfographicsDetailPage> {
+class _AdminInfographicsDetailPageState
+    extends State<AdminInfographicsDetailPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -40,9 +43,15 @@ class _InfographicsDetailPageState extends State<InfographicsDetailPage> {
         ),
         actions: [
           IconButton(
-            onPressed: () {},
+            onPressed: () {
+              Navigator.pushNamed(
+                context,
+                InfographicEditPage.routeName,
+                arguments: 'secret',
+              );
+            },
             icon: const Icon(
-              Icons.bookmark_outline_rounded,
+              Icons.more_horiz,
               color: kRichBlack,
             ),
           ),
