@@ -162,7 +162,7 @@ class _VideoSingkatPostPageState extends State<VideoSingkatPostPage> {
             const SizedBox(height: 15),
             Container(
               width: double.infinity,
-              height: MediaQuery.of(context).size.height * 0.45,
+              padding: const EdgeInsets.all(0),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(10),
                 border: Border.all(
@@ -179,6 +179,11 @@ class _VideoSingkatPostPageState extends State<VideoSingkatPostPage> {
                               _videoController!.value.isPlaying
                                   ? _videoController!.pause()
                                   : _videoController!.play();
+                            },
+                            onLongPress: () {
+                              setState(() {
+                                _videoController = null;
+                              });
                             },
                             child: Stack(
                               fit: StackFit.loose,
@@ -209,9 +214,12 @@ class _VideoSingkatPostPageState extends State<VideoSingkatPostPage> {
                             ),
                           ),
                         )
-                      : const Center(
-                          child: CircularProgressIndicator(
-                            color: kMikadoOrange,
+                      : SizedBox(
+                          height: MediaQuery.of(context).size.height * 0.45,
+                          child: const Center(
+                            child: CircularProgressIndicator(
+                              color: kMikadoOrange,
+                            ),
                           ),
                         )
                   : InkWell(
@@ -225,23 +233,26 @@ class _VideoSingkatPostPageState extends State<VideoSingkatPostPage> {
                         formCheck();
                       },
                       borderRadius: BorderRadius.circular(10),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          const Icon(
-                            Icons.camera_alt_outlined,
-                            color: kLightGrey,
-                            size: 35,
-                          ),
-                          Text(
-                            'Unggah Video',
-                            style: kTextTheme.bodyText2!.copyWith(
+                      child: SizedBox(
+                        height: MediaQuery.of(context).size.height * 0.45,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            const Icon(
+                              Icons.camera_alt_outlined,
                               color: kLightGrey,
-                              fontSize: 14,
+                              size: 35,
                             ),
-                          ),
-                        ],
+                            Text(
+                              'Unggah Video\nMaks. 60 detik',
+                              style: kTextTheme.bodyText2!.copyWith(
+                                color: kLightGrey,
+                                fontSize: 14,
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
             ),

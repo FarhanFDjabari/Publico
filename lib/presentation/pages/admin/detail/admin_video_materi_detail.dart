@@ -1,20 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:publico/presentation/pages/admin/edit/video_materi_edit_page.dart';
+import 'package:publico/presentation/widgets/publico_edit_bottom_sheet.dart';
 import 'package:publico/styles/colors.dart';
 import 'package:publico/styles/text_styles.dart';
 import 'package:video_player/video_player.dart';
 
-class VideoMateriDetailPage extends StatefulWidget {
-  static const routeName = '/video-materi-detail';
+class AdminVideoMateriDetailPage extends StatefulWidget {
+  static const routeName = '/admin-video-materi-detail';
   final String videoId;
-  const VideoMateriDetailPage({Key? key, required this.videoId})
+  const AdminVideoMateriDetailPage({Key? key, required this.videoId})
       : super(key: key);
 
   @override
-  _VideoMateriDetailPageState createState() => _VideoMateriDetailPageState();
+  _AdminVideoMateriDetailPageState createState() =>
+      _AdminVideoMateriDetailPageState();
 }
 
-class _VideoMateriDetailPageState extends State<VideoMateriDetailPage> {
+class _AdminVideoMateriDetailPageState
+    extends State<AdminVideoMateriDetailPage> {
   VideoPlayerController? _videoController;
 
   @override
@@ -59,9 +63,26 @@ class _VideoMateriDetailPageState extends State<VideoMateriDetailPage> {
         ),
         actions: [
           IconButton(
-            onPressed: () {},
+            onPressed: () {
+              showModalBottomSheet(
+                backgroundColor: kRichWhite,
+                context: context,
+                isDismissible: true,
+                builder: (_) => PublicoEditBottomSheet(
+                  parentContext: context,
+                  onDeletePressed: () {},
+                  onEditPressed: () {
+                    Navigator.pushNamed(
+                      context,
+                      VideoMateriEditPage.routeName,
+                      arguments: 'secret',
+                    );
+                  },
+                ),
+              );
+            },
             icon: const Icon(
-              Icons.bookmark_outline_rounded,
+              Icons.more_horiz,
               color: kRichBlack,
             ),
           ),

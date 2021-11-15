@@ -8,15 +8,16 @@ import 'package:publico/styles/colors.dart';
 import 'package:publico/styles/text_styles.dart';
 import 'package:video_player/video_player.dart';
 
-class VideoMateriPostPage extends StatefulWidget {
-  static const routeName = '/admin-video-materi-post';
-  const VideoMateriPostPage({Key? key}) : super(key: key);
+class VideoMateriEditPage extends StatefulWidget {
+  static const routeName = '/admin-video-materi-edit';
+  final String postId;
+  const VideoMateriEditPage({Key? key, required this.postId}) : super(key: key);
 
   @override
-  _VideoMateriPostPageState createState() => _VideoMateriPostPageState();
+  _VideoMateriEditPageState createState() => _VideoMateriEditPageState();
 }
 
-class _VideoMateriPostPageState extends State<VideoMateriPostPage> {
+class _VideoMateriEditPageState extends State<VideoMateriEditPage> {
   final _titleController = TextEditingController();
   final _descriptionController = TextEditingController();
   VideoPlayerController? _videoController;

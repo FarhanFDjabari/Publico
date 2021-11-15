@@ -8,17 +8,20 @@ import 'package:publico/styles/colors.dart';
 import 'package:publico/styles/text_styles.dart';
 import 'package:video_player/video_player.dart';
 
-class VideoMateriPostPage extends StatefulWidget {
-  static const routeName = '/admin-video-materi-post';
-  const VideoMateriPostPage({Key? key}) : super(key: key);
+class VideoSingkatEditPage extends StatefulWidget {
+  static const routeName = '/admin-video-singkat-edit';
+  final String postId;
+  const VideoSingkatEditPage({Key? key, required this.postId})
+      : super(key: key);
 
   @override
-  _VideoMateriPostPageState createState() => _VideoMateriPostPageState();
+  _VideoSingkatEditPageState createState() => _VideoSingkatEditPageState();
 }
 
-class _VideoMateriPostPageState extends State<VideoMateriPostPage> {
+class _VideoSingkatEditPageState extends State<VideoSingkatEditPage> {
   final _titleController = TextEditingController();
   final _descriptionController = TextEditingController();
+  final _tautanController = TextEditingController();
   VideoPlayerController? _videoController;
   File? videoFile;
   bool isValidate = false;
@@ -26,6 +29,7 @@ class _VideoMateriPostPageState extends State<VideoMateriPostPage> {
   void formCheck() {
     if (_titleController.text.isNotEmpty &&
         _descriptionController.text.isNotEmpty &&
+        _tautanController.text.isNotEmpty &&
         videoFile != null) {
       if (isValidate) {
         return;
@@ -43,19 +47,15 @@ class _VideoMateriPostPageState extends State<VideoMateriPostPage> {
 
   void videoPlayerInit(File videoFile) {
     _videoController = VideoPlayerController.file(videoFile)
-      ..addListener(() {
-        if (mounted) {
-          setState(() {});
-        }
-      })
+      ..addListener(() => setState(() {}))
       ..setLooping(false)
       ..initialize();
   }
 
   @override
   void dispose() {
-    super.dispose();
     _videoController?.dispose();
+    super.dispose();
   }
 
   @override
@@ -75,7 +75,7 @@ class _VideoMateriPostPageState extends State<VideoMateriPostPage> {
           ),
         ),
         title: Text(
-          'Tambah Video Materi',
+          'Tambah Video Singkat',
           style: kTextTheme.subtitle1!.copyWith(
             fontSize: 16,
             color: kRichBlack,
@@ -117,6 +117,31 @@ class _VideoMateriPostPageState extends State<VideoMateriPostPage> {
               decoration: InputDecoration(
                 label: const Text('Deskripsi'),
                 hintText: 'Masukkan deskripsi',
+                hintStyle: kTextTheme.bodyText2!.copyWith(
+                  color: kLightGrey,
+                ),
+                floatingLabelBehavior: FloatingLabelBehavior.always,
+                isDense: true,
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+              ),
+              onChanged: (value) {
+                Timer(const Duration(milliseconds: 750), () {
+                  formCheck();
+                });
+              },
+              style: kTextTheme.bodyText2!.copyWith(
+                color: kRichBlack,
+              ),
+              autofocus: false,
+            ),
+            const SizedBox(height: 15),
+            TextField(
+              controller: _tautanController,
+              decoration: InputDecoration(
+                label: const Text('Tautan Tiktok'),
+                hintText: 'Masukkan tautan',
                 hintStyle: kTextTheme.bodyText2!.copyWith(
                   color: kLightGrey,
                 ),
@@ -192,7 +217,7 @@ class _VideoMateriPostPageState extends State<VideoMateriPostPage> {
                           ),
                         )
                       : SizedBox(
-                          height: MediaQuery.of(context).size.height * 0.2,
+                          height: MediaQuery.of(context).size.height * 0.45,
                           child: const Center(
                             child: CircularProgressIndicator(
                               color: kMikadoOrange,
@@ -211,7 +236,7 @@ class _VideoMateriPostPageState extends State<VideoMateriPostPage> {
                       },
                       borderRadius: BorderRadius.circular(10),
                       child: SizedBox(
-                        height: MediaQuery.of(context).size.height * 0.2,
+                        height: MediaQuery.of(context).size.height * 0.45,
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.center,
                           mainAxisAlignment: MainAxisAlignment.center,
@@ -222,7 +247,7 @@ class _VideoMateriPostPageState extends State<VideoMateriPostPage> {
                               size: 35,
                             ),
                             Text(
-                              'Unggah Video',
+                              'Unggah Video\nMaks. 60 detik',
                               style: kTextTheme.bodyText2!.copyWith(
                                 color: kLightGrey,
                                 fontSize: 14,

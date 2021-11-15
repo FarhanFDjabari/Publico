@@ -4,8 +4,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:publico/presentation/bloc/auth/auth_cubit.dart';
+import 'package:publico/presentation/pages/admin/detail/admin_infographics_detail.dart';
+import 'package:publico/presentation/pages/admin/detail/admin_video_materi_detail.dart';
+import 'package:publico/presentation/pages/admin/detail/admin_video_singkat_detail.dart';
 import 'package:publico/presentation/pages/admin/edit/edit_sources_page.dart';
 import 'package:publico/presentation/pages/admin/edit/infographic_edit_page.dart';
+import 'package:publico/presentation/pages/admin/edit/video_materi_edit_page.dart';
+import 'package:publico/presentation/pages/admin/edit/video_singkat_edit_page.dart';
 import 'package:publico/presentation/pages/admin/infographics_tab.dart';
 import 'package:publico/presentation/pages/admin/post/add_source_page.dart';
 import 'package:publico/presentation/pages/admin/post/infographic_post_page.dart';
@@ -23,6 +28,7 @@ import 'package:publico/presentation/pages/detail/video_singkat_detail_page.dart
 import 'package:publico/presentation/pages/explore/explore_page.dart';
 import 'package:publico/presentation/pages/home/home_page_admin.dart';
 import 'package:publico/presentation/pages/home/home_page_user.dart';
+import 'package:publico/presentation/pages/onboarding/onboarding_end_page.dart';
 import 'package:publico/presentation/pages/onboarding/onboarding_page.dart';
 import 'package:publico/presentation/pages/search/search_page.dart';
 import 'package:publico/presentation/pages/splash_screen.dart';
@@ -61,6 +67,9 @@ class MyApp extends StatelessWidget {
           switch (settings.name) {
             case OnboardingPage.routeName:
               return MaterialPageRoute(builder: (_) => const OnboardingPage());
+            case OnboardingEndPage.routeName:
+              return MaterialPageRoute(
+                  builder: (_) => const OnboardingEndPage());
             case SplashScreen.routeName:
               return MaterialPageRoute(builder: (_) => const SplashScreen());
             case LoginPage.routeName:
@@ -100,6 +109,12 @@ class MyApp extends StatelessWidget {
                 builder: (_) => InfographicsDetailPage(postId: id),
                 settings: settings,
               );
+            case AdminInfographicsDetailPage.routeName:
+              final id = settings.arguments as String;
+              return CupertinoPageRoute(
+                builder: (_) => AdminInfographicsDetailPage(postId: id),
+                settings: settings,
+              );
             case AddSourcePage.routeName:
               return CupertinoPageRoute(
                 builder: (_) => const AddSourcePage(),
@@ -110,16 +125,40 @@ class MyApp extends StatelessWidget {
                 builder: (_) => VideoMateriDetailPage(videoId: id),
                 settings: settings,
               );
+            case AdminVideoMateriDetailPage.routeName:
+              final id = settings.arguments as String;
+              return CupertinoPageRoute(
+                builder: (_) => AdminVideoMateriDetailPage(videoId: id),
+                settings: settings,
+              );
             case VideoSingkatDetailPage.routeName:
               final id = settings.arguments as String;
               return CupertinoPageRoute(
                 builder: (_) => VideoSingkatDetailPage(videoId: id),
                 settings: settings,
               );
+            case AdminVideoSingkatDetailPage.routeName:
+              final id = settings.arguments as String;
+              return CupertinoPageRoute(
+                builder: (_) => AdminVideoSingkatDetailPage(videoId: id),
+                settings: settings,
+              );
             case InfographicEditPage.routeName:
               final id = settings.arguments as String;
               return CupertinoPageRoute(
-                builder: (_) => const InfographicPostPage(),
+                builder: (_) => InfographicEditPage(postId: id),
+                settings: settings,
+              );
+            case VideoMateriEditPage.routeName:
+              final id = settings.arguments as String;
+              return CupertinoPageRoute(
+                builder: (_) => VideoMateriEditPage(postId: id),
+                settings: settings,
+              );
+            case VideoSingkatEditPage.routeName:
+              final id = settings.arguments as String;
+              return CupertinoPageRoute(
+                builder: (_) => VideoSingkatEditPage(postId: id),
                 settings: settings,
               );
             case EditSourcesPage.routeName:

@@ -1,27 +1,31 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:publico/presentation/pages/admin/edit/video_singkat_edit_page.dart';
+import 'package:publico/presentation/widgets/publico_edit_bottom_sheet.dart';
 import 'package:publico/styles/colors.dart';
 import 'package:publico/styles/text_styles.dart';
 import 'package:video_player/video_player.dart';
 
-class VideoMateriDetailPage extends StatefulWidget {
-  static const routeName = '/video-materi-detail';
+class AdminVideoSingkatDetailPage extends StatefulWidget {
+  static const routeName = '/admin-video-singkat-detail';
   final String videoId;
-  const VideoMateriDetailPage({Key? key, required this.videoId})
+  const AdminVideoSingkatDetailPage({Key? key, required this.videoId})
       : super(key: key);
 
   @override
-  _VideoMateriDetailPageState createState() => _VideoMateriDetailPageState();
+  _AdminVideoSingkatDetailPageState createState() =>
+      _AdminVideoSingkatDetailPageState();
 }
 
-class _VideoMateriDetailPageState extends State<VideoMateriDetailPage> {
+class _AdminVideoSingkatDetailPageState
+    extends State<AdminVideoSingkatDetailPage> {
   VideoPlayerController? _videoController;
 
   @override
   void initState() {
     super.initState();
     videoPlayerInit(
-        'https://ak.picdn.net/shutterstock/videos/1040697206/preview/stock-footage-authentication-by-facial-recognition-concept-biometric-security-system.webm');
+        'https://assets.mixkit.co/videos/preview/mixkit-a-girl-blowing-a-bubble-gum-at-an-amusement-park-1226-large.mp4');
   }
 
   void videoPlayerInit(String url) {
@@ -59,9 +63,26 @@ class _VideoMateriDetailPageState extends State<VideoMateriDetailPage> {
         ),
         actions: [
           IconButton(
-            onPressed: () {},
+            onPressed: () {
+              showModalBottomSheet(
+                backgroundColor: kRichWhite,
+                context: context,
+                isDismissible: true,
+                builder: (_) => PublicoEditBottomSheet(
+                  parentContext: context,
+                  onDeletePressed: () {},
+                  onEditPressed: () {
+                    Navigator.pushNamed(
+                      context,
+                      VideoSingkatEditPage.routeName,
+                      arguments: 'secret',
+                    );
+                  },
+                ),
+              );
+            },
             icon: const Icon(
-              Icons.bookmark_outline_rounded,
+              Icons.more_horiz,
               color: kRichBlack,
             ),
           ),
@@ -123,7 +144,7 @@ class _VideoMateriDetailPageState extends State<VideoMateriDetailPage> {
                         ),
                       )
                     : SizedBox(
-                        height: MediaQuery.of(context).size.height * 0.25,
+                        height: MediaQuery.of(context).size.height * 0.7,
                         child: const Center(
                           child: CircularProgressIndicator(
                             color: kMikadoOrange,
@@ -147,6 +168,19 @@ class _VideoMateriDetailPageState extends State<VideoMateriDetailPage> {
                   style: kTextTheme.caption!.copyWith(
                     color: kGrey,
                     fontSize: 10,
+                  ),
+                ),
+              ),
+              const SizedBox(height: 5),
+              InkWell(
+                onTap: () {},
+                borderRadius: BorderRadius.circular(50),
+                child: CircleAvatar(
+                  radius: 24,
+                  backgroundColor: kRichBlack,
+                  child: SvgPicture.asset(
+                    'assets/svg/tik-tok-logo.svg',
+                    height: 20,
                   ),
                 ),
               ),
