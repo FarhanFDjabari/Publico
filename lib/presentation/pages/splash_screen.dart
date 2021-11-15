@@ -2,6 +2,8 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:get_storage/get_storage.dart';
+import 'package:publico/presentation/pages/home/home_page_admin.dart';
 import 'package:publico/presentation/pages/onboarding/onboarding_page.dart';
 import 'package:publico/styles/colors.dart';
 
@@ -28,11 +30,18 @@ class _SplashScreenState extends State<SplashScreen>
     );
 
     _animationController.forward().then((value) {
-      Timer(const Duration(seconds: 3), () {
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (_) => const OnboardingPage()),
-        );
+      Timer(const Duration(seconds: 2), () {
+        if (GetStorage().read('uid') == null) {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (_) => const OnboardingPage()),
+          );
+        } else {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (_) => const HomePageAdmin()),
+          );
+        }
       });
     });
   }

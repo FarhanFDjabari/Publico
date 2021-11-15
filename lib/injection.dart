@@ -6,8 +6,10 @@ import 'package:publico/domain/repositories/repository.dart';
 import 'package:publico/domain/usecases/login_with_email_and_password.dart';
 import 'package:publico/domain/usecases/logout.dart';
 import 'package:publico/domain/usecases/send_forget_password.dart';
-import 'package:publico/domain/usecases/sign_up_with_email_and_password.dart';
+import 'package:publico/domain/usecases/upload_file_to_storage.dart';
 import 'package:publico/presentation/bloc/auth/auth_cubit.dart';
+
+import 'data/datasources/db/database_helper.dart';
 
 final locator = GetIt.instance;
 
@@ -16,7 +18,6 @@ void init() {
   locator.registerFactory(
     () => AuthCubit(
       loginWithEmailAndPassword: locator(),
-      signUpWithEmailAndPassword: locator(),
       logout: locator(),
       sendForgetPassword: locator(),
     ),
@@ -24,9 +25,9 @@ void init() {
 
   // usecases
   locator.registerLazySingleton(() => LoginWithEmailAndPassword(locator()));
-  locator.registerLazySingleton(() => SignUpWithEmailAndPassword(locator()));
   locator.registerLazySingleton(() => Logout(locator()));
   locator.registerLazySingleton(() => SendForgetPassword(locator()));
+  locator.registerLazySingleton(() => UploadFileToStorage(locator()));
 
   // repository
   locator.registerLazySingleton<Repository>(
@@ -35,9 +36,12 @@ void init() {
     ),
   );
 
-  // datasources
+  // data sources
   locator.registerLazySingleton<RemoteDataSources>(
       () => RemoteDataSourcesImpl(firebaseAuth: locator()));
+
+  // helper
+  locator.registerLazySingleton<DatabaseHelper>(() => DatabaseHelper());
 
   // external
   locator.registerLazySingleton(() => auth.FirebaseAuth.instance);

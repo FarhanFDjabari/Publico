@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:publico/presentation/pages/auth/login_page.dart';
+import 'package:publico/presentation/pages/home/home_page_user.dart';
 import 'package:publico/presentation/widgets/primary_button.dart';
 import 'package:publico/styles/colors.dart';
 import 'package:publico/styles/text_styles.dart';
@@ -139,7 +140,13 @@ class _OnboardingPageState extends State<OnboardingPage> {
                     children: [
                       const Spacer(flex: 1),
                       PrimaryButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                builder: (_) => const HomePageUser(),
+                              ));
+                        },
                         child: SizedBox(
                           width: double.infinity,
                           height: 45,

@@ -1,4 +1,7 @@
+import 'dart:io';
+
 import 'package:dartz/dartz.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:publico/data/datasources/remote_datasources.dart';
 import 'package:publico/domain/entities/user.dart';
@@ -25,18 +28,6 @@ class RepositoryImpl extends Repository {
   }
 
   @override
-  Future<Either<Failure, User>> signUpWithEmailPassword(
-      String email, String password) async {
-    try {
-      final result =
-          await remoteDataSources.signUpWithEmailPassword(email, password);
-      return Right(result.toEntity());
-    } on AuthException catch (e) {
-      return Left(ServerFailure(e.message));
-    }
-  }
-
-  @override
   Future<Either<Failure, void>> logout() async {
     try {
       await remoteDataSources.logout();
@@ -53,6 +44,18 @@ class RepositoryImpl extends Repository {
       await remoteDataSources.sendForgetPasswordSignal(email);
       return const Right(null);
     } on AuthException catch (e) {
+      return Left(ServerFailure(e.message));
+    }
+  }
+
+  @override
+  Future<Either<Failure, UploadTask>> uploadFile(
+      String destination, File file) async {
+    try {
+      final result =
+          await remoteDataSources.uploadFiletoStorage(destination, file);
+      return Right(result);
+    } on ServerException catch (e) {
       return Left(ServerFailure(e.message));
     }
   }

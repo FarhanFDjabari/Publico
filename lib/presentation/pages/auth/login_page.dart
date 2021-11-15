@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:publico/presentation/bloc/auth/auth_cubit.dart';
 import 'package:publico/presentation/pages/auth/forget_password_page.dart';
-import 'package:publico/presentation/pages/home_page.dart';
+import 'package:publico/presentation/pages/home/home_page_admin.dart';
 import 'package:publico/presentation/widgets/loading_button.dart';
 import 'package:publico/presentation/widgets/primary_button.dart';
 import 'package:publico/styles/colors.dart';
@@ -54,6 +54,7 @@ class _LoginPageState extends State<LoginPage> {
                   controller: _emailController,
                   keyboardType: TextInputType.emailAddress,
                   decoration: InputDecoration(
+                    labelText: 'Alamat Email',
                     hintText: 'Alamat Email',
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10),
@@ -77,7 +78,10 @@ class _LoginPageState extends State<LoginPage> {
                   controller: _passwordController,
                   keyboardType: TextInputType.visiblePassword,
                   decoration: InputDecoration(
+                    labelText: 'Kata Sandi',
                     hintText: 'Kata Sandi',
+                    helperMaxLines: 1,
+                    helperText: 'minimal 8 karakter',
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10),
                     ),
@@ -141,7 +145,8 @@ class _LoginPageState extends State<LoginPage> {
                         ),
                       );
                       Navigator.of(context).pushReplacement(
-                        MaterialPageRoute(builder: (_) => const HomePage()),
+                        MaterialPageRoute(
+                            builder: (_) => const HomePageAdmin()),
                       );
                     }
                   },
