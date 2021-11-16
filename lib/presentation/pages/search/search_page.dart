@@ -17,97 +17,109 @@ class _SearchPageState extends State<SearchPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: kRichWhite,
-        elevation: 0,
-        title: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    return SafeArea(
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 10.0),
+        child: Column(
           children: [
-            Expanded(
-              child: InkWell(
-                borderRadius: BorderRadius.circular(16),
-                onTap: () {
-                  setState(() {
-                    _selectedIndex = 0;
-                  });
-                },
-                child: ChipButton(
-                  title: 'Infografis',
-                  selectedIndex: _selectedIndex,
-                  itemIndex: 0,
-                ),
-              ),
-            ),
-            const SizedBox(width: 10),
-            Expanded(
-              child: InkWell(
-                onTap: () {
-                  setState(() {
-                    _selectedIndex = 1;
-                  });
-                },
-                child: ChipButton(
-                  title: 'Video Materi',
-                  selectedIndex: _selectedIndex,
-                  itemIndex: 1,
-                ),
-              ),
-            ),
-            const SizedBox(width: 10),
-            Expanded(
-              child: InkWell(
-                onTap: () {
-                  setState(() {
-                    _selectedIndex = 2;
-                  });
-                },
-                child: ChipButton(
-                  title: 'Video Singkat',
-                  selectedIndex: _selectedIndex,
-                  itemIndex: 2,
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
-      body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 10.0),
-          child: Column(
-            children: [
-              TextField(
-                controller: _searchQueryController,
-                textInputAction: TextInputAction.search,
-                decoration: InputDecoration(
-                  contentPadding:
-                      const EdgeInsets.symmetric(vertical: 0.0, horizontal: 15),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  isDense: true,
-                  hintText: 'Individu dan pemerintah',
-                  hintStyle: kTextTheme.bodyText2!.copyWith(
-                    color: kLightGrey,
-                  ),
-                  suffixIcon: IconButton(
-                    onPressed: () {
-                      _searchQueryController.clear();
+            SizedBox(
+              height: 29,
+              child: ListView(
+                scrollDirection: Axis.horizontal,
+                children: [
+                  InkWell(
+                    borderRadius: BorderRadius.circular(16),
+                    onTap: () {
+                      setState(() {
+                        _selectedIndex = 0;
+                      });
                     },
-                    icon: const Icon(
-                      Icons.cancel_rounded,
+                    child: ChipButton(
+                      title: 'Semua',
+                      width: 105,
+                      selectedIndex: _selectedIndex,
+                      itemIndex: 0,
                     ),
                   ),
-                ),
-                autofocus: false,
-                style: kTextTheme.bodyText2!.copyWith(
-                  color: kRichBlack,
-                ),
-                onChanged: (value) {},
+                  const SizedBox(width: 10),
+                  InkWell(
+                    borderRadius: BorderRadius.circular(16),
+                    onTap: () {
+                      setState(() {
+                        _selectedIndex = 1;
+                      });
+                    },
+                    child: ChipButton(
+                      title: 'Infografis',
+                      width: 105,
+                      selectedIndex: _selectedIndex,
+                      itemIndex: 1,
+                    ),
+                  ),
+                  const SizedBox(width: 10),
+                  InkWell(
+                    borderRadius: BorderRadius.circular(16),
+                    onTap: () {
+                      setState(() {
+                        _selectedIndex = 2;
+                      });
+                    },
+                    child: ChipButton(
+                      title: 'Video Materi',
+                      width: 105,
+                      selectedIndex: _selectedIndex,
+                      itemIndex: 2,
+                    ),
+                  ),
+                  const SizedBox(width: 10),
+                  InkWell(
+                    borderRadius: BorderRadius.circular(16),
+                    onTap: () {
+                      setState(() {
+                        _selectedIndex = 3;
+                      });
+                    },
+                    child: ChipButton(
+                      title: 'Video Singkat',
+                      width: 105,
+                      selectedIndex: _selectedIndex,
+                      itemIndex: 3,
+                    ),
+                  ),
+                ],
               ),
-            ],
-          ),
+            ),
+            const SizedBox(height: 10),
+            TextField(
+              controller: _searchQueryController,
+              textInputAction: TextInputAction.search,
+              decoration: InputDecoration(
+                contentPadding:
+                    const EdgeInsets.symmetric(vertical: 0.0, horizontal: 15),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                isDense: true,
+                hintText: 'Individu dan pemerintah',
+                hintStyle: kTextTheme.bodyText2!.copyWith(
+                  color: kLightGrey,
+                ),
+                suffixIcon: IconButton(
+                  onPressed: () {
+                    _searchQueryController.clear();
+                  },
+                  icon: const Icon(
+                    Icons.cancel_rounded,
+                  ),
+                ),
+              ),
+              autofocus: false,
+              style: kTextTheme.bodyText2!.copyWith(
+                color: kRichBlack,
+              ),
+              onChanged: (value) {},
+            ),
+          ],
         ),
       ),
     );

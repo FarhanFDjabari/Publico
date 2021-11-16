@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:get/get.dart';
+import 'package:publico/presentation/widgets/publico_snackbar.dart';
 import 'package:publico/styles/colors.dart';
 import 'package:publico/styles/text_styles.dart';
 import 'package:video_player/video_player.dart';
@@ -59,7 +61,13 @@ class _VideoSingkatDetailPageState extends State<VideoSingkatDetailPage> {
         ),
         actions: [
           IconButton(
-            onPressed: () {},
+            onPressed: () {
+              Get.showSnackbar(
+                PublicoSnackbar(
+                  message: 'Ditambahkan ke bookmark',
+                ),
+              );
+            },
             icon: const Icon(
               Icons.bookmark_outline_rounded,
               color: kRichBlack,

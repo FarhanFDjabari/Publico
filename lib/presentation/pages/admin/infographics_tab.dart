@@ -15,76 +15,115 @@ class InfographicsTab extends StatefulWidget {
 }
 
 class _InfographicsTabState extends State<InfographicsTab> {
+  final _searchQueryController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SizedBox(
-        height: MediaQuery.of(context).size.height,
-        child: GridView.builder(
-          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 2,
-            mainAxisSpacing: 8,
-            crossAxisSpacing: 8,
-            childAspectRatio: 175 / 75,
-          ),
-          shrinkWrap: true,
-          itemCount: 9,
-          itemBuilder: (_, index) => Container(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(10),
-            ),
-            child: Stack(
-              alignment: Alignment.center,
-              fit: StackFit.expand,
-              children: [
-                ClipRRect(
+      body: Padding(
+        padding: const EdgeInsets.all(0.0),
+        child: Column(
+          children: [
+            TextField(
+              controller: _searchQueryController,
+              textInputAction: TextInputAction.search,
+              decoration: InputDecoration(
+                contentPadding:
+                    const EdgeInsets.symmetric(vertical: 0.0, horizontal: 15),
+                border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10),
-                  child: CachedNetworkImage(
-                    imageUrl:
-                        'https://images.pexels.com/photos/7947707/pexels-photo-7947707.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500',
-                    imageBuilder: (_, image) {
-                      return ColorFiltered(
-                        colorFilter: ColorFilter.mode(
-                          kRichBlack.withOpacity(0.45),
-                          BlendMode.darken,
+                ),
+                isDense: true,
+                hintText: 'Cari',
+                hintStyle: kTextTheme.bodyText2!.copyWith(
+                  color: kLightGrey,
+                ),
+                prefixIcon: const Icon(Icons.search),
+                suffixIcon: IconButton(
+                  onPressed: () {
+                    _searchQueryController.clear();
+                  },
+                  icon: const Icon(
+                    Icons.cancel_rounded,
+                  ),
+                ),
+              ),
+              autofocus: false,
+              style: kTextTheme.bodyText2!.copyWith(
+                color: kRichBlack,
+              ),
+              onChanged: (value) {},
+            ),
+            const SizedBox(height: 10),
+            Expanded(
+              child: GridView.builder(
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 2,
+                  mainAxisSpacing: 8,
+                  crossAxisSpacing: 8,
+                  childAspectRatio: 175 / 75,
+                ),
+                shrinkWrap: true,
+                itemCount: 9,
+                itemBuilder: (_, index) => Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: Stack(
+                    alignment: Alignment.center,
+                    fit: StackFit.expand,
+                    children: [
+                      ClipRRect(
+                        borderRadius: BorderRadius.circular(10),
+                        child: CachedNetworkImage(
+                          imageUrl:
+                              'https://images.pexels.com/photos/7947707/pexels-photo-7947707.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500',
+                          imageBuilder: (_, image) {
+                            return ColorFiltered(
+                              colorFilter: ColorFilter.mode(
+                                kRichBlack.withOpacity(0.45),
+                                BlendMode.darken,
+                              ),
+                              child: Image.network(
+                                'https://images.pexels.com/photos/7947707/pexels-photo-7947707.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500',
+                                fit: BoxFit.cover,
+                              ),
+                            );
+                          },
+                          placeholder: (_, value) {
+                            return const SizedBox(
+                              height: 75,
+                              child: Center(
+                                child: SizedBox(
+                                  width: 25,
+                                  height: 25,
+                                  child: CircularProgressIndicator(
+                                    color: kMikadoOrange,
+                                    strokeWidth: 3,
+                                  ),
+                                ),
+                              ),
+                            );
+                          },
                         ),
-                        child: Image.network(
-                          'https://images.pexels.com/photos/7947707/pexels-photo-7947707.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500',
-                          fit: BoxFit.cover,
-                        ),
-                      );
-                    },
-                    placeholder: (_, value) {
-                      return const SizedBox(
-                        height: 75,
+                      ),
+                      Positioned.fill(
                         child: Center(
-                          child: SizedBox(
-                            width: 25,
-                            height: 25,
-                            child: CircularProgressIndicator(
-                              color: kMikadoOrange,
-                              strokeWidth: 3,
+                          child: Text(
+                            'Semua',
+                            style: kTextTheme.caption!.copyWith(
+                              color: kRichWhite,
                             ),
+                            textAlign: TextAlign.center,
                           ),
                         ),
-                      );
-                    },
-                  ),
-                ),
-                Positioned.fill(
-                  child: Center(
-                    child: Text(
-                      'Semua',
-                      style: kTextTheme.caption!.copyWith(
-                        color: kRichWhite,
                       ),
-                      textAlign: TextAlign.center,
-                    ),
+                    ],
                   ),
                 ),
-              ],
+              ),
             ),
-          ),
+          ],
         ),
       ),
       floatingActionButton: SpeedDial(

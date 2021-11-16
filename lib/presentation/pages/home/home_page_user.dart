@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:publico/presentation/pages/bookmark/bookmark_page.dart';
 import 'package:publico/presentation/pages/explore/explore_page.dart';
 import 'package:publico/presentation/pages/search/search_page.dart';
@@ -39,6 +40,16 @@ class _HomePageUserState extends State<HomePageUser> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: kRichWhite,
+        elevation: 0,
+        title: SvgPicture.asset(
+          'assets/svg/Publico.svg',
+          height: 24,
+          width: 50,
+        ),
+        centerTitle: true,
+      ),
       body: NotificationListener<UserScrollNotification>(
         onNotification: (notification) {
           if (notification.direction == ScrollDirection.forward) {

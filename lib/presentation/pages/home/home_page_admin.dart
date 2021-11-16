@@ -7,7 +7,7 @@ import 'package:publico/presentation/pages/admin/video_materi_tab.dart';
 import 'package:publico/presentation/pages/admin/video_singkat_tab.dart';
 import 'package:publico/presentation/pages/splash_screen.dart';
 import 'package:publico/presentation/widgets/chip_button.dart';
-import 'package:publico/presentation/widgets/loading_button.dart';
+import 'package:publico/presentation/widgets/publico_setting_bottom_sheet.dart';
 import 'package:publico/styles/colors.dart';
 
 class HomePageAdmin extends StatefulWidget {
@@ -62,13 +62,9 @@ class _HomePageAdminState extends State<HomePageAdmin>
             ),
           );
         } else if (state is AuthDeleteSuccess) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text('Logout Sukses'),
-            ),
-          );
-          Navigator.of(context).pushReplacement(
-            MaterialPageRoute(builder: (_) => const SplashScreen()),
+          Navigator.of(context).pushNamedAndRemoveUntil(
+            SplashScreen.routeName,
+            (route) => false,
           );
         }
       },
@@ -85,25 +81,24 @@ class _HomePageAdminState extends State<HomePageAdmin>
           actions: [
             BlocBuilder<AuthCubit, AuthState>(
               builder: (builderContext, state) {
-                if (state is AuthLoading) {
-                  return LoadingButton(
-                    child: const Center(
-                      child: CircularProgressIndicator(),
-                    ),
-                  );
-                }
-                return ElevatedButton(
+                return IconButton(
                   onPressed: () {
-                    builderContext.read<AuthCubit>().logoutApp();
+                    showModalBottomSheet(
+                      backgroundColor: kRichWhite,
+                      context: context,
+                      isDismissible: true,
+                      builder: (_) => PublicoSettingBottomSheet(
+                        parentContext: context,
+                        onExitPressed: () {
+                          builderContext.read<AuthCubit>().logoutApp();
+                        },
+                        onHelpPressed: () {},
+                      ),
+                    );
                   },
-                  child: const SizedBox(
-                    width: 80,
-                    height: 20,
-                    child: Center(
-                        child: Text(
-                      'Logout',
-                      style: TextStyle(color: kRichWhite),
-                    )),
+                  icon: const Icon(
+                    Icons.settings,
+                    color: kRichBlack,
                   ),
                 );
               },

@@ -4,6 +4,8 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:get/get.dart';
+import 'package:publico/presentation/widgets/publico_snackbar.dart';
 import 'package:publico/styles/colors.dart';
 import 'package:publico/styles/text_styles.dart';
 
@@ -40,7 +42,13 @@ class _InfographicsDetailPageState extends State<InfographicsDetailPage> {
         ),
         actions: [
           IconButton(
-            onPressed: () {},
+            onPressed: () {
+              Get.showSnackbar(
+                PublicoSnackbar(
+                  message: 'Ditambahkan ke bookmark',
+                ),
+              );
+            },
             icon: const Icon(
               Icons.bookmark_outline_rounded,
               color: kRichBlack,

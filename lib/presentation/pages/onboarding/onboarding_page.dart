@@ -141,11 +141,10 @@ class _OnboardingPageState extends State<OnboardingPage> {
                       const Spacer(flex: 1),
                       PrimaryButton(
                         onPressed: () {
-                          Navigator.pushReplacement(
-                              context,
-                              MaterialPageRoute(
-                                builder: (_) => const HomePageUser(),
-                              ));
+                          Navigator.pushReplacementNamed(
+                            context,
+                            HomePageUser.routeName,
+                          );
                         },
                         child: SizedBox(
                           width: double.infinity,

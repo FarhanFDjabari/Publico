@@ -2,6 +2,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:publico/presentation/bloc/auth/auth_cubit.dart';
 import 'package:publico/presentation/pages/admin/detail/admin_infographics_detail.dart';
@@ -56,7 +57,7 @@ class MyApp extends StatelessWidget {
           create: (_) => di.locator<AuthCubit>(),
         ),
       ],
-      child: MaterialApp(
+      child: GetMaterialApp(
         title: 'Publico',
         theme: ThemeData.light().copyWith(
           colorScheme: kColorScheme,
