@@ -222,7 +222,7 @@ class _VideoMateriPostPageState extends State<VideoMateriPostPage> {
                               size: 35,
                             ),
                             Text(
-                              'Unggah Video',
+                              'Unggah Video\nMaks 7 Menit',
                               style: kTextTheme.bodyText2!.copyWith(
                                 color: kLightGrey,
                                 fontSize: 14,

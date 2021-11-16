@@ -245,7 +245,7 @@ class _VideoSingkatPostPageState extends State<VideoSingkatPostPage> {
                               size: 35,
                             ),
                             Text(
-                              'Unggah Video\nMaks. 60 detik',
+                              'Unggah Video\nMaks 60 Detik',
                               style: kTextTheme.bodyText2!.copyWith(
                                 color: kLightGrey,
                                 fontSize: 14,

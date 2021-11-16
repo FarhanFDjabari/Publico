@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:publico/presentation/pages/detail/video_singkat_detail_page.dart';
 import 'package:publico/presentation/widgets/publico_staggered_tile.dart';
-import 'package:publico/styles/colors.dart';
 
 class ExplorePage extends StatefulWidget {
   static const routeName = '/explore';
@@ -16,45 +14,33 @@ class ExplorePage extends StatefulWidget {
 class _ExplorePageState extends State<ExplorePage> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: kRichWhite,
-        elevation: 0,
-        title: SvgPicture.asset(
-          'assets/svg/Publico.svg',
-          height: 24,
-          width: 50,
-        ),
-        centerTitle: true,
-      ),
-      body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 10.0),
-          child: StaggeredGridView.countBuilder(
-            crossAxisCount: 4,
-            itemCount: 12,
-            itemBuilder: (BuildContext itemContext, int index) => InkWell(
-              onTap: () {
-                Navigator.pushNamed(
-                  context,
-                  VideoSingkatDetailPage.routeName,
-                  arguments: 'secret',
-                );
-              },
-              borderRadius: BorderRadius.circular(10),
-              child: PublicoStaggeredTile(
-                tileIndex: index,
-                title:
-                    'Subsidi Pemerintah dan Bantuan untuk lorem ipsum asdaksdka sdass dasdasdas',
-                imageUrl:
-                    'https://marketplace.canva.com/EADaooG1kwk/2/0/704w/canva-top-major-south-america-commodities-_IBpJMSh0_Y.jpg',
-                category: 'Infografis',
-              ),
+    return SafeArea(
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 10.0),
+        child: StaggeredGridView.countBuilder(
+          crossAxisCount: 4,
+          itemCount: 12,
+          itemBuilder: (BuildContext itemContext, int index) => InkWell(
+            onTap: () {
+              Navigator.pushNamed(
+                context,
+                VideoSingkatDetailPage.routeName,
+                arguments: 'secret',
+              );
+            },
+            borderRadius: BorderRadius.circular(10),
+            child: PublicoStaggeredTile(
+              tileIndex: index,
+              title:
+                  'Subsidi Pemerintah dan Bantuan untuk lorem ipsum asdaksdka sdass dasdasdas',
+              imageUrl:
+                  'https://marketplace.canva.com/EADaooG1kwk/2/0/704w/canva-top-major-south-america-commodities-_IBpJMSh0_Y.jpg',
+              category: 'Infografis',
             ),
-            staggeredTileBuilder: (int index) => const StaggeredTile.fit(2),
-            mainAxisSpacing: 15.0,
-            crossAxisSpacing: 8.0,
           ),
+          staggeredTileBuilder: (int index) => const StaggeredTile.fit(2),
+          mainAxisSpacing: 15.0,
+          crossAxisSpacing: 8.0,
         ),
       ),
     );

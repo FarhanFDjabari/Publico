@@ -5,6 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:publico/presentation/pages/admin/edit/infographic_edit_page.dart';
+import 'package:publico/presentation/widgets/publico_edit_bottom_sheet.dart';
 import 'package:publico/styles/colors.dart';
 import 'package:publico/styles/text_styles.dart';
 
@@ -44,10 +45,21 @@ class _AdminInfographicsDetailPageState
         actions: [
           IconButton(
             onPressed: () {
-              Navigator.pushNamed(
-                context,
-                InfographicEditPage.routeName,
-                arguments: 'secret',
+              showModalBottomSheet(
+                backgroundColor: kRichWhite,
+                context: context,
+                isDismissible: true,
+                builder: (_) => PublicoEditBottomSheet(
+                  parentContext: context,
+                  onDeletePressed: () {},
+                  onEditPressed: () {
+                    Navigator.pushNamed(
+                      context,
+                      InfographicEditPage.routeName,
+                      arguments: 'secret',
+                    );
+                  },
+                ),
               );
             },
             icon: const Icon(
