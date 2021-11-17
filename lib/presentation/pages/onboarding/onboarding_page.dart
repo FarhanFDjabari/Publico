@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:publico/presentation/pages/auth/login_page.dart';
 import 'package:publico/presentation/pages/home/home_page_user.dart';
+import 'package:publico/presentation/pages/onboarding/onboarding_end_page.dart';
 import 'package:publico/presentation/widgets/primary_button.dart';
 import 'package:publico/styles/colors.dart';
 import 'package:publico/styles/text_styles.dart';
@@ -23,23 +24,23 @@ class _OnboardingPageState extends State<OnboardingPage> {
 
   final List<Map<String, String>> onBoardingData = [
     {
-      'title': 'Infografis Ekonomi',
-      'subtitle':
-          'Dapatkan infografis lengkap mengenai materi ekonomi pembangunan berdasarkan sumber-sumber yang kredibel',
-      'imagePath': 'assets/svg/amico.svg'
-    },
-    {
       'title': 'Video Singkat Penjelasan',
       'subtitle':
           'Pelajari materi tentang ekonomi pembangunan melalui video singkat berdurasi 1 menit yang dapat anda lihat di TikTok juga!',
-      'imagePath': 'assets/svg/amico_2.svg'
+      'imagePath': 'assets/images/onboard_img_1.png'
     },
     {
       'title': 'Video Lengkap Materi',
       'subtitle':
           'Ingin memahami materi lebih lanjut? lihat video lengkap materi berdurasi 5 hingga 7 menit dari aplikasi Publico',
-      'imagePath': 'assets/svg/amico_3.svg'
+      'imagePath': 'assets/images/onboard_img_2.png'
     },
+    {
+      'title': 'Infografis Ekonomi',
+      'subtitle':
+          'Dapatkan infografis lengkap mengenai materi ekonomi pembangunan berdasarkan sumber-sumber yang kredibel',
+      'imagePath': 'assets/images/onboard_img_3.png'
+    }
   ];
 
   @override
@@ -68,143 +69,207 @@ class _OnboardingPageState extends State<OnboardingPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: SizedBox(
-        width: MediaQuery.of(context).size.width,
-        height: MediaQuery.of(context).size.height,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 10.0),
-          child: Column(
-            children: [
-              Expanded(
-                flex: 3,
-                child: PageView.builder(
-                  scrollDirection: Axis.horizontal,
-                  controller: onBoardingController,
-                  pageSnapping: true,
-                  onPageChanged: (index) {
-                    setState(() {
-                      currentIndex = index;
-                    });
-                  },
-                  itemCount: onBoardingData.length,
-                  itemBuilder: (_, index) => Column(
+    final _screenWidth = MediaQuery.of(context).size.width;
+    final _screenHeight = MediaQuery.of(context).size.height;
+    return Stack(
+      children: [
+        Container(
+          width: _screenWidth,
+          height: _screenHeight,
+          color: kRed,
+        ),
+        Container(
+          decoration: BoxDecoration(
+            gradient: kLinearGradient,
+          ),
+          child: Scaffold(
+            backgroundColor: Colors.transparent,
+            body: SizedBox(
+              width: _screenWidth,
+              height: _screenHeight,
+              child: Stack(
+                children: [
+                  Column(
                     children: [
-                      const Spacer(flex: 1),
-                      Container(
-                        margin: const EdgeInsets.only(bottom: 5),
-                        child: SvgPicture.asset(
-                          onBoardingData[index]['imagePath']!,
-                        ),
+                      const Spacer(
+                        flex: 6,
                       ),
-                      const SizedBox(height: 30),
-                      Text(
-                        onBoardingData[index]['title']!,
-                        style: kTextTheme.headline6!.copyWith(
-                          color: kRichBlack,
-                        ),
-                      ),
-                      Container(
-                        margin: const EdgeInsets.only(top: 10, bottom: 20),
-                        padding: const EdgeInsets.symmetric(horizontal: 5),
-                        width: double.infinity,
-                        child: Text(
-                          onBoardingData[index]['subtitle']!,
-                          textAlign: TextAlign.center,
-                          style: kTextTheme.bodyText2!.copyWith(
-                            color: kGrey,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-              SizedBox(
-                height: 5,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: List.generate(
-                    onBoardingData.length,
-                    (index) => _buildOnboardingDot(index: index),
-                  ),
-                ),
-              ),
-              Expanded(
-                flex: 2,
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(
-                      horizontal: 10.0, vertical: 30),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      const Spacer(flex: 1),
-                      PrimaryButton(
-                        onPressed: () {
-                          Navigator.pushReplacementNamed(
-                            context,
-                            HomePageUser.routeName,
-                          );
-                        },
-                        child: SizedBox(
-                          width: double.infinity,
-                          height: 45,
-                          child: Center(
-                            child: Text(
-                              'Lewati Pengenalan',
-                              style: kTextTheme.button!
-                                  .copyWith(color: kRichWhite),
+                      Expanded(
+                        flex: 5,
+                        child: Container(
+                          decoration: const BoxDecoration(
+                            color: kRichWhite,
+                            borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(100),
                             ),
                           ),
                         ),
+                      )
+                    ],
+                  ),
+                  Column(
+                    children: [
+                      SizedBox(
+                        height: _screenHeight / 12,
                       ),
-                      const SizedBox(height: 8),
-                      TextButton(
-                        onPressed: () {
-                          Navigator.pushReplacement(
-                              context,
-                              MaterialPageRoute(
-                                builder: (_) => const LoginPage(),
-                              ));
-                        },
-                        child: Text.rich(
-                          TextSpan(
+                      Expanded(
+                        flex: 4,
+                        child: PageView.builder(
+                          scrollDirection: Axis.horizontal,
+                          controller: onBoardingController,
+                          pageSnapping: true,
+                          onPageChanged: (index) {
+                            setState(() {
+                              currentIndex = index;
+                            });
+                          },
+                          itemCount: onBoardingData.length,
+                          itemBuilder: (_, index) => Column(
                             children: [
-                              TextSpan(
-                                  text: 'Anda seorang admin? ',
+                              Flexible(
+                                child: Stack(
+                                  children: [
+                                    Align(
+                                      alignment: index == 2
+                                          ? Alignment.bottomRight
+                                          : Alignment.bottomLeft,
+                                      child: Container(
+                                          margin:
+                                              const EdgeInsets.only(bottom: 5),
+                                          child: Image.asset(
+                                            onBoardingData[index]['imagePath']!,
+                                            fit: BoxFit.contain,
+                                          )),
+                                    ),
+                                    Align(
+                                      alignment: index == 2
+                                          ? Alignment.bottomLeft
+                                          : Alignment.bottomRight,
+                                      child: Container(
+                                        margin: const EdgeInsets.symmetric(
+                                          horizontal: 18.0,
+                                          vertical: 30,
+                                        ),
+                                        child: Column(
+                                          mainAxisAlignment: index == 1
+                                              ? MainAxisAlignment.start
+                                              : MainAxisAlignment.end,
+                                          crossAxisAlignment: index == 2
+                                              ? CrossAxisAlignment.start
+                                              : CrossAxisAlignment.end,
+                                          children: [
+                                            Text(
+                                              onBoardingData[index]['title']!
+                                                          .split(" ")
+                                                          .length ==
+                                                      2
+                                                  ? onBoardingData[index]
+                                                          ['title']!
+                                                      .split(" ")[0]
+                                                  : "${onBoardingData[index]['title']!.split(" ")[0]} ${onBoardingData[index]['title']!.split(" ")[1]}",
+                                              style: kHeading5.copyWith(
+                                                  fontWeight: FontWeight.w700),
+                                            ),
+                                            Text(
+                                              onBoardingData[index]['title']!
+                                                  .split(" ")
+                                                  .last,
+                                              style: kOverline.copyWith(
+                                                  fontSize: 20),
+                                            ),
+                                            SizedBox(
+                                              height: _screenHeight / 8,
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              const SizedBox(height: 30),
+                              Container(
+                                margin:
+                                    const EdgeInsets.only(top: 10, bottom: 20),
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 15),
+                                width: double.infinity,
+                                child: Text(
+                                  onBoardingData[index]['subtitle']!,
+                                  textAlign: TextAlign.center,
                                   style: kTextTheme.bodyText2!.copyWith(
                                     color: kGrey,
-                                  )),
-                              TextSpan(
-                                  text: 'Masuk Disini.',
-                                  style: kTextTheme.bodyText2!.copyWith(
-                                    color: kMikadoOrange,
-                                    fontWeight: FontWeight.w500,
-                                  )),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      SizedBox(
+                        height: 9,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: List.generate(
+                            onBoardingData.length,
+                            (index) => _buildOnboardingDot(index: index),
+                          ),
+                        ),
+                      ),
+                      Expanded(
+                        flex: 1,
+                        child: Padding(
+                          padding: EdgeInsets.symmetric(
+                            horizontal: _screenWidth / 6,
+                            vertical: 30,
+                          ),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              const Spacer(flex: 1),
+                              PrimaryButton(
+                                onPressed: () {
+                                  Navigator.pushReplacementNamed(
+                                    context,
+                                    OnboardingEndPage.routeName,
+                                  );
+                                },
+                                child: SizedBox(
+                                  width: double.infinity,
+                                  height: 45,
+                                  child: Center(
+                                    child: Text(
+                                      'Lewati Pengenalan',
+                                      style: kTextTheme.button!
+                                          .copyWith(color: kRichWhite),
+                                    ),
+                                  ),
+                                ),
+                              ),
                             ],
                           ),
                         ),
                       ),
                     ],
                   ),
-                ),
+                ],
               ),
-            ],
+            ),
           ),
         ),
-      ),
+      ],
     );
   }
 
   AnimatedContainer _buildOnboardingDot({required int index}) {
     return AnimatedContainer(
       duration: const Duration(milliseconds: 750),
-      width: 5,
-      height: 5,
-      margin: const EdgeInsets.only(right: 5),
+      width: 9,
+      height: 9,
+      margin: const EdgeInsets.only(right: 9),
       decoration: BoxDecoration(
         color: currentIndex == index ? kMikadoOrange : kLightGrey,
-        borderRadius: BorderRadius.circular(8),
+        shape: BoxShape.circle,
       ),
     );
   }
