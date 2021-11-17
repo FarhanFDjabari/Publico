@@ -55,13 +55,17 @@ class _SplashScreenState extends State<SplashScreen>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SizedBox(
+      backgroundColor: kRed,
+      body: Container(
         width: MediaQuery.of(context).size.width,
         height: MediaQuery.of(context).size.height,
+        decoration: BoxDecoration(
+          gradient: kLinearGradient2,
+        ),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            SvgPicture.asset('assets/svg/Publico.svg'),
+            SvgPicture.asset('assets/svg/Publico-white.svg'),
             const SizedBox(height: 15),
             SlideTransition(
               position: Tween<Offset>(
@@ -71,7 +75,7 @@ class _SplashScreenState extends State<SplashScreen>
               child: FadeTransition(
                 opacity: _animationController,
                 child: const CircularProgressIndicator(
-                  color: kMikadoOrange,
+                  color: kRichWhite,
                 ),
               ),
             ),

@@ -13,61 +13,59 @@ class OnboardingEndPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final _screenWidth = MediaQuery.of(context).size.width;
     final _screenHeight = MediaQuery.of(context).size.height;
-    return Stack(
-      children: [
-        Container(
-          width: _screenWidth,
-          height: _screenHeight,
-          color: kRed,
-        ),
-        Container(
-          decoration: BoxDecoration(gradient: kLinearGradient),
-          child: Scaffold(
-            backgroundColor: Colors.transparent,
-            body: SizedBox(
-              width: double.infinity,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  const Spacer(),
-                  Expanded(
-                      flex: 7,
-                      child: Image.asset('assets/images/onboard_img_end.png')),
-                  const SizedBox(
-                    height: 18,
-                  ),
-                  Expanded(
-                    flex: 2,
-                    child: Column(
-                      children: [
-                        ob.OutlineButton(
+    return Scaffold(
+      backgroundColor: kRed,
+      body: Container(
+        width: _screenWidth,
+        height: _screenHeight,
+        decoration: BoxDecoration(gradient: kLinearGradient2),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            const Spacer(),
+            Expanded(
+                flex: 7,
+                child: Image.asset('assets/images/onboard_img_end.png')),
+            const SizedBox(
+              height: 18,
+            ),
+            Expanded(
+              flex: 2,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 70.0),
+                child: Column(
+                  children: [
+                    ob.OutlineButton(
+                      child: SizedBox(
+                        height: 45,
+                        child: Center(
                           child: Text(
                             'Masuk Sebagai Pengunjung',
                             style: kButton.copyWith(color: kRichWhite),
                           ),
-                          onPressed: () {
-                            Navigator.pushReplacementNamed(
-                                context, HomePageUser.routeName);
-                          },
                         ),
-                        TextButton(
-                            onPressed: () {
-                              Navigator.pushReplacementNamed(
-                                  context, LoginPage.routeName);
-                            },
-                            child: Text(
-                              'Masuk sebagai Admin',
-                              style: kBodyText.copyWith(color: kRichWhite),
-                            ))
-                      ],
+                      ),
+                      onPressed: () {
+                        Navigator.pushReplacementNamed(
+                            context, HomePageUser.routeName);
+                      },
                     ),
-                  ),
-                ],
+                    TextButton(
+                        onPressed: () {
+                          Navigator.pushReplacementNamed(
+                              context, LoginPage.routeName);
+                        },
+                        child: Text(
+                          'Masuk sebagai Admin',
+                          style: kBodyText.copyWith(color: kRichWhite),
+                        ))
+                  ],
+                ),
               ),
             ),
-          ),
+          ],
         ),
-      ],
+      ),
     );
   }
 }

@@ -1,9 +1,6 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-import 'package:publico/presentation/pages/auth/login_page.dart';
-import 'package:publico/presentation/pages/home/home_page_user.dart';
 import 'package:publico/presentation/pages/onboarding/onboarding_end_page.dart';
 import 'package:publico/presentation/widgets/primary_button.dart';
 import 'package:publico/styles/colors.dart';

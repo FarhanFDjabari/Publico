@@ -24,6 +24,16 @@ final LinearGradient kLinearGradient = LinearGradient(
   end: Alignment.bottomRight,
 );
 
+final LinearGradient kLinearGradient2 = LinearGradient(
+  colors: [kMikadoOrange, kMikadoOrange.withOpacity(0.0)],
+  stops: const [
+    0.1,
+    0.90,
+  ],
+  begin: Alignment.topCenter,
+  end: Alignment.bottomCenter,
+);
+
 const kColorScheme = ColorScheme(
   primary: kMikadoOrange,
   primaryVariant: kMikadoOrange,

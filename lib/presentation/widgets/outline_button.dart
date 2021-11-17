@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:publico/styles/colors.dart';
 
-class OutlineButton extends ElevatedButton {
+class OutlineButton extends OutlinedButton {
   final double borderRadius;
   final Widget child;
   final Color? primaryColor;
@@ -21,6 +21,8 @@ class OutlineButton extends ElevatedButton {
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(borderRadius),
             ),
+            splashFactory: InkSplash.splashFactory,
+            shadowColor: Colors.transparent,
             primary: primaryColor,
             elevation: 0,
             textStyle: const TextStyle(
