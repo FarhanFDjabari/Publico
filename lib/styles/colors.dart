@@ -15,9 +15,13 @@ const Color kLightGrey = Color(0xFFB6B6B6);
 const Color kLightGrey2 = Color(0xFFEAEAEA);
 
 final LinearGradient kLinearGradient = LinearGradient(
-  colors: [kMikadoOrange, kMikadoOrange.withOpacity(0.5)],
-  begin: const Alignment(-0.5222991704940796, -1.7212408781051636),
-  end: const Alignment(1.721240758895874, -2.448887825012207),
+  colors: [kMikadoOrange.withOpacity(0.0), kMikadoOrange],
+  stops: const [
+    0.1,
+    0.90,
+  ],
+  begin: Alignment.topLeft,
+  end: Alignment.bottomRight,
 );
 
 const kColorScheme = ColorScheme(
