@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart' as auth;
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:publico/data/models/user_model.dart';
@@ -10,6 +11,9 @@ abstract class RemoteDataSources {
   Future<void> sendForgetPasswordSignal(String email);
   Future<UploadTask> uploadFiletoStorage(String destination, File file);
   Future<void> logout();
+
+  Future<void> postVideoSingkat(
+      String title, String description, String videoUrl, String tiktokUrl);
 }
 
 class RemoteDataSourcesImpl extends RemoteDataSources {
@@ -62,6 +66,24 @@ class RemoteDataSourcesImpl extends RemoteDataSources {
       final ref = FirebaseStorage.instance.ref(destination);
 
       return ref.putFile(file);
+    } catch (error) {
+      throw ServerException(error.toString());
+    }
+  }
+
+  @override
+  Future<void> postVideoSingkat(String title, String description,
+      String videoUrl, String tiktokUrl) async {
+    try {
+      final ref = await FirebaseFirestore.instance.collection('videos');
+      final result = await ref.add({
+        'title': title,
+        'description': description,
+        'isSingkat': true,
+        'videoUrl': videoUrl,
+        'tiktokUrl': tiktokUrl,
+      });
+      print('Video Singkat added');
     } catch (error) {
       throw ServerException(error.toString());
     }

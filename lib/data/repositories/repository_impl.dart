@@ -5,6 +5,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:publico/data/datasources/remote_datasources.dart';
 import 'package:publico/domain/entities/user.dart';
+import 'package:path/path.dart' as p;
 import 'package:publico/domain/repositories/repository.dart';
 import 'package:publico/util/exception.dart';
 import 'package:publico/util/failure.dart';
@@ -55,6 +56,30 @@ class RepositoryImpl extends Repository {
       final result =
           await remoteDataSources.uploadFiletoStorage(destination, file);
       return Right(result);
+    } on ServerException catch (e) {
+      return Left(ServerFailure(e.message));
+    }
+  }
+
+  @override
+  Future<Either<Failure, void>> postVideoSingkat(
+      String title,
+      String description,
+      String tiktokUrl,
+      String destination,
+      File file) async {
+    try {
+      final uploadTask = await remoteDataSources.uploadFiletoStorage(
+          '$destination/${p.basename(file.path)}', file);
+      String videoUrl = '';
+      await uploadTask.whenComplete(() async {
+        videoUrl = await uploadTask.snapshot.ref.getDownloadURL();
+      });
+      final result = await remoteDataSources.postVideoSingkat(
+          title, description, videoUrl, tiktokUrl);
+      return const Right(null);
+    } on FirebaseException catch (e) {
+      return Left(ServerFailure(e.toString()));
     } on ServerException catch (e) {
       return Left(ServerFailure(e.message));
     }

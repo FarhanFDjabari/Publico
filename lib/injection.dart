@@ -3,11 +3,13 @@ import 'package:get_it/get_it.dart';
 import 'package:publico/data/datasources/remote_datasources.dart';
 import 'package:publico/data/repositories/repository_impl.dart';
 import 'package:publico/domain/repositories/repository.dart';
+import 'package:publico/domain/usecases/admin/post_video_singkat.dart';
 import 'package:publico/domain/usecases/login_with_email_and_password.dart';
 import 'package:publico/domain/usecases/logout.dart';
 import 'package:publico/domain/usecases/send_forget_password.dart';
 import 'package:publico/domain/usecases/upload_file_to_storage.dart';
 import 'package:publico/presentation/bloc/auth/auth_cubit.dart';
+import 'package:publico/presentation/bloc/auth/video_singkat/cubit/video_singkat_cubit.dart';
 
 import 'data/datasources/db/database_helper.dart';
 
@@ -22,12 +24,19 @@ void init() {
       sendForgetPassword: locator(),
     ),
   );
+  locator.registerFactory(
+    () => VideoSingkatCubit(
+      postVideoSingkat: locator(),
+    ),
+  );
 
   // usecases
   locator.registerLazySingleton(() => LoginWithEmailAndPassword(locator()));
   locator.registerLazySingleton(() => Logout(locator()));
   locator.registerLazySingleton(() => SendForgetPassword(locator()));
   locator.registerLazySingleton(() => UploadFileToStorage(locator()));
+
+  locator.registerLazySingleton(() => PostVideoSingkat(locator()));
 
   // repository
   locator.registerLazySingleton<Repository>(

@@ -11,4 +11,7 @@ abstract class Repository {
   Future<Either<Failure, void>> sendForgetPasswordSignal(String email);
   Future<Either<Failure, UploadTask>> uploadFile(String destination, File file);
   Future<Either<Failure, void>> logout();
+
+  Future<Either<Failure, void>> postVideoSingkat(String title,
+      String description, String tiktokUrl, String destination, File file);
 }
