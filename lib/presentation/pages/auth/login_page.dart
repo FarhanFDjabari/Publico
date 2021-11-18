@@ -146,48 +146,45 @@ class _LoginPageState extends State<LoginPage> {
                                   ),
                                 ),
                               ),
-                              SizedBox(
-                                child: TextFormField(
-                                  controller: _passwordController,
-                                  keyboardType: TextInputType.visiblePassword,
-                                  decoration: InputDecoration(
-                                    hintText: 'Masukkan kata sandi',
-                                    helperText: 'Minimal 8 karakter',
-                                    helperMaxLines: 1,
-                                    border: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(10),
-                                    ),
-                                    enabledBorder: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(10),
-                                    ),
-                                    suffixIcon: IconButton(
-                                      onPressed: () {
-                                        setState(() {
-                                          _isObscured = !_isObscured;
-                                        });
-                                      },
-                                      icon: Icon(
-                                        _isObscured
-                                            ? Icons.visibility_off
-                                            : Icons.visibility,
-                                        size: 20,
-                                      ),
+                              TextFormField(
+                                controller: _passwordController,
+                                keyboardType: TextInputType.visiblePassword,
+                                decoration: InputDecoration(
+                                  hintText: 'Masukkan kata sandi',
+                                  helperText: 'Minimal 8 karakter',
+                                  helperMaxLines: 1,
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                  enabledBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                  suffixIcon: IconButton(
+                                    onPressed: () {
+                                      setState(() {
+                                        _isObscured = !_isObscured;
+                                      });
+                                    },
+                                    icon: Icon(
+                                      _isObscured
+                                          ? Icons.visibility_off
+                                          : Icons.visibility,
+                                      size: 20,
                                     ),
                                   ),
-                                  style: kTextTheme.bodyText2!.copyWith(
-                                    color: kRichBlack,
-                                    height: 1,
-                                  ),
-                                  obscureText: _isObscured,
-                                  autofocus: false,
-                                  autocorrect: false,
-                                  onChanged: (value) {
-                                    Timer(const Duration(milliseconds: 500),
-                                        () {
-                                      formCheck();
-                                    });
-                                  },
                                 ),
+                                style: kTextTheme.bodyText2!.copyWith(
+                                  color: kRichBlack,
+                                  height: 1,
+                                ),
+                                obscureText: _isObscured,
+                                autofocus: false,
+                                autocorrect: false,
+                                onChanged: (value) {
+                                  Timer(const Duration(milliseconds: 500), () {
+                                    formCheck();
+                                  });
+                                },
                               ),
                               Align(
                                 alignment: Alignment.centerRight,
@@ -311,10 +308,10 @@ class _LoginPageState extends State<LoginPage> {
                       ),
                     ),
                     Positioned(
-                      top: -_screenHeight * 0.4 + 30,
+                      top: -_screenHeight * 0.38 + 30,
                       child: Image.asset(
                         'assets/images/onboard_img_end.png',
-                        height: _screenHeight * 0.4,
+                        height: _screenHeight * 0.38,
                       ),
                     ),
                   ],
