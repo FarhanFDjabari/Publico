@@ -25,7 +25,9 @@ class OnboardingEndPage extends StatelessWidget {
             const Spacer(),
             Expanded(
                 flex: 7,
-                child: Image.asset('assets/images/onboard_img_end.png')),
+                child: Hero(
+                    tag: const Key('onboarding-img-end'),
+                    child: Image.asset('assets/images/onboard_img_end.png'))),
             const SizedBox(
               height: 18,
             ),

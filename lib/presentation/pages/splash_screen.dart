@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:publico/presentation/pages/home/home_page_admin.dart';
+import 'package:publico/presentation/pages/onboarding/onboarding_end_page.dart';
 import 'package:publico/presentation/pages/onboarding/onboarding_page.dart';
 import 'package:publico/styles/colors.dart';
 
@@ -31,15 +32,22 @@ class _SplashScreenState extends State<SplashScreen>
 
     _animationController.forward().then((value) {
       Timer(const Duration(seconds: 2), () {
-        if (GetStorage().read('uid') == null) {
-          Navigator.pushReplacement(
+        if (GetStorage().read('uid') == null &&
+            GetStorage().read('first_open') == null) {
+          Navigator.pushReplacementNamed(
             context,
-            MaterialPageRoute(builder: (_) => const OnboardingPage()),
+            OnboardingPage.routeName,
+          );
+        } else if (GetStorage().read('uid') != null &&
+            GetStorage().read('first_open') != null) {
+          Navigator.pushReplacementNamed(
+            context,
+            HomePageAdmin.routeName,
           );
         } else {
-          Navigator.pushReplacement(
+          Navigator.pushReplacementNamed(
             context,
-            MaterialPageRoute(builder: (_) => const HomePageAdmin()),
+            OnboardingEndPage.routeName,
           );
         }
       });

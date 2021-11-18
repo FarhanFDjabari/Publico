@@ -309,9 +309,12 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                     Positioned(
                       top: -_screenHeight * 0.38 + 30,
-                      child: Image.asset(
-                        'assets/images/onboard_img_end.png',
-                        height: _screenHeight * 0.38,
+                      child: Hero(
+                        tag: const Key('onboarding-img-end'),
+                        child: Image.asset(
+                          'assets/images/onboard_img_end.png',
+                          height: _screenHeight * 0.38,
+                        ),
                       ),
                     ),
                   ],

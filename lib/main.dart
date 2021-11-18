@@ -76,7 +76,8 @@ class MyApp extends StatelessWidget {
             case LoginPage.routeName:
               return MaterialPageRoute(builder: (_) => const LoginPage());
             case ForgetPasswordPage.routeName:
-              return MaterialPageRoute(builder: (_) => ForgetPasswordPage());
+              return MaterialPageRoute(
+                  builder: (_) => const ForgetPasswordPage());
             case HomePageUser.routeName:
               return MaterialPageRoute(builder: (_) => const HomePageUser());
             case HomePageAdmin.routeName:

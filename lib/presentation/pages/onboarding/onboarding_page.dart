@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:publico/presentation/pages/onboarding/onboarding_end_page.dart';
 import 'package:publico/presentation/widgets/primary_button.dart';
 import 'package:publico/styles/colors.dart';
@@ -225,11 +226,16 @@ class _OnboardingPageState extends State<OnboardingPage> {
                             children: [
                               const Spacer(flex: 1),
                               PrimaryButton(
-                                onPressed: () {
-                                  Navigator.pushReplacementNamed(
-                                    context,
-                                    OnboardingEndPage.routeName,
-                                  );
+                                onPressed: () async {
+                                  await GetStorage()
+                                      .write('first_open', false)
+                                      .then(
+                                        (value) =>
+                                            Navigator.pushReplacementNamed(
+                                          context,
+                                          OnboardingEndPage.routeName,
+                                        ),
+                                      );
                                 },
                                 child: SizedBox(
                                   width: double.infinity,
