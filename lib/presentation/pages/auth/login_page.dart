@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -23,6 +25,25 @@ class _LoginPageState extends State<LoginPage> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   bool _isObscured = true;
+  bool isValidate = false;
+
+  void formCheck() {
+    if (_emailController.text.isEmpty ||
+        !_emailController.text.contains('@') ||
+        _passwordController.text.length < 8) {
+      if (!isValidate) {
+        return;
+      } else {
+        setState(() {
+          isValidate = false;
+        });
+      }
+    } else {
+      setState(() {
+        isValidate = true;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -109,11 +130,10 @@ class _LoginPageState extends State<LoginPage> {
                                   height: 1,
                                   color: kRichBlack,
                                 ),
-                                validator: (value) {
-                                  if (value!.isEmpty || !value.contains('@')) {
-                                    return 'Format email tidak valid';
-                                  }
-                                  return null;
+                                onChanged: (value) {
+                                  Timer(const Duration(milliseconds: 500), () {
+                                    formCheck();
+                                  });
                                 },
                               ),
                               const SizedBox(height: 8),
@@ -126,45 +146,48 @@ class _LoginPageState extends State<LoginPage> {
                                   ),
                                 ),
                               ),
-                              TextFormField(
-                                controller: _passwordController,
-                                keyboardType: TextInputType.visiblePassword,
-                                decoration: InputDecoration(
-                                  hintText: 'Masukkan kata sandi',
-                                  helperMaxLines: 1,
-                                  border: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(10),
-                                  ),
-                                  enabledBorder: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(10),
-                                  ),
-                                  suffixIcon: IconButton(
-                                    onPressed: () {
-                                      setState(() {
-                                        _isObscured = !_isObscured;
-                                      });
-                                    },
-                                    icon: Icon(
-                                      _isObscured
-                                          ? Icons.visibility_off
-                                          : Icons.visibility,
-                                      size: 20,
+                              SizedBox(
+                                child: TextFormField(
+                                  controller: _passwordController,
+                                  keyboardType: TextInputType.visiblePassword,
+                                  decoration: InputDecoration(
+                                    hintText: 'Masukkan kata sandi',
+                                    helperText: 'Minimal 8 karakter',
+                                    helperMaxLines: 1,
+                                    border: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
+                                    enabledBorder: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
+                                    suffixIcon: IconButton(
+                                      onPressed: () {
+                                        setState(() {
+                                          _isObscured = !_isObscured;
+                                        });
+                                      },
+                                      icon: Icon(
+                                        _isObscured
+                                            ? Icons.visibility_off
+                                            : Icons.visibility,
+                                        size: 20,
+                                      ),
                                     ),
                                   ),
+                                  style: kTextTheme.bodyText2!.copyWith(
+                                    color: kRichBlack,
+                                    height: 1,
+                                  ),
+                                  obscureText: _isObscured,
+                                  autofocus: false,
+                                  autocorrect: false,
+                                  onChanged: (value) {
+                                    Timer(const Duration(milliseconds: 500),
+                                        () {
+                                      formCheck();
+                                    });
+                                  },
                                 ),
-                                style: kTextTheme.bodyText2!.copyWith(
-                                  color: kRichBlack,
-                                  height: 1,
-                                ),
-                                obscureText: _isObscured,
-                                autofocus: false,
-                                autocorrect: false,
-                                validator: (value) {
-                                  if (value!.isEmpty) {
-                                    return 'Kata sandi tidak boleh kosong';
-                                  }
-                                  return null;
-                                },
                               ),
                               Align(
                                 alignment: Alignment.centerRight,
@@ -240,16 +263,16 @@ class _LoginPageState extends State<LoginPage> {
                                     );
                                   }
                                   return PrimaryButton(
-                                    onPressed: () {
-                                      if (_formKey.currentState!.validate()) {
-                                        builderContext
-                                            .read<AuthCubit>()
-                                            .loginEmailAndPassword(
-                                              _emailController.text,
-                                              _passwordController.text,
-                                            );
-                                      }
-                                    },
+                                    onPressed: !isValidate
+                                        ? null
+                                        : () {
+                                            builderContext
+                                                .read<AuthCubit>()
+                                                .loginEmailAndPassword(
+                                                  _emailController.text,
+                                                  _passwordController.text,
+                                                );
+                                          },
                                     borderRadius: 10,
                                     primaryColor: kMikadoOrange,
                                     child: SizedBox(
