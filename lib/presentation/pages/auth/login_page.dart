@@ -26,190 +26,279 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
+    final _screenWidth = MediaQuery.of(context).size.width;
+    final _screenHeight = MediaQuery.of(context).size.height;
+
     return Scaffold(
-      body: Center(
-        child: SingleChildScrollView(
-          child: SafeArea(
-            top: true,
-            child: Form(
-              key: _formKey,
-              child: Padding(
-                padding: const EdgeInsets.all(15.0),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
+      backgroundColor: kRed,
+      resizeToAvoidBottomInset: false,
+      body: Container(
+        decoration: BoxDecoration(
+          gradient: kLinearGradient,
+        ),
+        child: Center(
+          child: SingleChildScrollView(
+            child: SafeArea(
+              top: true,
+              child: SizedBox(
+                width: _screenWidth,
+                height: _screenHeight,
+                child: Stack(
+                  alignment: Alignment.center,
                   children: [
-                    SvgPicture.asset(
-                      'assets/svg/Publico.svg',
-                      height: 50,
-                    ),
-                    const SizedBox(height: 20),
-                    Text(
-                      'Masuk Untuk Admin Aplikasi',
-                      style: kTextTheme.subtitle1!.copyWith(
-                        fontWeight: FontWeight.w500,
-                        fontSize: 16,
-                        color: kRichBlack,
-                      ),
-                    ),
-                    const SizedBox(height: 30),
-                    TextFormField(
-                      controller: _emailController,
-                      keyboardType: TextInputType.emailAddress,
-                      autofocus: true,
-                      decoration: InputDecoration(
-                        labelText: 'Alamat Email',
-                        hintText: 'Alamat Email',
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10),
+                    Column(
+                      children: [
+                        const Spacer(
+                          flex: 4,
                         ),
-                        enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                      ),
-                      style: kTextTheme.bodyText2!.copyWith(
-                        color: kRichBlack,
-                      ),
-                      validator: (value) {
-                        if (value!.isEmpty || !value.contains('@')) {
-                          return 'Format email tidak valid';
-                        }
-                        return null;
-                      },
-                    ),
-                    const SizedBox(height: 15),
-                    TextFormField(
-                      controller: _passwordController,
-                      keyboardType: TextInputType.visiblePassword,
-                      decoration: InputDecoration(
-                        labelText: 'Kata Sandi',
-                        hintText: 'Kata Sandi',
-                        helperMaxLines: 1,
-                        helperText: 'minimal 8 karakter',
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        suffixIcon: IconButton(
-                          onPressed: () {
-                            setState(() {
-                              _isObscured = !_isObscured;
-                            });
-                          },
-                          icon: Icon(_isObscured
-                              ? Icons.visibility_off
-                              : Icons.visibility),
-                        ),
-                      ),
-                      style: kTextTheme.bodyText2!.copyWith(
-                        color: kRichBlack,
-                      ),
-                      obscureText: _isObscured,
-                      autofocus: false,
-                      autocorrect: false,
-                      validator: (value) {
-                        if (value!.isEmpty) {
-                          return 'Kata sandi tidak boleh kosong';
-                        }
-                        return null;
-                      },
-                    ),
-                    const SizedBox(height: 30),
-                    BlocConsumer<AuthCubit, AuthState>(
-                      listener: (listenerContext, state) {
-                        if (state is AuthError) {
-                          ScaffoldMessenger.of(context).showMaterialBanner(
-                            MaterialBanner(
-                              content:
-                                  Text('Autentikasi Error: ${state.message}'),
-                              actions: [
-                                TextButton(
-                                  onPressed: () {
-                                    ScaffoldMessenger.of(context)
-                                        .hideCurrentMaterialBanner();
-                                  },
-                                  child: const Text('Oke'),
-                                ),
-                              ],
-                              padding: const EdgeInsets.only(top: 20),
-                              leadingPadding:
-                                  const EdgeInsets.symmetric(horizontal: 10),
-                              leading: const Icon(
-                                Icons.error,
-                                color: Colors.red,
-                              ),
-                              backgroundColor: kRichBlack.withOpacity(0.75),
+                        Flexible(
+                          flex: 7,
+                          child: Container(
+                            decoration: const BoxDecoration(
+                              color: kRichWhite,
+                              borderRadius: BorderRadius.only(
+                                  topLeft: Radius.circular(100)),
                             ),
-                          );
-                        } else if (state is AuthSuccess) {
-                          Navigator.of(context).pushReplacementNamed(
-                            HomePageAdmin.routeName,
-                          );
-                        }
-                      },
-                      builder: (builderContext, state) {
-                        if (state is AuthLoading) {
-                          return LoadingButton(
-                            borderRadius: 10,
-                            primaryColor: kLightGrey,
-                            child: const SizedBox(
-                              width: double.infinity,
-                              height: 45,
-                              child: Center(
-                                child: SizedBox(
-                                  width: 20,
-                                  height: 20,
-                                  child: CircularProgressIndicator(
-                                    color: kRichWhite,
-                                    strokeWidth: 3,
-                                  ),
-                                ),
-                              ),
-                            ),
-                          );
-                        }
-                        return PrimaryButton(
-                          onPressed: () {
-                            if (_formKey.currentState!.validate()) {
-                              builderContext
-                                  .read<AuthCubit>()
-                                  .loginEmailAndPassword(
-                                    _emailController.text,
-                                    _passwordController.text,
-                                  );
-                            }
-                          },
-                          borderRadius: 10,
-                          primaryColor: kMikadoOrange,
-                          child: SizedBox(
-                            width: double.infinity,
-                            height: 45,
-                            child: Center(
-                              child: Text(
-                                'Masuk Admin',
-                                style: kTextTheme.button!.copyWith(
-                                  color: kRichWhite,
+                            child: Form(
+                              key: _formKey,
+                              child: Padding(
+                                padding: const EdgeInsets.all(15.0),
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    SvgPicture.asset(
+                                      'assets/svg/Publico.svg',
+                                      height: 36,
+                                    ),
+                                    const SizedBox(height: 16),
+                                    Text(
+                                      'Masuk Untuk Admin Aplikasi',
+                                      style: kTextTheme.subtitle1!.copyWith(
+                                        fontWeight: FontWeight.w500,
+                                        fontSize: 16,
+                                        color: kRichBlack,
+                                      ),
+                                    ),
+                                    const SizedBox(height: 30),
+                                    TextFormField(
+                                      controller: _emailController,
+                                      keyboardType: TextInputType.emailAddress,
+                                      autofocus: true,
+                                      decoration: InputDecoration(
+                                        labelText: 'Alamat Email',
+                                        hintText: 'Alamat Email',
+                                        border: OutlineInputBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(10),
+                                        ),
+                                        enabledBorder: OutlineInputBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(10),
+                                        ),
+                                      ),
+                                      style: kTextTheme.bodyText2!.copyWith(
+                                        color: kRichBlack,
+                                      ),
+                                      validator: (value) {
+                                        if (value!.isEmpty ||
+                                            !value.contains('@')) {
+                                          return 'Format email tidak valid';
+                                        }
+                                        return null;
+                                      },
+                                    ),
+                                    const SizedBox(height: 16),
+                                    TextFormField(
+                                      controller: _passwordController,
+                                      keyboardType:
+                                          TextInputType.visiblePassword,
+                                      decoration: InputDecoration(
+                                        labelText: 'Kata Sandi',
+                                        hintText: 'Kata Sandi',
+                                        helperMaxLines: 1,
+                                        border: OutlineInputBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(10),
+                                        ),
+                                        enabledBorder: OutlineInputBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(10),
+                                        ),
+                                        suffixIcon: IconButton(
+                                          onPressed: () {
+                                            setState(() {
+                                              _isObscured = !_isObscured;
+                                            });
+                                          },
+                                          icon: Icon(
+                                            _isObscured
+                                                ? Icons.visibility_off
+                                                : Icons.visibility,
+                                            size: 20,
+                                          ),
+                                        ),
+                                      ),
+                                      style: kTextTheme.bodyText2!.copyWith(
+                                        color: kRichBlack,
+                                      ),
+                                      obscureText: _isObscured,
+                                      autofocus: false,
+                                      autocorrect: false,
+                                      validator: (value) {
+                                        if (value!.isEmpty) {
+                                          return 'Kata sandi tidak boleh kosong';
+                                        }
+                                        return null;
+                                      },
+                                    ),
+                                    Align(
+                                      alignment: Alignment.centerRight,
+                                      child: TextButton(
+                                        onPressed: () {
+                                          Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                builder: (_) =>
+                                                    ForgetPasswordPage(),
+                                              ));
+                                        },
+                                        child: Text('Lupa Kata Sandi?',
+                                            style:
+                                                kTextTheme.bodyText2!.copyWith(
+                                              color: kGrey,
+                                            )),
+                                      ),
+                                    ),
+                                    const SizedBox(height: 20),
+                                    BlocConsumer<AuthCubit, AuthState>(
+                                      listener: (listenerContext, state) {
+                                        if (state is AuthError) {
+                                          ScaffoldMessenger.of(context)
+                                              .showMaterialBanner(
+                                            MaterialBanner(
+                                              content: Text(
+                                                  'Autentikasi Error: ${state.message}'),
+                                              actions: [
+                                                TextButton(
+                                                  onPressed: () {
+                                                    ScaffoldMessenger.of(
+                                                            context)
+                                                        .hideCurrentMaterialBanner();
+                                                  },
+                                                  child: const Text('Oke'),
+                                                ),
+                                              ],
+                                              padding: const EdgeInsets.only(
+                                                  top: 20),
+                                              leadingPadding:
+                                                  const EdgeInsets.symmetric(
+                                                      horizontal: 10),
+                                              leading: const Icon(
+                                                Icons.error,
+                                                color: Colors.red,
+                                              ),
+                                              backgroundColor:
+                                                  kRichBlack.withOpacity(0.75),
+                                            ),
+                                          );
+                                        } else if (state is AuthSuccess) {
+                                          Navigator.of(context)
+                                              .pushReplacementNamed(
+                                            HomePageAdmin.routeName,
+                                          );
+                                        }
+                                      },
+                                      builder: (builderContext, state) {
+                                        if (state is AuthLoading) {
+                                          return LoadingButton(
+                                            borderRadius: 10,
+                                            primaryColor: kLightGrey,
+                                            child: const SizedBox(
+                                              width: double.infinity,
+                                              height: 45,
+                                              child: Center(
+                                                child: SizedBox(
+                                                  width: 20,
+                                                  height: 20,
+                                                  child:
+                                                      CircularProgressIndicator(
+                                                    color: kRichWhite,
+                                                    strokeWidth: 3,
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                          );
+                                        }
+                                        return PrimaryButton(
+                                          onPressed: () {
+                                            if (_formKey.currentState!
+                                                .validate()) {
+                                              builderContext
+                                                  .read<AuthCubit>()
+                                                  .loginEmailAndPassword(
+                                                    _emailController.text,
+                                                    _passwordController.text,
+                                                  );
+                                            }
+                                          },
+                                          borderRadius: 10,
+                                          primaryColor: kMikadoOrange,
+                                          child: SizedBox(
+                                            width: double.infinity,
+                                            height: 45,
+                                            child: Center(
+                                              child: Text(
+                                                'Masuk Admin',
+                                                style:
+                                                    kTextTheme.button!.copyWith(
+                                                  color: kRichWhite,
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        );
+                                      },
+                                    ),
+                                    TextButton(
+                                      onPressed: () {
+                                        Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (_) =>
+                                                  ForgetPasswordPage(),
+                                            ));
+                                      },
+                                      child: Wrap(
+                                        children: [
+                                          Text('Bukan admin?',
+                                              style: kTextTheme.bodyText2!
+                                                  .copyWith(
+                                                color: kGrey,
+                                              )),
+                                          Text(' Masuk',
+                                              style: kTextTheme.bodyText2!
+                                                  .copyWith(
+                                                color: kMikadoOrange,
+                                              )),
+                                        ],
+                                      ),
+                                    ),
+                                  ],
                                 ),
                               ),
                             ),
                           ),
-                        );
-                      },
+                        ),
+                      ],
                     ),
-                    const SizedBox(height: 8),
-                    TextButton(
-                      onPressed: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (_) => ForgetPasswordPage(),
-                            ));
-                      },
-                      child: Text('Lupa Kata Sandi Anda?',
-                          style: kTextTheme.bodyText2!.copyWith(
-                            color: kGrey,
-                          )),
+                    Positioned(
+                      bottom: _screenHeight / 1.8,
+                      child: Image.asset(
+                        'assets/images/onboard_img_end.png',
+                        height: _screenHeight / 3,
+                        width: _screenWidth / 1.5,
+                      ),
                     ),
                   ],
                 ),
