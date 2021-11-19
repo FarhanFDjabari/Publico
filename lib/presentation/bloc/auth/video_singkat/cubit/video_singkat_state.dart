@@ -15,8 +15,10 @@ class PostVideoSingkatLoading extends VideoSingkatState {
 }
 
 class PostVideoSingkatSuccess extends VideoSingkatState {
+  final String message;
+  const PostVideoSingkatSuccess(this.message);
   @override
-  List<Object> get props => [];
+  List<Object> get props => [message];
 }
 
 class VideoSingkatError extends VideoSingkatState {

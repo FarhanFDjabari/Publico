@@ -1,4 +1,6 @@
+import 'package:cloud_firestore/cloud_firestore.dart' as firestore;
 import 'package:firebase_auth/firebase_auth.dart' as auth;
+import 'package:firebase_storage/firebase_storage.dart' as storage;
 import 'package:get_it/get_it.dart';
 import 'package:publico/data/datasources/remote_datasources.dart';
 import 'package:publico/data/repositories/repository_impl.dart';
@@ -46,12 +48,13 @@ void init() {
   );
 
   // data sources
-  locator.registerLazySingleton<RemoteDataSources>(
-      () => RemoteDataSourcesImpl(firebaseAuth: locator()));
+  locator.registerLazySingleton<RemoteDataSources>(() => RemoteDataSourcesImpl(firebaseAuth: locator(), firebaseStorage: locator(), firebaseFirestore: locator()));
 
   // helper
   locator.registerLazySingleton<DatabaseHelper>(() => DatabaseHelper());
 
   // external
   locator.registerLazySingleton(() => auth.FirebaseAuth.instance);
+  locator.registerLazySingleton(() => storage.FirebaseStorage.instance);
+  locator.registerLazySingleton(() => firestore.FirebaseFirestore.instance);
 }

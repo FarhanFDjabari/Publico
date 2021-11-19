@@ -1,29 +1,30 @@
 import 'dart:io';
 
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:cloud_firestore/cloud_firestore.dart' as firestore;
 import 'package:firebase_auth/firebase_auth.dart' as auth;
-import 'package:firebase_storage/firebase_storage.dart';
+import 'package:firebase_storage/firebase_storage.dart' as storage;
+import 'package:get_storage/get_storage.dart';
 import 'package:publico/data/models/user_model.dart';
 import 'package:publico/util/exception.dart';
 
 abstract class RemoteDataSources {
   Future<UserModel> loginWithEmailPassword(String email, String password);
   Future<void> sendForgetPasswordSignal(String email);
-  Future<UploadTask> uploadFiletoStorage(String destination, File file);
+  Future<storage.UploadTask> uploadFiletoStorage(String destination, File file);
   Future<void> logout();
 
-  Future<void> postVideoSingkat(
-      String title, String description, String videoUrl, String tiktokUrl);
+  Future<void> postVideoSingkat(String title, String description, String videoUrl, String tiktokUrl);
 }
 
 class RemoteDataSourcesImpl extends RemoteDataSources {
   final auth.FirebaseAuth firebaseAuth;
+  final storage.FirebaseStorage firebaseStorage;
+  final firestore.FirebaseFirestore firebaseFirestore;
 
-  RemoteDataSourcesImpl({required this.firebaseAuth});
+  RemoteDataSourcesImpl({required this.firebaseAuth, required this.firebaseStorage, required this.firebaseFirestore});
 
   @override
-  Future<UserModel> loginWithEmailPassword(
-      String email, String password) async {
+  Future<UserModel> loginWithEmailPassword(String email, String password) async {
     try {
       final credential = await firebaseAuth.signInWithEmailAndPassword(
         email: email,
@@ -61,9 +62,9 @@ class RemoteDataSourcesImpl extends RemoteDataSources {
   }
 
   @override
-  Future<UploadTask> uploadFiletoStorage(String destination, File file) async {
+  Future<storage.UploadTask> uploadFiletoStorage(String destination, File file) async {
     try {
-      final ref = FirebaseStorage.instance.ref(destination);
+      final ref = firebaseStorage.ref(destination);
 
       return ref.putFile(file);
     } catch (error) {
@@ -72,16 +73,15 @@ class RemoteDataSourcesImpl extends RemoteDataSources {
   }
 
   @override
-  Future<void> postVideoSingkat(String title, String description,
-      String videoUrl, String tiktokUrl) async {
+  Future<void> postVideoSingkat(String title, String description, String videoUrl, String tiktokUrl) async {
     try {
-      final ref = FirebaseFirestore.instance.collection('video_singkats');
+      final ref = firebaseFirestore.collection('video_singkats');
       await ref.add({
         'title': title,
         'description': description,
         'videoUrl': videoUrl,
         'tiktokUrl': tiktokUrl,
-        'admin_id': firebaseAuth.currentUser!.uid
+        'admin_id': GetStorage().read('uid'),
       });
     } catch (error) {
       throw ServerException(error.toString());
