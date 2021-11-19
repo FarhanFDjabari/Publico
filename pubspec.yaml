@@ -31,6 +31,7 @@ dependencies:
   sqflite_sqlcipher: ^2.1.0
   uuid: ^3.0.5
   video_player: ^2.2.7
+  video_thumbnail: ^0.4.3
 
 dev_dependencies:
   analyzer: ^2.7.0

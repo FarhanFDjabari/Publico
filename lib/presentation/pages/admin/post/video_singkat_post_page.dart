@@ -10,6 +10,7 @@ import 'package:publico/presentation/widgets/primary_button.dart';
 import 'package:publico/styles/colors.dart';
 import 'package:publico/styles/text_styles.dart';
 import 'package:video_player/video_player.dart';
+import 'package:video_thumbnail/video_thumbnail.dart';
 
 class VideoSingkatPostPage extends StatefulWidget {
   static const routeName = '/admin-video-singkat-post';
@@ -25,6 +26,8 @@ class _VideoSingkatPostPageState extends State<VideoSingkatPostPage> {
   final _tautanController = TextEditingController();
   VideoPlayerController? _videoController;
   File? videoFile;
+  File? thumbnailImage;
+  int? duration;
   bool isValidate = false;
 
   void formCheck() {
@@ -46,11 +49,19 @@ class _VideoSingkatPostPageState extends State<VideoSingkatPostPage> {
     }
   }
 
-  void videoPlayerInit(File videoFile) {
+  void videoPlayerInit(File videoFile) async {
     _videoController = VideoPlayerController.file(videoFile)
       ..addListener(() => setState(() {}))
       ..setLooping(false)
-      ..initialize();
+      ..initialize().then(
+        (value) => duration = _videoController?.value.duration.inSeconds,
+      );
+    String? thumbnailPath = await VideoThumbnail.thumbnailFile(
+      video: videoFile.path,
+      imageFormat: ImageFormat.JPEG,
+      quality: 10,
+    );
+    thumbnailImage = File(thumbnailPath!);
   }
 
   @override
@@ -331,11 +342,15 @@ class _VideoSingkatPostPageState extends State<VideoSingkatPostPage> {
                             builderContext
                                 .read<VideoSingkatCubit>()
                                 .postVideoSingkatFirestore(
-                                    _titleController.text,
-                                    _descriptionController.text,
-                                    _tautanController.text,
-                                    'video_singkat',
-                                    videoFile!);
+                                  _titleController.text,
+                                  _descriptionController.text,
+                                  _tautanController.text,
+                                  'video_singkat',
+                                  'video_singkat_thumbnail',
+                                  videoFile!,
+                                  thumbnailImage!,
+                                  duration!,
+                                );
                           },
                   );
                 },

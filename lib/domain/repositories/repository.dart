@@ -12,8 +12,21 @@ abstract class Repository {
   Future<Either<Failure, UploadTask>> uploadFile(String destination, File file);
   Future<Either<Failure, void>> logout();
 
-  Future<Either<Failure, void>> postVideoSingkat(String title,
-      String description, String tiktokUrl, String destination, File file);
+  Future<Either<Failure, void>> postVideoSingkat(
+      String title,
+      String description,
+      String tiktokUrl,
+      String videoDestination,
+      String thumbnailDestination,
+      File videoFile,
+      File thumbnailFile,
+      int duration);
   Future<Either<Failure, void>> postVideoMateri(
-      String title, String description, String destination, File file);
+      String title,
+      String description,
+      String videoDestination,
+      String thumbnailDestination,
+      File videoFile,
+      File thumbnailFile,
+      int duration);
 }

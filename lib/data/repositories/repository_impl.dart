@@ -67,20 +67,32 @@ class RepositoryImpl extends Repository {
       String title,
       String description,
       String tiktokUrl,
-      String destination,
-      File file) async {
+      String videoDestination,
+      String thumbnailDestination,
+      File videoFile,
+      File thumbnailFile,
+      int duration) async {
     try {
-      final filename = basename(file.path);
-      final path =
-          "$destination/${DateTime.now().microsecondsSinceEpoch}-${const Uuid().v4()}-${filename.toLowerCase().replaceAll(" ", "_")}";
-      final uploadTask =
-          await remoteDataSources.uploadFiletoStorage(path, file);
+      final videoFilename = basename(videoFile.path);
+      final thumbnailFilename = basename(thumbnailFile.path);
+      final videoPath =
+          "$videoDestination/${DateTime.now().microsecondsSinceEpoch}-${const Uuid().v4()}-${videoFilename.toLowerCase().replaceAll(" ", "_")}";
+      final thumbnailPath =
+          "$thumbnailDestination/${DateTime.now().microsecondsSinceEpoch}-${const Uuid().v4()}-${thumbnailFilename.toLowerCase().replaceAll(" ", "_")}";
+      final videoUploadTask =
+          await remoteDataSources.uploadFiletoStorage(videoPath, videoFile);
+      final thumbnailUploadTask = await remoteDataSources.uploadFiletoStorage(
+          thumbnailPath, thumbnailFile);
       String videoUrl = '';
-      await uploadTask.whenComplete(() async {
-        videoUrl = await uploadTask.snapshot.ref.getDownloadURL();
+      String thumbnailUrl = '';
+      await videoUploadTask.whenComplete(() async {
+        videoUrl = await videoUploadTask.snapshot.ref.getDownloadURL();
+      });
+      await thumbnailUploadTask.whenComplete(() async {
+        thumbnailUrl = await thumbnailUploadTask.snapshot.ref.getDownloadURL();
       });
       await remoteDataSources.postVideoSingkat(
-          title, description, videoUrl, tiktokUrl);
+          title, description, videoUrl, thumbnailUrl, tiktokUrl, duration);
 
       return const Right(null);
     } on FirebaseException catch (e) {
@@ -92,18 +104,34 @@ class RepositoryImpl extends Repository {
 
   @override
   Future<Either<Failure, void>> postVideoMateri(
-      String title, String description, String destination, File file) async {
+      String title,
+      String description,
+      String videoDestination,
+      String thumbnailDestination,
+      File videoFile,
+      File thumbnailFile,
+      int duration) async {
     try {
-      final filename = basename(file.path);
-      final path =
-          "$destination/${DateTime.now().microsecondsSinceEpoch}-${const Uuid().v4()}-${filename.toLowerCase().replaceAll(" ", "_")}";
-      final uploadTask =
-          await remoteDataSources.uploadFiletoStorage(path, file);
+      final videoFilename = basename(videoFile.path);
+      final thumbnailFilename = basename(thumbnailFile.path);
+      final videoPath =
+          "$videoDestination/${DateTime.now().microsecondsSinceEpoch}-${const Uuid().v4()}-${videoFilename.toLowerCase().replaceAll(" ", "_")}";
+      final thumbnailPath =
+          "$thumbnailDestination/${DateTime.now().microsecondsSinceEpoch}-${const Uuid().v4()}-${thumbnailFilename.toLowerCase().replaceAll(" ", "_")}";
+      final videoUploadTask =
+          await remoteDataSources.uploadFiletoStorage(videoPath, videoFile);
+      final thumbnailUploadTask = await remoteDataSources.uploadFiletoStorage(
+          thumbnailPath, thumbnailFile);
       String videoUrl = '';
-      await uploadTask.whenComplete(() async {
-        videoUrl = await uploadTask.snapshot.ref.getDownloadURL();
+      String thumbnailUrl = '';
+      await videoUploadTask.whenComplete(() async {
+        videoUrl = await videoUploadTask.snapshot.ref.getDownloadURL();
       });
-      await remoteDataSources.postVideoMateri(title, description, videoUrl);
+      await thumbnailUploadTask.whenComplete(() async {
+        thumbnailUrl = await thumbnailUploadTask.snapshot.ref.getDownloadURL();
+      });
+      await remoteDataSources.postVideoMateri(
+          title, description, videoUrl, thumbnailUrl, duration);
 
       return const Right(null);
     } on FirebaseException catch (e) {

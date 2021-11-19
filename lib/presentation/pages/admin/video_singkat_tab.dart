@@ -75,7 +75,7 @@ class _VideoSingkatTabState extends State<VideoSingkatTab> {
                           'Subsidi Pemerintah dan Bantuan untuk lorem ipsum asdaksdka sdass dasdasdas',
                       imageUrl:
                           'https://marketplace.canva.com/EADaooG1kwk/2/0/704w/canva-top-major-south-america-commodities-_IBpJMSh0_Y.jpg',
-                      category: 'Infografis',
+                      category: 'Video Singkat',
                     ),
                   ),
                   staggeredTileBuilder: (int index) =>

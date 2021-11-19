@@ -13,10 +13,22 @@ class VideoMateriCubit extends Cubit<VideoMateriState> {
   final PostVideoMateri postVideoMateri;
 
   void postVideoMateriFirestore(
-      String title, String description, String destination, File file) async {
+      String title,
+      String description,
+      String videoDestination,
+      String thumbnailDestination,
+      File videoFile,
+      File thumbnailFile,
+      int duration) async {
     emit(PostVideoMateriLoading());
-    final result =
-        await postVideoMateri.execute(title, description, destination, file);
+    final result = await postVideoMateri.execute(
+        title,
+        description,
+        videoDestination,
+        thumbnailDestination,
+        videoFile,
+        thumbnailFile,
+        duration);
     result.fold(
       (l) => emit(VideoMateriError(l.message)),
       (r) => emit(

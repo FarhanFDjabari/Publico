@@ -7,7 +7,23 @@ class PostVideoSingkat {
 
   PostVideoSingkat(this.repository);
 
-  Future<Either<Failure, void>> execute(title, description, tiktokUrl, destination, file) async {
-    return repository.postVideoSingkat(title, description, tiktokUrl, destination, file);
+  Future<Either<Failure, void>> execute(
+      title,
+      description,
+      tiktokUrl,
+      videoDestination,
+      thumbnailDestination,
+      videoFile,
+      thumbnailFile,
+      duration) async {
+    return repository.postVideoSingkat(
+        title,
+        description,
+        tiktokUrl,
+        videoDestination,
+        thumbnailDestination,
+        videoFile,
+        thumbnailFile,
+        duration);
   }
 }

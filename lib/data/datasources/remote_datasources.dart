@@ -12,10 +12,10 @@ abstract class RemoteDataSources {
   Future<void> sendForgetPasswordSignal(String email);
   Future<storage.UploadTask> uploadFiletoStorage(String destination, File file);
   Future<void> logout();
-  Future<void> postVideoSingkat(
-      String title, String description, String videoUrl, String tiktokUrl);
-  Future<void> postVideoMateri(
-      String title, String description, String videoUrl);
+  Future<void> postVideoSingkat(String title, String description,
+      String videoUrl, String thumbnailUrl, String tiktokUrl, int duration);
+  Future<void> postVideoMateri(String title, String description,
+      String videoUrl, String thumbnailUrl, int duration);
 }
 
 class RemoteDataSourcesImpl extends RemoteDataSources {
@@ -80,8 +80,13 @@ class RemoteDataSourcesImpl extends RemoteDataSources {
   }
 
   @override
-  Future<void> postVideoSingkat(String title, String description,
-      String videoUrl, String tiktokUrl) async {
+  Future<void> postVideoSingkat(
+      String title,
+      String description,
+      String videoUrl,
+      String thumbnailUrl,
+      String tiktokUrl,
+      int duration) async {
     try {
       final ref = firebaseFirestore.collection('video_singkat');
       await ref.add({
@@ -89,7 +94,9 @@ class RemoteDataSourcesImpl extends RemoteDataSources {
         'title': title,
         'description': description,
         'videoUrl': videoUrl,
+        'thumbnailUrl': thumbnailUrl,
         'tiktokUrl': tiktokUrl,
+        'duration': duration,
         'admin_id': GetStorage().read('uid'),
       });
     } catch (error) {
@@ -98,8 +105,8 @@ class RemoteDataSourcesImpl extends RemoteDataSources {
   }
 
   @override
-  Future<void> postVideoMateri(
-      String title, String description, String videoUrl) async {
+  Future<void> postVideoMateri(String title, String description,
+      String videoUrl, String thumbnailUrl, int duration) async {
     try {
       final ref = firebaseFirestore.collection('video_materi');
       await ref.add({
@@ -107,6 +114,8 @@ class RemoteDataSourcesImpl extends RemoteDataSources {
         'title': title,
         'description': description,
         'videoUrl': videoUrl,
+        'thumbnailUrl': thumbnailUrl,
+        'duration': duration,
         'admin_id': GetStorage().read('uid'),
       });
     } catch (error) {

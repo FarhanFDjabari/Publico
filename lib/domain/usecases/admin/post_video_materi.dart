@@ -7,8 +7,9 @@ class PostVideoMateri {
 
   PostVideoMateri(this.repository);
 
-  Future<Either<Failure, void>> execute(
-      title, description, destination, file) async {
-    return repository.postVideoMateri(title, description, destination, file);
+  Future<Either<Failure, void>> execute(title, description, videoDestination,
+      thumbnailDestination, videoFile, thumbnailFile, duration) async {
+    return repository.postVideoMateri(title, description, videoDestination,
+        thumbnailDestination, videoFile, thumbnailFile, duration);
   }
 }
