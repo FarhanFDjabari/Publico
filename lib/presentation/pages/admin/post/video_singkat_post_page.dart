@@ -263,7 +263,31 @@ class _VideoSingkatPostPageState extends State<VideoSingkatPostPage> {
               const SizedBox(height: 15),
               BlocConsumer<VideoSingkatCubit, VideoSingkatState>(
                 listener: (context, state) {
-                  if (state is PostVideoSingkatSuccess) {
+                  if (state is VideoSingkatError) {
+                    ScaffoldMessenger.of(context).showMaterialBanner(
+                      MaterialBanner(
+                        content:
+                            Text('Upload video materi error: ${state.message}'),
+                        actions: [
+                          TextButton(
+                            onPressed: () {
+                              ScaffoldMessenger.of(context)
+                                  .hideCurrentMaterialBanner();
+                            },
+                            child: const Text('Oke'),
+                          ),
+                        ],
+                        padding: const EdgeInsets.only(top: 20),
+                        leadingPadding:
+                            const EdgeInsets.symmetric(horizontal: 10),
+                        leading: const Icon(
+                          Icons.error,
+                          color: Colors.red,
+                        ),
+                        backgroundColor: kRichBlack.withOpacity(0.75),
+                      ),
+                    );
+                  } else if (state is PostVideoSingkatSuccess) {
                     Navigator.pop(context);
                   }
                 },
@@ -310,7 +334,7 @@ class _VideoSingkatPostPageState extends State<VideoSingkatPostPage> {
                                     _titleController.text,
                                     _descriptionController.text,
                                     _tautanController.text,
-                                    'video_singkats',
+                                    'video_singkat',
                                     videoFile!);
                           },
                   );

@@ -12,8 +12,10 @@ abstract class RemoteDataSources {
   Future<void> sendForgetPasswordSignal(String email);
   Future<storage.UploadTask> uploadFiletoStorage(String destination, File file);
   Future<void> logout();
-
-  Future<void> postVideoSingkat(String title, String description, String videoUrl, String tiktokUrl);
+  Future<void> postVideoSingkat(
+      String title, String description, String videoUrl, String tiktokUrl);
+  Future<void> postVideoMateri(
+      String title, String description, String videoUrl);
 }
 
 class RemoteDataSourcesImpl extends RemoteDataSources {
@@ -21,10 +23,14 @@ class RemoteDataSourcesImpl extends RemoteDataSources {
   final storage.FirebaseStorage firebaseStorage;
   final firestore.FirebaseFirestore firebaseFirestore;
 
-  RemoteDataSourcesImpl({required this.firebaseAuth, required this.firebaseStorage, required this.firebaseFirestore});
+  RemoteDataSourcesImpl(
+      {required this.firebaseAuth,
+      required this.firebaseStorage,
+      required this.firebaseFirestore});
 
   @override
-  Future<UserModel> loginWithEmailPassword(String email, String password) async {
+  Future<UserModel> loginWithEmailPassword(
+      String email, String password) async {
     try {
       final credential = await firebaseAuth.signInWithEmailAndPassword(
         email: email,
@@ -62,7 +68,8 @@ class RemoteDataSourcesImpl extends RemoteDataSources {
   }
 
   @override
-  Future<storage.UploadTask> uploadFiletoStorage(String destination, File file) async {
+  Future<storage.UploadTask> uploadFiletoStorage(
+      String destination, File file) async {
     try {
       final ref = firebaseStorage.ref(destination);
 
@@ -73,14 +80,33 @@ class RemoteDataSourcesImpl extends RemoteDataSources {
   }
 
   @override
-  Future<void> postVideoSingkat(String title, String description, String videoUrl, String tiktokUrl) async {
+  Future<void> postVideoSingkat(String title, String description,
+      String videoUrl, String tiktokUrl) async {
     try {
-      final ref = firebaseFirestore.collection('video_singkats');
+      final ref = firebaseFirestore.collection('video_singkat');
       await ref.add({
+        'type': 'Video Singkat',
         'title': title,
         'description': description,
         'videoUrl': videoUrl,
         'tiktokUrl': tiktokUrl,
+        'admin_id': GetStorage().read('uid'),
+      });
+    } catch (error) {
+      throw ServerException(error.toString());
+    }
+  }
+
+  @override
+  Future<void> postVideoMateri(
+      String title, String description, String videoUrl) async {
+    try {
+      final ref = firebaseFirestore.collection('video_materi');
+      await ref.add({
+        'type': 'Video Materi',
+        'title': title,
+        'description': description,
+        'videoUrl': videoUrl,
         'admin_id': GetStorage().read('uid'),
       });
     } catch (error) {

@@ -11,9 +11,11 @@ import 'package:publico/domain/usecases/logout.dart';
 import 'package:publico/domain/usecases/send_forget_password.dart';
 import 'package:publico/domain/usecases/upload_file_to_storage.dart';
 import 'package:publico/presentation/bloc/auth/auth_cubit.dart';
+import 'package:publico/presentation/bloc/video_materi/video_materi_cubit.dart';
 import 'package:publico/presentation/bloc/video_singkat/video_singkat_cubit.dart';
 
 import 'data/datasources/db/database_helper.dart';
+import 'domain/usecases/admin/post_video_materi.dart';
 
 final locator = GetIt.instance;
 
@@ -31,6 +33,11 @@ void init() {
       postVideoSingkat: locator(),
     ),
   );
+  locator.registerFactory(
+    () => VideoMateriCubit(
+      postVideoMateri: locator(),
+    ),
+  );
 
   // usecases
   locator.registerLazySingleton(() => LoginWithEmailAndPassword(locator()));
@@ -39,6 +46,7 @@ void init() {
   locator.registerLazySingleton(() => UploadFileToStorage(locator()));
 
   locator.registerLazySingleton(() => PostVideoSingkat(locator()));
+  locator.registerLazySingleton(() => PostVideoMateri(locator()));
 
   // repository
   locator.registerLazySingleton<Repository>(

@@ -3,6 +3,9 @@ import 'dart:io';
 
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:publico/presentation/bloc/video_materi/video_materi_cubit.dart';
+import 'package:publico/presentation/widgets/loading_button.dart';
 import 'package:publico/presentation/widgets/primary_button.dart';
 import 'package:publico/styles/colors.dart';
 import 'package:publico/styles/text_styles.dart';
@@ -54,8 +57,8 @@ class _VideoMateriPostPageState extends State<VideoMateriPostPage> {
 
   @override
   void dispose() {
-    super.dispose();
     _videoController?.dispose();
+    super.dispose();
   }
 
   @override
@@ -234,20 +237,83 @@ class _VideoMateriPostPageState extends State<VideoMateriPostPage> {
                     ),
             ),
             const SizedBox(height: 15),
-            PrimaryButton(
-              borderRadius: 10,
-              child: SizedBox(
-                height: 45,
-                child: Center(
-                  child: Text(
-                    'Simpan',
-                    style: kTextTheme.button!.copyWith(
-                      color: kRichWhite,
+            BlocConsumer<VideoMateriCubit, VideoMateriState>(
+              listener: (listenerContext, state) {
+                if (state is VideoMateriError) {
+                  ScaffoldMessenger.of(context).showMaterialBanner(
+                    MaterialBanner(
+                      content:
+                          Text('Upload video materi error: ${state.message}'),
+                      actions: [
+                        TextButton(
+                          onPressed: () {
+                            ScaffoldMessenger.of(context)
+                                .hideCurrentMaterialBanner();
+                          },
+                          child: const Text('Oke'),
+                        ),
+                      ],
+                      padding: const EdgeInsets.only(top: 20),
+                      leadingPadding:
+                          const EdgeInsets.symmetric(horizontal: 10),
+                      leading: const Icon(
+                        Icons.error,
+                        color: Colors.red,
+                      ),
+                      backgroundColor: kRichBlack.withOpacity(0.75),
+                    ),
+                  );
+                } else if (state is PostVideoMateriSuccess) {
+                  Navigator.pop(context);
+                }
+              },
+              builder: (builderContext, state) {
+                if (state is PostVideoMateriLoading) {
+                  return LoadingButton(
+                    borderRadius: 10,
+                    primaryColor: kLightGrey,
+                    child: const SizedBox(
+                      width: double.infinity,
+                      height: 45,
+                      child: Center(
+                        child: SizedBox(
+                          width: 20,
+                          height: 20,
+                          child: CircularProgressIndicator(
+                            color: kRichWhite,
+                            strokeWidth: 3,
+                          ),
+                        ),
+                      ),
+                    ),
+                  );
+                }
+                return PrimaryButton(
+                  borderRadius: 10,
+                  child: SizedBox(
+                    height: 45,
+                    child: Center(
+                      child: Text(
+                        'Simpan',
+                        style: kTextTheme.button!.copyWith(
+                          color: kRichWhite,
+                        ),
+                      ),
                     ),
                   ),
-                ),
-              ),
-              onPressed: !isValidate ? null : () {},
+                  onPressed: !isValidate
+                      ? null
+                      : () {
+                          builderContext
+                              .read<VideoMateriCubit>()
+                              .postVideoMateriFirestore(
+                                  _titleController.text,
+                                  _descriptionController.text,
+                                  'video_materi',
+                                  videoFile!);
+                        },
+                );
+              },
             ),
           ],
         ),

@@ -14,4 +14,6 @@ abstract class Repository {
 
   Future<Either<Failure, void>> postVideoSingkat(String title,
       String description, String tiktokUrl, String destination, File file);
+  Future<Either<Failure, void>> postVideoMateri(
+      String title, String description, String destination, File file);
 }
