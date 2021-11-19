@@ -218,6 +218,8 @@ class _VideoMateriPostPageState extends State<VideoMateriPostPage> {
                           )
                     : InkWell(
                         onTap: () async {
+                          await Future.delayed(
+                              const Duration(milliseconds: 500));
                           final result = await FilePicker.platform.pickFiles(
                             type: FileType.video,
                             withData: false,
@@ -227,6 +229,7 @@ class _VideoMateriPostPageState extends State<VideoMateriPostPage> {
                             videoFile = File(result.files.first.path!);
                             videoPlayerInit(videoFile!);
                             formCheck();
+                            result.files.clear();
                           }
                         },
                         borderRadius: BorderRadius.circular(10),
