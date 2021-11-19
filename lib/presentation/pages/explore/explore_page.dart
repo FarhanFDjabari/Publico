@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
-import 'package:publico/presentation/pages/detail/video_singkat_detail_page.dart';
+import 'package:publico/presentation/pages/detail/infographics_detail_page.dart';
 import 'package:publico/presentation/widgets/publico_staggered_tile.dart';
 
 class ExplorePage extends StatefulWidget {
@@ -24,7 +24,7 @@ class _ExplorePageState extends State<ExplorePage> {
             onTap: () {
               Navigator.pushNamed(
                 context,
-                VideoSingkatDetailPage.routeName,
+                InfographicsDetailPage.routeName,
                 arguments: 'secret',
               );
             },

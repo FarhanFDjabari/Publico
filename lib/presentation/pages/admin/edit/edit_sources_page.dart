@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 
 class EditSourcesPage extends StatefulWidget {
   static const routeName = '/admin-edit-sources';
-  const EditSourcesPage({Key? key}) : super(key: key);
+  final String sourceId;
+  const EditSourcesPage({Key? key, required this.sourceId}) : super(key: key);
 
   @override
   _EditSourcesPageState createState() => _EditSourcesPageState();

@@ -166,7 +166,7 @@ class MyApp extends StatelessWidget {
             case EditSourcesPage.routeName:
               final id = settings.arguments as String;
               return CupertinoPageRoute(
-                builder: (_) => const EditSourcesPage(),
+                builder: (_) => EditSourcesPage(sourceId: id),
                 settings: settings,
               );
             default:
