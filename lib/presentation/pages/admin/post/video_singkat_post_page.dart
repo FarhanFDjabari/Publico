@@ -10,6 +10,7 @@ import 'package:publico/presentation/widgets/primary_button.dart';
 import 'package:publico/styles/colors.dart';
 import 'package:publico/styles/text_styles.dart';
 import 'package:video_player/video_player.dart';
+import 'package:uuid/uuid.dart';
 
 class VideoSingkatPostPage extends StatefulWidget {
   static const routeName = '/admin-video-singkat-post';
@@ -279,8 +280,8 @@ class _VideoSingkatPostPageState extends State<VideoSingkatPostPage> {
                       leadingPadding:
                           const EdgeInsets.symmetric(horizontal: 10),
                       leading: const Icon(
-                        Icons.error,
-                        color: Colors.red,
+                        Icons.check_circle_outline_rounded,
+                        color: kMikadoOrange,
                       ),
                       backgroundColor: kRichBlack.withOpacity(0.75),
                     ),
@@ -330,7 +331,7 @@ class _VideoSingkatPostPageState extends State<VideoSingkatPostPage> {
                                   _titleController.text,
                                   _descriptionController.text,
                                   _tautanController.text,
-                                  '/videos',
+                                  'video_singkats/${const Uuid().v4()}',
                                   videoFile!);
                         },
                 );

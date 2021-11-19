@@ -75,15 +75,14 @@ class RemoteDataSourcesImpl extends RemoteDataSources {
   Future<void> postVideoSingkat(String title, String description,
       String videoUrl, String tiktokUrl) async {
     try {
-      final ref = await FirebaseFirestore.instance.collection('videos');
-      final result = await ref.add({
+      final ref = FirebaseFirestore.instance.collection('video_singkats');
+      await ref.add({
         'title': title,
         'description': description,
-        'isSingkat': true,
         'videoUrl': videoUrl,
         'tiktokUrl': tiktokUrl,
+        'admin_id': firebaseAuth.currentUser!.uid
       });
-      print('Video Singkat added');
     } catch (error) {
       throw ServerException(error.toString());
     }
