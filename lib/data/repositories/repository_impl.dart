@@ -6,6 +6,7 @@ import 'package:get_storage/get_storage.dart';
 import 'package:path/path.dart';
 import 'package:publico/data/datasources/remote_datasources.dart';
 import 'package:publico/domain/entities/user.dart';
+import 'package:publico/domain/entities/video_singkat.dart';
 import 'package:publico/domain/repositories/repository.dart';
 import 'package:publico/util/exception.dart';
 import 'package:publico/util/failure.dart';
@@ -142,6 +143,22 @@ class RepositoryImpl extends Repository {
   }
 
   @override
+  Future<Either<Failure, List<VideoSingkat>>> getVideoSingkatPostsByUid(
+      uid) async {
+    try {
+      final videoSingkatModels =
+          await remoteDataSources.getVideoSingkatPostsByUid(uid);
+      final videoSingkatList = videoSingkatModels
+          .map((videoSingkatModel) => videoSingkatModel.toEntity())
+          .toList();
+      return Right(videoSingkatList);
+    } on FirebaseException catch (e) {
+      return Left(ServerFailure(e.toString()));
+    } on ServerException catch (e) {
+      return Left(ServerFailure(e.message));
+    }
+  }
+
   Future<Either<Failure, void>> postInfographicTheme(
       String themeName, File themeImage, String destination) async {
     try {

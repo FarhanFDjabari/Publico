@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
 import 'package:publico/domain/entities/video_singkat.dart';
 
@@ -21,6 +22,19 @@ class VideoSingkatModel extends Equatable {
     required this.thumbnailUrl,
     required this.tiktokUrl,
   });
+
+  static VideoSingkatModel fromSnapshot(DocumentSnapshot snapshot) {
+    return VideoSingkatModel(
+      id: snapshot.id,
+      type: snapshot['type'],
+      title: snapshot['title'],
+      duration: snapshot['duration'],
+      description: snapshot['description'],
+      videoUrl: snapshot['videoUrl'],
+      thumbnailUrl: snapshot['thumbnailUrl'],
+      tiktokUrl: snapshot['tiktokUrl'],
+    );
+  }
 
   VideoSingkat toEntity() {
     return VideoSingkat(

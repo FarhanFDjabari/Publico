@@ -6,6 +6,7 @@ import 'package:publico/data/datasources/local_datasources.dart';
 import 'package:publico/data/datasources/remote_datasources.dart';
 import 'package:publico/data/repositories/repository_impl.dart';
 import 'package:publico/domain/repositories/repository.dart';
+import 'package:publico/domain/usecases/admin/get_video_singkat_posts_by_uid.dart';
 import 'package:publico/domain/usecases/admin/delete_video_post.dart';
 import 'package:publico/domain/usecases/admin/post_infographic_theme.dart';
 import 'package:publico/domain/usecases/admin/post_video_singkat.dart';
@@ -35,6 +36,7 @@ void init() {
   locator.registerFactory(
     () => VideoSingkatCubit(
       postVideoSingkat: locator(),
+      getVideoSingkatPostsByUid: locator(),
       deleteVideoPost: locator(),
     ),
   );
@@ -58,6 +60,7 @@ void init() {
 
   locator.registerLazySingleton(() => PostVideoSingkat(locator()));
   locator.registerLazySingleton(() => PostVideoMateri(locator()));
+  locator.registerLazySingleton(() => GetVideoSingkatPostsByUid(locator()));
   locator.registerLazySingleton(() => PostInfographicTheme(locator()));
   locator.registerLazySingleton(() => DeleteVideoPost(locator()));
 

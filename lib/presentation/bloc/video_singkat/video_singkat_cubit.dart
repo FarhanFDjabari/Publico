@@ -2,18 +2,24 @@ import 'dart:io';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:publico/domain/entities/video_singkat.dart';
+import 'package:publico/domain/usecases/admin/get_video_singkat_posts_by_uid.dart';
 import 'package:publico/domain/usecases/admin/delete_video_post.dart';
 import 'package:publico/domain/usecases/admin/post_video_singkat.dart';
 
 part 'video_singkat_state.dart';
 
 class VideoSingkatCubit extends Cubit<VideoSingkatState> {
-  VideoSingkatCubit(
-      {required this.postVideoSingkat, required this.deleteVideoPost})
+  VideoSingkatCubit({
+    required this.postVideoSingkat, 
+    required this.getVideoSingkatPostsByUid, 
+    required this.deleteVideoPost,})
       : super(VideoSingkatInitial());
 
   final PostVideoSingkat postVideoSingkat;
+  final GetVideoSingkatPostsByUid getVideoSingkatPostsByUid;
   final DeleteVideoPost deleteVideoPost;
+
 
   void postVideoSingkatFirestore(
       String title,
@@ -55,5 +61,14 @@ class VideoSingkatCubit extends Cubit<VideoSingkatState> {
       (r) => emit(
           const DeleteVideoSingkatSuccess('Berhasil menghapus video singkat')),
     );
+  }
+
+  void getVideoSingkatPostsByUidFirestore(String uid) async {
+    emit(GetVideoSingkatPostsByUidLoading());
+    final result = await getVideoSingkatPostsByUid.execute(uid);
+    result.fold(
+        (l) => emit(
+            const GetVideoSingkatPostsByUidError("Tidak ada video singkat")),
+        (r) => emit(GetVideoSingkatPostsByUidSuccess(r)));
   }
 }

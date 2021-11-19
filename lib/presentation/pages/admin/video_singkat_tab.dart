@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+import 'package:get_storage/get_storage.dart';
+import 'package:publico/presentation/bloc/video_singkat/video_singkat_cubit.dart';
 import 'package:publico/presentation/pages/admin/detail/admin_video_singkat_detail.dart';
 import 'package:publico/presentation/pages/admin/post/video_singkat_post_page.dart';
 import 'package:publico/presentation/widgets/publico_staggered_tile_admin.dart';
@@ -19,6 +22,9 @@ class _VideoSingkatTabState extends State<VideoSingkatTab> {
 
   @override
   Widget build(BuildContext context) {
+    context
+        .read<VideoSingkatCubit>()
+        .getVideoSingkatPostsByUidFirestore(GetStorage().read('uid'));
     return Scaffold(
       body: SafeArea(
         child: Padding(
@@ -57,31 +63,43 @@ class _VideoSingkatTabState extends State<VideoSingkatTab> {
               ),
               const SizedBox(height: 10),
               Expanded(
-                child: StaggeredGridView.countBuilder(
-                  crossAxisCount: 4,
-                  itemCount: 12,
-                  itemBuilder: (BuildContext itemContext, int index) => InkWell(
-                    onTap: () {
-                      Navigator.pushNamed(
-                        context,
-                        AdminVideoSingkatDetailPage.routeName,
-                        arguments: 'secret',
+                child: BlocBuilder<VideoSingkatCubit, VideoSingkatState>(
+                  builder: (context, state) {
+                    if (state is GetVideoSingkatPostsByUidSuccess) {
+                      return StaggeredGridView.countBuilder(
+                        crossAxisCount: 4,
+                        itemCount: state.videoSingkats.length,
+                        itemBuilder: (BuildContext itemContext, int index) =>
+                            InkWell(
+                          onTap: () {
+                            Navigator.pushNamed(
+                              context,
+                              AdminVideoSingkatDetailPage.routeName,
+                              arguments: state.videoSingkats[index],
+                            );
+                          },
+                          borderRadius: BorderRadius.circular(10),
+                          child: PublicoStaggeredTile(
+                            tileIndex: index,
+                            title: state.videoSingkats[index].title,
+                            imageUrl: state.videoSingkats[index].thumbnailUrl,
+                            category: state.videoSingkats[index].type,
+                          ),
+                        ),
+                        staggeredTileBuilder: (int index) =>
+                            const StaggeredTile.fit(2),
+                        mainAxisSpacing: 15.0,
+                        crossAxisSpacing: 8.0,
                       );
-                    },
-                    borderRadius: BorderRadius.circular(10),
-                    child: PublicoStaggeredTileAdmin(
-                      tileIndex: index,
-                      title:
-                          'Subsidi Pemerintah dan Bantuan untuk lorem ipsum asdaksdka sdass dasdasdas',
-                      imageUrl:
-                          'https://marketplace.canva.com/EADaooG1kwk/2/0/704w/canva-top-major-south-america-commodities-_IBpJMSh0_Y.jpg',
-                      category: 'Video Singkat',
-                    ),
-                  ),
-                  staggeredTileBuilder: (int index) =>
-                      const StaggeredTile.fit(2),
-                  mainAxisSpacing: 15.0,
-                  crossAxisSpacing: 8.0,
+                    } else if (state is GetVideoSingkatPostsByUidError) {
+                      return const Center(
+                        child: Text('Tidak ada video singkat'),
+                      );
+                    }
+                    return const Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  },
                 ),
               ),
             ],

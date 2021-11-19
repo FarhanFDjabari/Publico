@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:publico/domain/entities/video_singkat.dart';
 import 'package:publico/presentation/pages/admin/edit/video_singkat_edit_page.dart';
 import 'package:publico/presentation/widgets/publico_edit_bottom_sheet.dart';
 import 'package:publico/styles/colors.dart';
@@ -8,8 +9,8 @@ import 'package:video_player/video_player.dart';
 
 class AdminVideoSingkatDetailPage extends StatefulWidget {
   static const routeName = '/admin-video-singkat-detail';
-  final String videoId;
-  const AdminVideoSingkatDetailPage({Key? key, required this.videoId})
+  final VideoSingkat videoSingkat;
+  const AdminVideoSingkatDetailPage({Key? key, required this.videoSingkat})
       : super(key: key);
 
   @override
@@ -24,8 +25,7 @@ class _AdminVideoSingkatDetailPageState
   @override
   void initState() {
     super.initState();
-    videoPlayerInit(
-        'https://assets.mixkit.co/videos/preview/mixkit-a-girl-blowing-a-bubble-gum-at-an-amusement-park-1226-large.mp4');
+    videoPlayerInit(widget.videoSingkat.videoUrl);
   }
 
   void videoPlayerInit(String url) {
@@ -155,7 +155,7 @@ class _AdminVideoSingkatDetailPageState
               const SizedBox(height: 10),
               SizedBox(
                 child: Text(
-                  'Exposure image of business profit growth',
+                  widget.videoSingkat.title,
                   maxLines: 1,
                   style: kTextTheme.caption!.copyWith(color: kRichBlack),
                 ),
@@ -163,7 +163,7 @@ class _AdminVideoSingkatDetailPageState
               const SizedBox(height: 5),
               SizedBox(
                 child: Text(
-                  'Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and ',
+                  widget.videoSingkat.description,
                   overflow: TextOverflow.fade,
                   style: kTextTheme.caption!.copyWith(
                     color: kGrey,
