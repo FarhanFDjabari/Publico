@@ -41,6 +41,14 @@ dev_dependencies:
     sdk: flutter
   mockito: ^5.0.16
 
+flutter_icons:
+  android: true
+  ios: true
+  remove_alpha_ios: true
+  image_path: "assets/images/splash-white.png"
+  adaptive_icon_foreground: "assets/images/logo-foreground.png"
+  adaptive_icon_background: "#DF4759"
+
 # The following section is specific to Flutter.
 flutter:
 
