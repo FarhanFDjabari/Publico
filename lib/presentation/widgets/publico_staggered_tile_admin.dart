@@ -3,12 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:publico/styles/colors.dart';
 import 'package:publico/styles/text_styles.dart';
 
-class PublicoStaggeredTile extends StatelessWidget {
+class PublicoStaggeredTileAdmin extends StatelessWidget {
   final int tileIndex;
   final String imageUrl;
   final String category;
   final String title;
-  const PublicoStaggeredTile({
+  const PublicoStaggeredTileAdmin({
     Key? key,
     this.tileIndex = 0,
     required this.imageUrl,
@@ -79,20 +79,10 @@ class PublicoStaggeredTile extends StatelessWidget {
             ),
           ],
         ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Text(
-              category,
-              style: kTextTheme.overline!
-                  .copyWith(color: kMikadoOrange, fontSize: 13),
-            ),
-            const Icon(
-              Icons.bookmark_outline_rounded,
-              color: kRichBlack,
-            ),
-          ],
+        Text(
+          category,
+          style:
+              kTextTheme.overline!.copyWith(color: kMikadoOrange, fontSize: 13),
         ),
         Text(
           title,

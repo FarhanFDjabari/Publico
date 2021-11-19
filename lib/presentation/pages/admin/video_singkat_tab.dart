@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:publico/presentation/pages/admin/detail/admin_video_singkat_detail.dart';
 import 'package:publico/presentation/pages/admin/post/video_singkat_post_page.dart';
-import 'package:publico/presentation/widgets/publico_staggered_tile.dart';
+import 'package:publico/presentation/widgets/publico_staggered_tile_admin.dart';
 import 'package:publico/styles/colors.dart';
 import 'package:publico/styles/text_styles.dart';
 
@@ -69,7 +69,7 @@ class _VideoSingkatTabState extends State<VideoSingkatTab> {
                       );
                     },
                     borderRadius: BorderRadius.circular(10),
-                    child: PublicoStaggeredTile(
+                    child: PublicoStaggeredTileAdmin(
                       tileIndex: index,
                       title:
                           'Subsidi Pemerintah dan Bantuan untuk lorem ipsum asdaksdka sdass dasdasdas',

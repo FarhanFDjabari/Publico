@@ -61,6 +61,21 @@ class DatabaseHelper {
     );
   }
 
+  Future<Map<String, dynamic>?> getBookmarkById(String id) async {
+    final db = await database;
+    final results = await db!.query(
+      _tblBookmark,
+      where: 'id = ?',
+      whereArgs: [id],
+    );
+
+    if (results.isNotEmpty) {
+      return results.first;
+    } else {
+      return null;
+    }
+  }
+
   Future<List<Map<String, dynamic>>?> getBookmarkByType(String type) async {
     final db = await database;
     final results = await db!.query(

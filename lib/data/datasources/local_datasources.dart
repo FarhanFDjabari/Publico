@@ -7,6 +7,7 @@ abstract class LocalDataSources {
   Future<String> insertVideoMateriToBookmark(VideoMateriTable video);
   Future<String> removeVideoMateriFromBookmark(VideoMateriTable movie);
   Future<List<VideoMateriTable>> getVideoMateriBookmark();
+  Future<VideoMateriTable?> getBookmarkById(String id);
 }
 
 class LocalDataSourceImpl implements LocalDataSources {
@@ -41,5 +42,15 @@ class LocalDataSourceImpl implements LocalDataSources {
       return result.map((data) => VideoMateriTable.fromMap(data)).toList();
     }
     return [];
+  }
+
+  @override
+  Future<VideoMateriTable?> getBookmarkById(String id) async {
+    final result = await databaseHelper.getBookmarkById(id);
+    if (result != null) {
+      return VideoMateriTable.fromMap(result);
+    } else {
+      return null;
+    }
   }
 }
