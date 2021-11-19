@@ -5,7 +5,7 @@ import 'package:get_storage/get_storage.dart';
 import 'package:publico/presentation/bloc/video_singkat/video_singkat_cubit.dart';
 import 'package:publico/presentation/pages/admin/detail/admin_video_singkat_detail.dart';
 import 'package:publico/presentation/pages/admin/post/video_singkat_post_page.dart';
-import 'package:publico/presentation/widgets/publico_staggered_tile.dart';
+import 'package:publico/presentation/widgets/publico_staggered_tile_admin.dart';
 import 'package:publico/styles/colors.dart';
 import 'package:publico/styles/text_styles.dart';
 

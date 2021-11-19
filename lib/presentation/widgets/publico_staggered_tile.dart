@@ -88,18 +88,9 @@ class PublicoStaggeredTile extends StatelessWidget {
               style: kTextTheme.overline!
                   .copyWith(color: kMikadoOrange, fontSize: 13),
             ),
-            IconButton(
-              onPressed: () {},
-              splashRadius: 1,
-              constraints: const BoxConstraints(
-                maxWidth: 28,
-                maxHeight: 28,
-              ),
-              icon: Icon(
-                Icons.bookmark_outline_rounded,
-                color: kRichBlack,
-                size: 20,
-              ),
+            const Icon(
+              Icons.bookmark_outline_rounded,
+              color: kRichBlack,
             ),
           ],
         ),

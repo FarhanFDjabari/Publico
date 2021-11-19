@@ -8,7 +8,6 @@ environment:
 dependencies:
   cached_network_image: ^3.1.0+1
   cloud_firestore: ^3.1.0
-  cupertino_icons: ^1.0.4
   dartz: ^0.10.0
   equatable: ^2.0.3
   file_picker: ^4.2.3
@@ -26,8 +25,6 @@ dependencies:
   get_it: ^7.2.0
   get_storage: ^2.0.3
   google_fonts: ^2.1.0
-  http: ^0.13.4
-  path_provider: ^2.0.7
   sqflite_sqlcipher: ^2.1.0
   uuid: ^3.0.5
   video_player: ^2.2.7
@@ -43,6 +40,14 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   mockito: ^5.0.16
+
+flutter_icons:
+  android: true
+  ios: true
+  remove_alpha_ios: true
+  image_path: "assets/images/splash-white.png"
+  adaptive_icon_foreground: "assets/images/logo-foreground.png"
+  adaptive_icon_background: "#DF4759"
 
 # The following section is specific to Flutter.
 flutter:

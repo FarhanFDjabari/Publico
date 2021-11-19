@@ -3,6 +3,7 @@ import 'package:publico/domain/entities/video_materi.dart';
 
 class VideoMateriModel extends Equatable {
   final String id;
+  final String adminId;
   final String type;
   final String title;
   final int duration;
@@ -12,6 +13,7 @@ class VideoMateriModel extends Equatable {
 
   const VideoMateriModel({
     required this.id,
+    required this.adminId,
     required this.type,
     required this.title,
     required this.duration,
@@ -23,6 +25,7 @@ class VideoMateriModel extends Equatable {
   VideoMateri toEntity() {
     return VideoMateri(
       id: id,
+      adminId: adminId,
       type: type,
       title: title,
       duration: duration,
@@ -35,6 +38,7 @@ class VideoMateriModel extends Equatable {
   @override
   List<Object?> get props => [
         id,
+        adminId,
         type,
         title,
         duration,

@@ -17,8 +17,10 @@ abstract class RemoteDataSources {
       String videoUrl, String thumbnailUrl, String tiktokUrl, int duration);
   Future<void> postVideoMateri(String title, String description,
       String videoUrl, String thumbnailUrl, int duration);
-
   Future<List<VideoSingkatModel>> getVideoSingkatPostsByUid(String uid);
+  Future<void> postNewTheme(String themeName, String imagePath);
+  Future<void> deleteFromStorage(String downloadUrl);
+  Future<void> deletePost(String id, String collectionName);
 }
 
 class RemoteDataSourcesImpl extends RemoteDataSources {
@@ -83,6 +85,16 @@ class RemoteDataSourcesImpl extends RemoteDataSources {
   }
 
   @override
+  Future<void> deleteFromStorage(String downloadUrl) async {
+    try {
+      final ref = firebaseStorage.refFromURL(downloadUrl);
+      await ref.delete();
+    } catch (error) {
+      throw ServerException(error.toString());
+    }
+  }
+
+  @override
   Future<void> postVideoSingkat(
       String title,
       String description,
@@ -96,9 +108,9 @@ class RemoteDataSourcesImpl extends RemoteDataSources {
         'type': 'Video Singkat',
         'title': title,
         'description': description,
-        'videoUrl': videoUrl,
-        'thumbnailUrl': thumbnailUrl,
-        'tiktokUrl': tiktokUrl,
+        'video_url': videoUrl,
+        'thumbnail_url': thumbnailUrl,
+        'tiktok_url': tiktokUrl,
         'duration': duration,
         'admin_id': GetStorage().read('uid'),
       });
@@ -116,8 +128,8 @@ class RemoteDataSourcesImpl extends RemoteDataSources {
         'type': 'Video Materi',
         'title': title,
         'description': description,
-        'videoUrl': videoUrl,
-        'thumbnailUrl': thumbnailUrl,
+        'video_url': videoUrl,
+        'thumbnail_url': thumbnailUrl,
         'duration': duration,
         'admin_id': GetStorage().read('uid'),
       });
@@ -137,6 +149,29 @@ class RemoteDataSourcesImpl extends RemoteDataSources {
           .map((doc) => VideoSingkatModel.fromSnapshot(doc))
           .toList();
       return videoSingkatModels;
+    } catch (error) {
+      throw ServerException(error.toString());
+    }
+  }
+
+  Future<void> postNewTheme(String themeName, String imagePath) async {
+    try {
+      final ref = firebaseFirestore.collection('infographic_themes');
+      await ref.add({
+        'theme_name': themeName,
+        'thumbnail_url': imagePath,
+        'admin_id': GetStorage().read('uid'),
+      });
+    } catch (error) {
+      throw ServerException(error.toString());
+    }
+  }
+
+  @override
+  Future<void> deletePost(String id, String collectionName) async {
+    try {
+      final ref = firebaseFirestore.collection(collectionName);
+      await ref.doc(id).delete();
     } catch (error) {
       throw ServerException(error.toString());
     }

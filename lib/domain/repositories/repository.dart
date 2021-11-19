@@ -30,7 +30,10 @@ abstract class Repository {
       File videoFile,
       File thumbnailFile,
       int duration);
-
   Future<Either<Failure, List<VideoSingkat>>> getVideoSingkatPostsByUid(
       String uid);
+  Future<Either<Failure, void>> postInfographicTheme(
+      String themeName, File themeImage, String destination);
+  Future<Either<Failure, void>> deleteVideoPost(
+      String id, String videoUrl, String thumbnailUrl, String collectionPath);
 }
