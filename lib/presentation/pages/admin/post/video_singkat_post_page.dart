@@ -3,6 +3,9 @@ import 'dart:io';
 
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:publico/presentation/bloc/auth/video_singkat/cubit/video_singkat_cubit.dart';
+import 'package:publico/presentation/widgets/loading_button.dart';
 import 'package:publico/presentation/widgets/primary_button.dart';
 import 'package:publico/styles/colors.dart';
 import 'package:publico/styles/text_styles.dart';
@@ -25,10 +28,7 @@ class _VideoSingkatPostPageState extends State<VideoSingkatPostPage> {
   bool isValidate = false;
 
   void formCheck() {
-    if (_titleController.text.isNotEmpty &&
-        _descriptionController.text.isNotEmpty &&
-        _tautanController.text.isNotEmpty &&
-        videoFile != null) {
+    if (_titleController.text.isNotEmpty && _descriptionController.text.isNotEmpty && _tautanController.text.isNotEmpty && videoFile != null) {
       if (isValidate) {
         return;
       } else {
@@ -81,198 +81,232 @@ class _VideoSingkatPostPageState extends State<VideoSingkatPostPage> {
         ),
         centerTitle: true,
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(20),
-        child: Column(
-          children: [
-            TextField(
-              controller: _titleController,
-              decoration: InputDecoration(
-                label: const Text('Judul'),
-                hintText: 'Masukkan judul',
-                hintStyle: kTextTheme.bodyText2!.copyWith(
-                  color: kLightGrey,
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(20),
+          child: Column(
+            children: [
+              TextField(
+                controller: _titleController,
+                decoration: InputDecoration(
+                  label: const Text('Judul'),
+                  hintText: 'Masukkan judul',
+                  hintStyle: kTextTheme.bodyText2!.copyWith(
+                    color: kLightGrey,
+                  ),
+                  floatingLabelBehavior: FloatingLabelBehavior.always,
+                  isDense: true,
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
                 ),
-                floatingLabelBehavior: FloatingLabelBehavior.always,
-                isDense: true,
-                border: OutlineInputBorder(
+                onChanged: (value) {
+                  Timer(const Duration(milliseconds: 750), () {
+                    formCheck();
+                  });
+                },
+                style: kTextTheme.bodyText2!.copyWith(
+                  color: kRichBlack,
+                ),
+                autofocus: false,
+              ),
+              const SizedBox(height: 15),
+              TextField(
+                controller: _descriptionController,
+                decoration: InputDecoration(
+                  label: const Text('Deskripsi'),
+                  hintText: 'Masukkan deskripsi',
+                  hintStyle: kTextTheme.bodyText2!.copyWith(
+                    color: kLightGrey,
+                  ),
+                  floatingLabelBehavior: FloatingLabelBehavior.always,
+                  isDense: true,
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                ),
+                onChanged: (value) {
+                  Timer(const Duration(milliseconds: 750), () {
+                    formCheck();
+                  });
+                },
+                style: kTextTheme.bodyText2!.copyWith(
+                  color: kRichBlack,
+                ),
+                autofocus: false,
+              ),
+              const SizedBox(height: 15),
+              TextField(
+                controller: _tautanController,
+                decoration: InputDecoration(
+                  label: const Text('Tautan Tiktok'),
+                  hintText: 'Masukkan tautan',
+                  hintStyle: kTextTheme.bodyText2!.copyWith(
+                    color: kLightGrey,
+                  ),
+                  floatingLabelBehavior: FloatingLabelBehavior.always,
+                  isDense: true,
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                ),
+                onChanged: (value) {
+                  Timer(const Duration(milliseconds: 750), () {
+                    formCheck();
+                  });
+                },
+                style: kTextTheme.bodyText2!.copyWith(
+                  color: kRichBlack,
+                ),
+                autofocus: false,
+              ),
+              const SizedBox(height: 15),
+              Container(
+                width: double.infinity,
+                padding: const EdgeInsets.all(0),
+                decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10),
+                  border: Border.all(
+                    color: kMikadoOrange,
+                  ),
                 ),
-              ),
-              onChanged: (value) {
-                Timer(const Duration(milliseconds: 750), () {
-                  formCheck();
-                });
-              },
-              style: kTextTheme.bodyText2!.copyWith(
-                color: kRichBlack,
-              ),
-              autofocus: false,
-            ),
-            const SizedBox(height: 15),
-            TextField(
-              controller: _descriptionController,
-              decoration: InputDecoration(
-                label: const Text('Deskripsi'),
-                hintText: 'Masukkan deskripsi',
-                hintStyle: kTextTheme.bodyText2!.copyWith(
-                  color: kLightGrey,
-                ),
-                floatingLabelBehavior: FloatingLabelBehavior.always,
-                isDense: true,
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10),
-                ),
-              ),
-              onChanged: (value) {
-                Timer(const Duration(milliseconds: 750), () {
-                  formCheck();
-                });
-              },
-              style: kTextTheme.bodyText2!.copyWith(
-                color: kRichBlack,
-              ),
-              autofocus: false,
-            ),
-            const SizedBox(height: 15),
-            TextField(
-              controller: _tautanController,
-              decoration: InputDecoration(
-                label: const Text('Tautan Tiktok'),
-                hintText: 'Masukkan tautan',
-                hintStyle: kTextTheme.bodyText2!.copyWith(
-                  color: kLightGrey,
-                ),
-                floatingLabelBehavior: FloatingLabelBehavior.always,
-                isDense: true,
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10),
-                ),
-              ),
-              onChanged: (value) {
-                Timer(const Duration(milliseconds: 750), () {
-                  formCheck();
-                });
-              },
-              style: kTextTheme.bodyText2!.copyWith(
-                color: kRichBlack,
-              ),
-              autofocus: false,
-            ),
-            const SizedBox(height: 15),
-            Container(
-              width: double.infinity,
-              padding: const EdgeInsets.all(0),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
-                border: Border.all(
-                  color: kMikadoOrange,
-                ),
-              ),
-              child: videoFile != null && _videoController != null
-                  ? _videoController!.value.isInitialized
-                      ? ClipRRect(
-                          borderRadius: BorderRadius.circular(10),
-                          child: GestureDetector(
-                            behavior: HitTestBehavior.opaque,
-                            onTap: () {
-                              _videoController!.value.isPlaying
-                                  ? _videoController!.pause()
-                                  : _videoController!.play();
-                            },
-                            onLongPress: () {
-                              setState(() {
-                                _videoController = null;
-                              });
-                            },
-                            child: Stack(
-                              fit: StackFit.loose,
-                              children: [
-                                AspectRatio(
-                                  aspectRatio:
-                                      _videoController!.value.aspectRatio,
-                                  child: VideoPlayer(
-                                    _videoController!,
+                child: videoFile != null && _videoController != null
+                    ? _videoController!.value.isInitialized
+                        ? ClipRRect(
+                            borderRadius: BorderRadius.circular(10),
+                            child: GestureDetector(
+                              behavior: HitTestBehavior.opaque,
+                              onTap: () {
+                                _videoController!.value.isPlaying ? _videoController!.pause() : _videoController!.play();
+                              },
+                              onLongPress: () {
+                                setState(() {
+                                  _videoController = null;
+                                });
+                              },
+                              child: Stack(
+                                fit: StackFit.loose,
+                                children: [
+                                  AspectRatio(
+                                    aspectRatio: _videoController!.value.aspectRatio,
+                                    child: VideoPlayer(
+                                      _videoController!,
+                                    ),
                                   ),
-                                ),
-                                Positioned.fill(
-                                  child: Center(
-                                    child: _videoController!.value.isPlaying
-                                        ? Container()
-                                        : Container(
-                                            alignment: Alignment.center,
-                                            color: Colors.black26,
-                                            child: const Icon(
-                                              Icons.play_arrow,
-                                              color: kRichWhite,
-                                              size: 80,
+                                  Positioned.fill(
+                                    child: Center(
+                                      child: _videoController!.value.isPlaying
+                                          ? Container()
+                                          : Container(
+                                              alignment: Alignment.center,
+                                              color: Colors.black26,
+                                              child: const Icon(
+                                                Icons.play_arrow,
+                                                color: kRichWhite,
+                                                size: 80,
+                                              ),
                                             ),
-                                          ),
+                                    ),
                                   ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        )
-                      : SizedBox(
-                          height: MediaQuery.of(context).size.height * 0.45,
-                          child: const Center(
-                            child: CircularProgressIndicator(
-                              color: kMikadoOrange,
-                            ),
-                          ),
-                        )
-                  : InkWell(
-                      onTap: () async {
-                        final result = await FilePicker.platform.pickFiles(
-                          type: FileType.video,
-                        );
-                        if (result == null) return;
-                        videoFile = File(result.files.first.path!);
-                        videoPlayerInit(videoFile!);
-                        formCheck();
-                      },
-                      borderRadius: BorderRadius.circular(10),
-                      child: SizedBox(
-                        height: MediaQuery.of(context).size.height * 0.45,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            const Icon(
-                              Icons.camera_alt_outlined,
-                              color: kLightGrey,
-                              size: 35,
-                            ),
-                            Text(
-                              'Unggah Video\nMaks 60 Detik',
-                              style: kTextTheme.bodyText2!.copyWith(
-                                color: kLightGrey,
-                                fontSize: 14,
+                                ],
                               ),
                             ),
-                          ],
+                          )
+                        : SizedBox(
+                            height: MediaQuery.of(context).size.height * 0.45,
+                            child: const Center(
+                              child: CircularProgressIndicator(
+                                color: kMikadoOrange,
+                              ),
+                            ),
+                          )
+                    : InkWell(
+                        onTap: () async {
+                          final result = await FilePicker.platform.pickFiles(
+                            type: FileType.video,
+                          );
+                          if (result == null) return;
+                          videoFile = File(result.files.first.path!);
+                          videoPlayerInit(videoFile!);
+                          formCheck();
+                        },
+                        borderRadius: BorderRadius.circular(10),
+                        child: SizedBox(
+                          height: MediaQuery.of(context).size.height * 0.45,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              const Icon(
+                                Icons.camera_alt_outlined,
+                                color: kLightGrey,
+                                size: 35,
+                              ),
+                              Text(
+                                'Unggah Video\nMaks 60 Detik',
+                                style: kTextTheme.bodyText2!.copyWith(
+                                  color: kLightGrey,
+                                  fontSize: 14,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+              ),
+              const SizedBox(height: 15),
+              BlocConsumer<VideoSingkatCubit, VideoSingkatState>(
+                listener: (context, state) {
+                  if (state is PostVideoSingkatSuccess) {
+                    Navigator.pop(context);
+                  }
+                },
+                builder: (builderContext, state) {
+                  if (state is PostVideoSingkatLoading) {
+                    return LoadingButton(
+                      borderRadius: 10,
+                      primaryColor: kLightGrey,
+                      child: const SizedBox(
+                        width: double.infinity,
+                        height: 45,
+                        child: Center(
+                          child: SizedBox(
+                            width: 20,
+                            height: 20,
+                            child: CircularProgressIndicator(
+                              color: kRichWhite,
+                              strokeWidth: 3,
+                            ),
+                          ),
+                        ),
+                      ),
+                    );
+                  }
+                  return PrimaryButton(
+                    borderRadius: 10,
+                    child: SizedBox(
+                      height: 45,
+                      child: Center(
+                        child: Text(
+                          'Simpan',
+                          style: kTextTheme.button!.copyWith(
+                            color: kRichWhite,
+                          ),
                         ),
                       ),
                     ),
-            ),
-            const SizedBox(height: 15),
-            PrimaryButton(
-              borderRadius: 10,
-              child: SizedBox(
-                height: 45,
-                child: Center(
-                  child: Text(
-                    'Simpan',
-                    style: kTextTheme.button!.copyWith(
-                      color: kRichWhite,
-                    ),
-                  ),
-                ),
+                    onPressed: !isValidate
+                        ? null
+                        : () {
+                            builderContext
+                                .read<VideoSingkatCubit>()
+                                .postVideoSingkatFirestore(_titleController.text, _descriptionController.text, _tautanController.text, 'video_singkats', videoFile!);
+                          },
+                  );
+                },
               ),
-              onPressed: !isValidate ? null : () {},
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
