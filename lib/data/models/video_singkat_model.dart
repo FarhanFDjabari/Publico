@@ -30,9 +30,9 @@ class VideoSingkatModel extends Equatable {
       title: snapshot['title'],
       duration: snapshot['duration'],
       description: snapshot['description'],
-      videoUrl: snapshot['videoUrl'],
-      thumbnailUrl: snapshot['thumbnailUrl'],
-      tiktokUrl: snapshot['tiktokUrl'],
+      videoUrl: snapshot['video_url'],
+      thumbnailUrl: snapshot['thumbnail_url'],
+      tiktokUrl: snapshot['tiktok_url'],
     );
   }
 
