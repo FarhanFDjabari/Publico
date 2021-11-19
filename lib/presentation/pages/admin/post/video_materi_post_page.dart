@@ -4,9 +4,11 @@ import 'dart:io';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get/get.dart';
 import 'package:publico/presentation/bloc/video_materi/video_materi_cubit.dart';
 import 'package:publico/presentation/widgets/loading_button.dart';
 import 'package:publico/presentation/widgets/primary_button.dart';
+import 'package:publico/presentation/widgets/publico_snackbar.dart';
 import 'package:publico/styles/colors.dart';
 import 'package:publico/styles/text_styles.dart';
 import 'package:video_player/video_player.dart';
@@ -280,6 +282,11 @@ class _VideoMateriPostPageState extends State<VideoMateriPostPage> {
                     );
                   } else if (state is PostVideoMateriSuccess) {
                     Navigator.pop(context);
+                    Get.showSnackbar(
+                      PublicoSnackbar(
+                        message: state.message,
+                      ),
+                    );
                   }
                 },
                 builder: (builderContext, state) {

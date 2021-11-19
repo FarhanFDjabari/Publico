@@ -14,9 +14,21 @@ class PostVideoSingkatLoading extends VideoSingkatState {
   List<Object> get props => [];
 }
 
+class DeleteVideoSingkatLoading extends VideoSingkatState {
+  @override
+  List<Object> get props => [];
+}
+
 class PostVideoSingkatSuccess extends VideoSingkatState {
   final String message;
   const PostVideoSingkatSuccess(this.message);
+  @override
+  List<Object> get props => [message];
+}
+
+class DeleteVideoSingkatSuccess extends VideoSingkatState {
+  final String message;
+  const DeleteVideoSingkatSuccess(this.message);
   @override
   List<Object> get props => [message];
 }

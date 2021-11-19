@@ -17,6 +17,8 @@ abstract class RemoteDataSources {
   Future<void> postVideoMateri(String title, String description,
       String videoUrl, String thumbnailUrl, int duration);
   Future<void> postNewTheme(String themeName, String imagePath);
+  Future<void> deleteFromStorage(String downloadUrl);
+  Future<void> deletePost(String id, String collectionName);
 }
 
 class RemoteDataSourcesImpl extends RemoteDataSources {
@@ -81,6 +83,16 @@ class RemoteDataSourcesImpl extends RemoteDataSources {
   }
 
   @override
+  Future<void> deleteFromStorage(String downloadUrl) async {
+    try {
+      final ref = firebaseStorage.refFromURL(downloadUrl);
+      await ref.delete();
+    } catch (error) {
+      throw ServerException(error.toString());
+    }
+  }
+
+  @override
   Future<void> postVideoSingkat(
       String title,
       String description,
@@ -133,6 +145,16 @@ class RemoteDataSourcesImpl extends RemoteDataSources {
         'thumbnail_url': imagePath,
         'admin_id': GetStorage().read('uid'),
       });
+    } catch (error) {
+      throw ServerException(error.toString());
+    }
+  }
+
+  @override
+  Future<void> deletePost(String id, String collectionName) async {
+    try {
+      final ref = firebaseFirestore.collection(collectionName);
+      await ref.doc(id).delete();
     } catch (error) {
       throw ServerException(error.toString());
     }

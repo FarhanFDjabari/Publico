@@ -14,9 +14,21 @@ class PostVideoMateriLoading extends VideoMateriState {
   List<Object> get props => [];
 }
 
+class DeleteVideoMateriLoading extends VideoMateriState {
+  @override
+  List<Object> get props => [];
+}
+
 class PostVideoMateriSuccess extends VideoMateriState {
   final String message;
   const PostVideoMateriSuccess(this.message);
+  @override
+  List<Object> get props => [message];
+}
+
+class DeleteVideoMateriSuccess extends VideoMateriState {
+  final String message;
+  const DeleteVideoMateriSuccess(this.message);
   @override
   List<Object> get props => [message];
 }

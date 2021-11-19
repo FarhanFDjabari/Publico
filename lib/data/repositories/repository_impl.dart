@@ -164,4 +164,20 @@ class RepositoryImpl extends Repository {
       return Left(ServerFailure(e.message));
     }
   }
+
+  @override
+  Future<Either<Failure, void>> deleteVideoPost(String id, String videoUrl,
+      String thumbnailUrl, String collectionPath) async {
+    try {
+      await remoteDataSources.deleteFromStorage(videoUrl);
+      await remoteDataSources.deleteFromStorage(thumbnailUrl);
+      await remoteDataSources.deletePost(id, collectionPath);
+
+      return const Right(null);
+    } on FirebaseException catch (e) {
+      return Left(ServerFailure(e.toString()));
+    } on ServerException catch (e) {
+      return Left(ServerFailure(e.message));
+    }
+  }
 }
