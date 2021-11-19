@@ -241,11 +241,14 @@ class _VideoSingkatPostPageState extends State<VideoSingkatPostPage> {
                         onTap: () async {
                           final result = await FilePicker.platform.pickFiles(
                             type: FileType.video,
+                            withData: false,
+                            allowMultiple: false,
                           );
-                          if (result == null) return;
-                          videoFile = File(result.files.first.path!);
-                          videoPlayerInit(videoFile!);
-                          formCheck();
+                          if (result != null) {
+                            videoFile = File(result.files.first.path!);
+                            videoPlayerInit(videoFile!);
+                            formCheck();
+                          }
                         },
                         borderRadius: BorderRadius.circular(10),
                         child: SizedBox(

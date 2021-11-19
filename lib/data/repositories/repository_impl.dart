@@ -140,4 +140,28 @@ class RepositoryImpl extends Repository {
       return Left(ServerFailure(e.message));
     }
   }
+
+  @override
+  Future<Either<Failure, void>> postInfographicTheme(
+      String themeName, File themeImage, String destination) async {
+    try {
+      final filename = basename(themeImage.path);
+      final videoPath =
+          "$destination/${DateTime.now().microsecondsSinceEpoch}-${const Uuid().v4()}-${filename.toLowerCase().replaceAll(" ", "_")}";
+      final themeUploadTask =
+          await remoteDataSources.uploadFiletoStorage(videoPath, themeImage);
+      String themeImgUrl = '';
+      await themeUploadTask.whenComplete(() async {
+        themeImgUrl = await themeUploadTask.snapshot.ref.getDownloadURL();
+      });
+
+      await remoteDataSources.postNewTheme(themeName, themeImgUrl);
+
+      return const Right(null);
+    } on FirebaseException catch (e) {
+      return Left(ServerFailure(e.toString()));
+    } on ServerException catch (e) {
+      return Left(ServerFailure(e.message));
+    }
+  }
 }

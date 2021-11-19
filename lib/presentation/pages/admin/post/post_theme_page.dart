@@ -3,7 +3,12 @@ import 'dart:io';
 
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get/get.dart';
+import 'package:publico/presentation/bloc/infographic/infographic_cubit.dart';
+import 'package:publico/presentation/widgets/loading_button.dart';
 import 'package:publico/presentation/widgets/primary_button.dart';
+import 'package:publico/presentation/widgets/publico_snackbar.dart';
 import 'package:publico/styles/colors.dart';
 import 'package:publico/styles/text_styles.dart';
 
@@ -34,6 +39,12 @@ class _PostThemePageState extends State<PostThemePage> {
         isValidate = false;
       });
     }
+  }
+
+  @override
+  void dispose() {
+    imageFile = null;
+    super.dispose();
   }
 
   @override
@@ -138,20 +149,87 @@ class _PostThemePageState extends State<PostThemePage> {
               ),
             ),
             const SizedBox(height: 15),
-            PrimaryButton(
-              borderRadius: 10,
-              child: SizedBox(
-                height: 45,
-                child: Center(
-                  child: Text(
-                    'Simpan',
-                    style: kTextTheme.button!.copyWith(
-                      color: kRichWhite,
+            BlocConsumer<InfographicCubit, InfographicState>(
+              listener: (listenerContext, state) {
+                if (state is InfographicError) {
+                  ScaffoldMessenger.of(context).showMaterialBanner(
+                    MaterialBanner(
+                      content:
+                          Text('Gagal menambahkan tema baru: ${state.message}'),
+                      actions: [
+                        TextButton(
+                          onPressed: () {
+                            ScaffoldMessenger.of(context)
+                                .hideCurrentMaterialBanner();
+                          },
+                          child: const Text('Oke'),
+                        ),
+                      ],
+                      padding: const EdgeInsets.only(top: 20),
+                      leadingPadding:
+                          const EdgeInsets.symmetric(horizontal: 10),
+                      leading: const Icon(
+                        Icons.error,
+                        color: Colors.red,
+                      ),
+                      backgroundColor: kRichBlack.withOpacity(0.75),
+                    ),
+                  );
+                } else if (state is PostInfographicThemeSuccess) {
+                  Navigator.pop(context);
+                  Get.showSnackbar(
+                    PublicoSnackbar(
+                      message: state.message,
+                    ),
+                  );
+                }
+              },
+              builder: (builderContext, state) {
+                if (state is InfographicLoading) {
+                  return LoadingButton(
+                    borderRadius: 10,
+                    primaryColor: kLightGrey,
+                    child: const SizedBox(
+                      width: double.infinity,
+                      height: 45,
+                      child: Center(
+                        child: SizedBox(
+                          width: 20,
+                          height: 20,
+                          child: CircularProgressIndicator(
+                            color: kRichWhite,
+                            strokeWidth: 3,
+                          ),
+                        ),
+                      ),
+                    ),
+                  );
+                }
+                return PrimaryButton(
+                  borderRadius: 10,
+                  child: SizedBox(
+                    height: 45,
+                    child: Center(
+                      child: Text(
+                        'Simpan',
+                        style: kTextTheme.button!.copyWith(
+                          color: kRichWhite,
+                        ),
+                      ),
                     ),
                   ),
-                ),
-              ),
-              onPressed: !isValidate ? null : () {},
+                  onPressed: !isValidate
+                      ? null
+                      : () {
+                          builderContext
+                              .read<InfographicCubit>()
+                              .postNewInfographicTheme(
+                                  _themeNameController.text,
+                                  'infographic_themes',
+                                  imageFile!);
+                        },
+                );
+              },
             ),
           ],
         ),

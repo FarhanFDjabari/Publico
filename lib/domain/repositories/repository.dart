@@ -29,4 +29,7 @@ abstract class Repository {
       File videoFile,
       File thumbnailFile,
       int duration);
+
+  Future<Either<Failure, void>> postInfographicTheme(
+      String themeName, File themeImage, String destination);
 }
