@@ -69,23 +69,24 @@ class _VideoSingkatTabState extends State<VideoSingkatTab> {
                       return StaggeredGridView.countBuilder(
                         crossAxisCount: 4,
                         itemCount: state.videoSingkats.length,
-                        itemBuilder: (BuildContext itemContext, int index) =>
-                            InkWell(
-                          onTap: () {
-                            Navigator.pushNamed(
-                              context,
-                              AdminVideoSingkatDetailPage.routeName,
-                              arguments: state.videoSingkats[index],
-                            );
-                          },
-                          borderRadius: BorderRadius.circular(10),
-                          child: PublicoStaggeredTile(
-                            tileIndex: index,
-                            title: state.videoSingkats[index].title,
-                            imageUrl: state.videoSingkats[index].thumbnailUrl,
-                            category: state.videoSingkats[index].type,
-                          ),
-                        ),
+                        itemBuilder: (BuildContext itemContext, int index) {
+                          return InkWell(
+                            onTap: () {
+                              Navigator.pushNamed(
+                                context,
+                                AdminVideoSingkatDetailPage.routeName,
+                                arguments: state.videoSingkats[index],
+                              );
+                            },
+                            borderRadius: BorderRadius.circular(10),
+                            child: PublicoStaggeredTileAdmin(
+                              tileIndex: index,
+                              title: state.videoSingkats[index].title,
+                              imageUrl: state.videoSingkats[index].thumbnailUrl,
+                              category: state.videoSingkats[index].type,
+                            ),
+                          );
+                        },
                         staggeredTileBuilder: (int index) =>
                             const StaggeredTile.fit(2),
                         mainAxisSpacing: 15.0,

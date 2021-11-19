@@ -79,11 +79,13 @@ class PublicoStaggeredTileAdmin extends StatelessWidget {
             ),
           ],
         ),
+        const SizedBox(height: 4),
         Text(
           category,
           style:
               kTextTheme.overline!.copyWith(color: kMikadoOrange, fontSize: 13),
         ),
+        const SizedBox(height: 4),
         Text(
           title,
           style: kTextTheme.caption!.copyWith(color: kRichBlack, fontSize: 14),

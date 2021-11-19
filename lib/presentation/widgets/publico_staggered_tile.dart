@@ -79,6 +79,7 @@ class PublicoStaggeredTile extends StatelessWidget {
             ),
           ],
         ),
+        const SizedBox(height: 4),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -94,6 +95,7 @@ class PublicoStaggeredTile extends StatelessWidget {
             ),
           ],
         ),
+        const SizedBox(height: 4),
         Text(
           title,
           style: kTextTheme.caption!.copyWith(color: kRichBlack, fontSize: 14),
