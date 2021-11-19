@@ -27,3 +27,23 @@ class VideoSingkatError extends VideoSingkatState {
   @override
   List<Object> get props => [message];
 }
+
+class GetVideoSingkatPostsByUidLoading extends VideoSingkatState {
+  @override
+  List<Object> get props => [];
+}
+
+class GetVideoSingkatPostsByUidSuccess extends VideoSingkatState {
+  final List<VideoSingkat> videoSingkats;
+  const GetVideoSingkatPostsByUidSuccess(this.videoSingkats);
+  @override
+  List<Object> get props => [videoSingkats];
+}
+
+class GetVideoSingkatPostsByUidError extends VideoSingkatState {
+  final String message;
+  const GetVideoSingkatPostsByUidError(this.message);
+
+  @override
+  List<Object> get props => [message];
+}

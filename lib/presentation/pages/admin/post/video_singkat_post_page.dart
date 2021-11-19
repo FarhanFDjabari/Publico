@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:publico/presentation/bloc/video_singkat/video_singkat_cubit.dart';
 import 'package:publico/presentation/widgets/loading_button.dart';
 import 'package:publico/presentation/widgets/primary_button.dart';
@@ -299,6 +300,10 @@ class _VideoSingkatPostPageState extends State<VideoSingkatPostPage> {
                       ),
                     );
                   } else if (state is PostVideoSingkatSuccess) {
+                    context
+                        .read<VideoSingkatCubit>()
+                        .getVideoSingkatPostsByUidFirestore(
+                            GetStorage().read('uid'));
                     Navigator.pop(context);
                   }
                 },

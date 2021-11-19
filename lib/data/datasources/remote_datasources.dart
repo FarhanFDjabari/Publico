@@ -5,6 +5,7 @@ import 'package:firebase_auth/firebase_auth.dart' as auth;
 import 'package:firebase_storage/firebase_storage.dart' as storage;
 import 'package:get_storage/get_storage.dart';
 import 'package:publico/data/models/user_model.dart';
+import 'package:publico/data/models/video_singkat_model.dart';
 import 'package:publico/util/exception.dart';
 
 abstract class RemoteDataSources {
@@ -16,6 +17,8 @@ abstract class RemoteDataSources {
       String videoUrl, String thumbnailUrl, String tiktokUrl, int duration);
   Future<void> postVideoMateri(String title, String description,
       String videoUrl, String thumbnailUrl, int duration);
+
+  Future<List<VideoSingkatModel>> getVideoSingkatPostsByUid(String uid);
 }
 
 class RemoteDataSourcesImpl extends RemoteDataSources {
@@ -118,6 +121,22 @@ class RemoteDataSourcesImpl extends RemoteDataSources {
         'duration': duration,
         'admin_id': GetStorage().read('uid'),
       });
+    } catch (error) {
+      throw ServerException(error.toString());
+    }
+  }
+
+  @override
+  Future<List<VideoSingkatModel>> getVideoSingkatPostsByUid(String uid) async {
+    try {
+      final ref = firebaseFirestore.collection('video_singkat');
+      final result = await ref
+          .where('admin_id', isEqualTo: GetStorage().read('uid'))
+          .get();
+      final videoSingkatModels = result.docs
+          .map((doc) => VideoSingkatModel.fromSnapshot(doc))
+          .toList();
+      return videoSingkatModels;
     } catch (error) {
       throw ServerException(error.toString());
     }

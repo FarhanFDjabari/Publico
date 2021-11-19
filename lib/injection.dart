@@ -5,6 +5,7 @@ import 'package:get_it/get_it.dart';
 import 'package:publico/data/datasources/remote_datasources.dart';
 import 'package:publico/data/repositories/repository_impl.dart';
 import 'package:publico/domain/repositories/repository.dart';
+import 'package:publico/domain/usecases/admin/get_video_singkat_posts_by_uid.dart';
 import 'package:publico/domain/usecases/admin/post_video_singkat.dart';
 import 'package:publico/domain/usecases/login_with_email_and_password.dart';
 import 'package:publico/domain/usecases/logout.dart';
@@ -31,6 +32,7 @@ void init() {
   locator.registerFactory(
     () => VideoSingkatCubit(
       postVideoSingkat: locator(),
+      getVideoSingkatPostsByUid: locator(),
     ),
   );
   locator.registerFactory(
@@ -47,6 +49,7 @@ void init() {
 
   locator.registerLazySingleton(() => PostVideoSingkat(locator()));
   locator.registerLazySingleton(() => PostVideoMateri(locator()));
+  locator.registerLazySingleton(() => GetVideoSingkatPostsByUid(locator()));
 
   // repository
   locator.registerLazySingleton<Repository>(
