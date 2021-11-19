@@ -4,7 +4,7 @@ import 'dart:io';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:publico/presentation/bloc/auth/video_singkat/cubit/video_singkat_cubit.dart';
+import 'package:publico/presentation/bloc/video_singkat/video_singkat_cubit.dart';
 import 'package:publico/presentation/widgets/loading_button.dart';
 import 'package:publico/presentation/widgets/primary_button.dart';
 import 'package:publico/styles/colors.dart';
@@ -28,7 +28,10 @@ class _VideoSingkatPostPageState extends State<VideoSingkatPostPage> {
   bool isValidate = false;
 
   void formCheck() {
-    if (_titleController.text.isNotEmpty && _descriptionController.text.isNotEmpty && _tautanController.text.isNotEmpty && videoFile != null) {
+    if (_titleController.text.isNotEmpty &&
+        _descriptionController.text.isNotEmpty &&
+        _tautanController.text.isNotEmpty &&
+        videoFile != null) {
       if (isValidate) {
         return;
       } else {
@@ -177,7 +180,9 @@ class _VideoSingkatPostPageState extends State<VideoSingkatPostPage> {
                             child: GestureDetector(
                               behavior: HitTestBehavior.opaque,
                               onTap: () {
-                                _videoController!.value.isPlaying ? _videoController!.pause() : _videoController!.play();
+                                _videoController!.value.isPlaying
+                                    ? _videoController!.pause()
+                                    : _videoController!.play();
                               },
                               onLongPress: () {
                                 setState(() {
@@ -188,7 +193,8 @@ class _VideoSingkatPostPageState extends State<VideoSingkatPostPage> {
                                 fit: StackFit.loose,
                                 children: [
                                   AspectRatio(
-                                    aspectRatio: _videoController!.value.aspectRatio,
+                                    aspectRatio:
+                                        _videoController!.value.aspectRatio,
                                     child: VideoPlayer(
                                       _videoController!,
                                     ),
@@ -300,7 +306,12 @@ class _VideoSingkatPostPageState extends State<VideoSingkatPostPage> {
                         : () {
                             builderContext
                                 .read<VideoSingkatCubit>()
-                                .postVideoSingkatFirestore(_titleController.text, _descriptionController.text, _tautanController.text, 'video_singkats', videoFile!);
+                                .postVideoSingkatFirestore(
+                                    _titleController.text,
+                                    _descriptionController.text,
+                                    _tautanController.text,
+                                    'video_singkats',
+                                    videoFile!);
                           },
                   );
                 },

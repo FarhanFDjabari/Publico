@@ -11,7 +11,7 @@ import 'package:publico/domain/usecases/logout.dart';
 import 'package:publico/domain/usecases/send_forget_password.dart';
 import 'package:publico/domain/usecases/upload_file_to_storage.dart';
 import 'package:publico/presentation/bloc/auth/auth_cubit.dart';
-import 'package:publico/presentation/bloc/auth/video_singkat/cubit/video_singkat_cubit.dart';
+import 'package:publico/presentation/bloc/video_singkat/video_singkat_cubit.dart';
 
 import 'data/datasources/db/database_helper.dart';
 
@@ -48,7 +48,10 @@ void init() {
   );
 
   // data sources
-  locator.registerLazySingleton<RemoteDataSources>(() => RemoteDataSourcesImpl(firebaseAuth: locator(), firebaseStorage: locator(), firebaseFirestore: locator()));
+  locator.registerLazySingleton<RemoteDataSources>(() => RemoteDataSourcesImpl(
+      firebaseAuth: locator(),
+      firebaseStorage: locator(),
+      firebaseFirestore: locator()));
 
   // helper
   locator.registerLazySingleton<DatabaseHelper>(() => DatabaseHelper());

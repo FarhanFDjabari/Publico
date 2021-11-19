@@ -5,7 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:publico/presentation/bloc/auth/auth_cubit.dart';
-import 'package:publico/presentation/bloc/auth/video_singkat/cubit/video_singkat_cubit.dart';
+import 'package:publico/presentation/bloc/video_singkat/video_singkat_cubit.dart';
 import 'package:publico/presentation/pages/admin/detail/admin_infographics_detail.dart';
 import 'package:publico/presentation/pages/admin/detail/admin_video_materi_detail.dart';
 import 'package:publico/presentation/pages/admin/detail/admin_video_singkat_detail.dart';
