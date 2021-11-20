@@ -2,11 +2,14 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
+import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:publico/domain/entities/theme.dart' as themeEntity;
 import 'package:publico/presentation/bloc/infographic/infographic_cubit.dart';
 import 'package:publico/presentation/pages/admin/post/infographic_post_page.dart';
 import 'package:publico/presentation/pages/admin/post/post_theme_page.dart';
+import 'package:publico/presentation/pages/detail/infographics_detail_page.dart';
+import 'package:publico/presentation/widgets/publico_staggered_tile_admin.dart';
 import 'package:publico/styles/colors.dart';
 import 'package:publico/styles/text_styles.dart';
 
@@ -21,13 +24,20 @@ class InfographicsTab extends StatefulWidget {
 class _InfographicsTabState extends State<InfographicsTab> {
   final _searchQueryController = TextEditingController();
   var themeClicked = false;
+  var selectedTheme;
 
   @override
   Widget build(BuildContext context) {
     List<themeEntity.Theme> themeList = [];
-    context
-        .read<InfographicCubit>()
-        .getInfographicThemesByUidFirestore(GetStorage().read('uid'));
+    if (themeClicked) {
+      context
+          .read<InfographicCubit>()
+          .getInfographicsByThemeIdFirestore(selectedTheme);
+    } else {
+      context
+          .read<InfographicCubit>()
+          .getInfographicThemesByUidFirestore(GetStorage().read('uid'));
+    }
     return Scaffold(
       body: Padding(
         padding: const EdgeInsets.all(0.0),
@@ -66,7 +76,62 @@ class _InfographicsTabState extends State<InfographicsTab> {
             const SizedBox(height: 10),
             Expanded(
               child: themeClicked
-                  ? Container()
+                  ? BlocBuilder<InfographicCubit, InfographicState>(
+                      builder: (context, state) {
+                        if (state is GetInfographicsByThemeIdSuccess) {
+                          if (state.infographicList.isNotEmpty) {
+                            return StaggeredGridView.countBuilder(
+                              crossAxisCount: 4,
+                              itemCount: 5,
+                              itemBuilder:
+                                  (BuildContext itemContext, int index) {
+                                return InkWell(
+                                  onTap: () {
+                                    Navigator.pushNamed(
+                                      context,
+                                      InfographicsDetailPage.routeName,
+                                      arguments: 'arguments',
+                                    );
+                                  },
+                                  borderRadius: BorderRadius.circular(10),
+                                  child: PublicoStaggeredTileAdmin(
+                                    tileIndex: index,
+                                    duration: 2,
+                                    title: 'title',
+                                    imageUrl:
+                                        'https://firebasestorage.googleapis.com/v0/b/publico-188f6.appspot.com/o/infographics%2F1637430369923498-de234c0c-dadd-4847-82b9-19e75ec19904-photo-1498598457418-36ef20772bb9.jpeg?alt=media&token=a6f5b926-be2a-4001-8f18-94af6d046596',
+                                    category: 'Infografis',
+                                  ),
+                                );
+                              },
+                              staggeredTileBuilder: (int index) =>
+                                  const StaggeredTile.fit(2),
+                              mainAxisSpacing: 15.0,
+                              crossAxisSpacing: 8.0,
+                            );
+                          } else {
+                            return Center(
+                              child: Text(
+                                'Belum ada infografis yang tersedia',
+                                style: kTextTheme.bodyText2!
+                                    .copyWith(color: kRichBlack),
+                              ),
+                            );
+                          }
+                        } else if (state is GetInfographicsByThemeIdError) {
+                          return Center(
+                            child: Text(
+                              'Kesalahan Koneksi: ${state.message}',
+                              style: kTextTheme.bodyText2!
+                                  .copyWith(color: kRichBlack),
+                            ),
+                          );
+                        }
+                        return const Center(
+                          child: CircularProgressIndicator(),
+                        );
+                      },
+                    )
                   : BlocBuilder<InfographicCubit, InfographicState>(
                       builder: (context, state) {
                         if (state is GetInfographicThemesByUidSuccess) {
@@ -83,7 +148,10 @@ class _InfographicsTabState extends State<InfographicsTab> {
                             itemCount: state.themeList.length,
                             itemBuilder: (_, index) => InkWell(
                               onTap: () {
-                                setState(() => themeClicked = true);
+                                setState(() {
+                                  themeClicked = true;
+                                  selectedTheme = state.themeList[index].id;
+                                });
                               },
                               child: Container(
                                 decoration: BoxDecoration(

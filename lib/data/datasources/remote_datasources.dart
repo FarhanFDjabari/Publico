@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart' as firestore;
 import 'package:firebase_auth/firebase_auth.dart' as auth;
 import 'package:firebase_storage/firebase_storage.dart' as storage;
 import 'package:get_storage/get_storage.dart';
+import 'package:publico/data/models/infographic_model.dart';
 import 'package:publico/data/models/theme_model.dart';
 import 'package:publico/data/models/user_model.dart';
 import 'package:publico/data/models/video_materi_model.dart';
@@ -21,6 +22,7 @@ abstract class RemoteDataSources {
       String videoUrl, String thumbnailUrl, int duration);
   Future<List<VideoSingkatModel>> getVideoSingkatPostsByUid(String uid);
   Future<List<VideoMateriModel>> getVideoMateriPostsByUid(String uid);
+  Future<List<InfographicModel>> getInfographicsByThemeId(String themeId);
   Future<List<ThemeModel>> getInfographicThemesByUid(String uid);
   Future<void> postNewTheme(String themeName, String imagePath);
   Future<void> deleteFromStorage(String downloadUrl);
@@ -196,6 +198,23 @@ class RemoteDataSourcesImpl extends RemoteDataSources {
           .map((doc) => VideoSingkatModel.fromSnapshot(doc))
           .toList();
       return videoSingkatModels;
+    } catch (error) {
+      throw ServerException(error.toString());
+    }
+  }
+
+  @override
+  Future<List<InfographicModel>> getInfographicsByThemeId(
+      String themeId) async {
+    try {
+      final ref = firebaseFirestore.collection('infographics');
+      final result = await ref
+          .where('admin_id', isEqualTo: GetStorage().read('uid'))
+          .where('theme_id', isEqualTo: themeId)
+          .get();
+      final infographicModels =
+          result.docs.map((doc) => InfographicModel.fromSnapshot(doc)).toList();
+      return infographicModels;
     } catch (error) {
       throw ServerException(error.toString());
     }

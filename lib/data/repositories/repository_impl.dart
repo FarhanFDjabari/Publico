@@ -5,6 +5,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:path/path.dart';
 import 'package:publico/data/datasources/remote_datasources.dart';
+import 'package:publico/domain/entities/infographic.dart';
 import 'package:publico/domain/entities/theme.dart';
 import 'package:publico/domain/entities/user.dart';
 import 'package:publico/domain/entities/video_materi.dart';
@@ -175,6 +176,23 @@ class RepositoryImpl extends Repository {
       return Left(ServerFailure(e.toString()));
     } on ServerException catch (e) {
       return Left(ServerFailure(e.message));
+    }
+  }
+
+  @override
+  Future<Either<Failure, List<Infographic>>> getInfographicsByThemeId(
+      String themeId) async {
+    try {
+      final infographicModels =
+          await remoteDataSources.getInfographicsByThemeId(themeId);
+      final infographicList = infographicModels
+          .map((infographicModel) => infographicModel.toEntity())
+          .toList();
+      return Right(infographicList);
+    } on FirebaseException catch (e) {
+      return Left(ServerFailure(e.toString()));
+    } on ServerException catch (e) {
+      return Left(ServerFailure(e.toString()));
     }
   }
 
