@@ -26,6 +26,14 @@ class _VideoMateriEditPageState extends State<VideoMateriEditPage> {
   File? videoFile;
   bool isValidate = false;
 
+  @override
+  void initState() {
+    super.initState();
+    _titleController.text = widget.videoMateri.title;
+    _descriptionController.text = widget.videoMateri.description;
+    videoPlayerNetworkInit(widget.videoMateri.videoUrl);
+  }
+
   void formCheck() {
     if (_titleController.text.isNotEmpty &&
         _descriptionController.text.isNotEmpty &&
@@ -55,10 +63,22 @@ class _VideoMateriEditPageState extends State<VideoMateriEditPage> {
       ..initialize();
   }
 
+  void videoPlayerNetworkInit(String url) {
+    _videoController = VideoPlayerController.network(url)
+      ..addListener(() {
+        if (mounted) {
+          setState(() {});
+        }
+      })
+      ..setLooping(false)
+      ..initialize();
+  }
+
   @override
   void dispose() {
     super.dispose();
     _videoController?.dispose();
+    FilePicker.platform.clearTemporaryFiles();
   }
 
   @override
@@ -78,7 +98,7 @@ class _VideoMateriEditPageState extends State<VideoMateriEditPage> {
           ),
         ),
         title: Text(
-          'Tambah Video Materi',
+          'Edit Video Materi',
           style: kTextTheme.subtitle1!.copyWith(
             fontSize: 16,
             color: kRichBlack,
@@ -149,7 +169,7 @@ class _VideoMateriEditPageState extends State<VideoMateriEditPage> {
                   color: kMikadoOrange,
                 ),
               ),
-              child: videoFile != null && _videoController != null
+              child: _videoController != null
                   ? _videoController!.value.isInitialized
                       ? ClipRRect(
                           borderRadius: BorderRadius.circular(10),
@@ -160,7 +180,8 @@ class _VideoMateriEditPageState extends State<VideoMateriEditPage> {
                                   ? _videoController!.pause()
                                   : _videoController!.play();
                             },
-                            onLongPress: () {
+                            onLongPress: () async {
+                              await FilePicker.platform.clearTemporaryFiles();
                               setState(() {
                                 _videoController = null;
                               });
@@ -204,6 +225,7 @@ class _VideoMateriEditPageState extends State<VideoMateriEditPage> {
                         )
                   : InkWell(
                       onTap: () async {
+                        await Future.delayed(const Duration(milliseconds: 500));
                         final result = await FilePicker.platform.pickFiles(
                           type: FileType.video,
                         );

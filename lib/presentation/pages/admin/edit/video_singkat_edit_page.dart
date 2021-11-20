@@ -27,6 +27,15 @@ class _VideoSingkatEditPageState extends State<VideoSingkatEditPage> {
   File? videoFile;
   bool isValidate = false;
 
+  @override
+  void initState() {
+    super.initState();
+    _titleController.text = widget.videoSingkat.title;
+    _descriptionController.text = widget.videoSingkat.description;
+    _tautanController.text = widget.videoSingkat.tiktokUrl;
+    videoPlayerNetworkInit(widget.videoSingkat.videoUrl);
+  }
+
   void formCheck() {
     if (_titleController.text.isNotEmpty &&
         _descriptionController.text.isNotEmpty &&
@@ -53,9 +62,17 @@ class _VideoSingkatEditPageState extends State<VideoSingkatEditPage> {
       ..initialize();
   }
 
+  void videoPlayerNetworkInit(String url) {
+    _videoController = VideoPlayerController.network(url)
+      ..addListener(() => setState(() {}))
+      ..setLooping(false)
+      ..initialize();
+  }
+
   @override
   void dispose() {
     _videoController?.dispose();
+    FilePicker.platform.clearTemporaryFiles();
     super.dispose();
   }
 
@@ -76,7 +93,7 @@ class _VideoSingkatEditPageState extends State<VideoSingkatEditPage> {
           ),
         ),
         title: Text(
-          'Tambah Video Singkat',
+          'Edit Video Singkat',
           style: kTextTheme.subtitle1!.copyWith(
             fontSize: 16,
             color: kRichBlack,
@@ -172,7 +189,7 @@ class _VideoSingkatEditPageState extends State<VideoSingkatEditPage> {
                   color: kMikadoOrange,
                 ),
               ),
-              child: videoFile != null && _videoController != null
+              child: _videoController != null
                   ? _videoController!.value.isInitialized
                       ? ClipRRect(
                           borderRadius: BorderRadius.circular(10),
@@ -183,7 +200,8 @@ class _VideoSingkatEditPageState extends State<VideoSingkatEditPage> {
                                   ? _videoController!.pause()
                                   : _videoController!.play();
                             },
-                            onLongPress: () {
+                            onLongPress: () async {
+                              await FilePicker.platform.clearTemporaryFiles();
                               setState(() {
                                 _videoController = null;
                               });
@@ -227,6 +245,7 @@ class _VideoSingkatEditPageState extends State<VideoSingkatEditPage> {
                         )
                   : InkWell(
                       onTap: () async {
+                        await Future.delayed(const Duration(milliseconds: 500));
                         final result = await FilePicker.platform.pickFiles(
                           type: FileType.video,
                         );

@@ -44,6 +44,7 @@ class _PostThemePageState extends State<PostThemePage> {
   @override
   void dispose() {
     imageFile = null;
+    FilePicker.platform.clearTemporaryFiles();
     super.dispose();
   }
 
@@ -103,6 +104,7 @@ class _PostThemePageState extends State<PostThemePage> {
             const SizedBox(height: 15),
             InkWell(
               onTap: () async {
+                await Future.delayed(const Duration(milliseconds: 500));
                 final result = await FilePicker.platform.pickFiles(
                   type: FileType.image,
                 );
