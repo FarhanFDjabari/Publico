@@ -62,6 +62,7 @@ class _VideoMateriPostPageState extends State<VideoMateriPostPage> {
       });
     String? thumbnailPath = await VideoThumbnail.thumbnailFile(
       video: videoFile.path,
+      timeMs: 2000,
       imageFormat: ImageFormat.JPEG,
       quality: 10,
     );
@@ -70,7 +71,10 @@ class _VideoMateriPostPageState extends State<VideoMateriPostPage> {
 
   @override
   void dispose() {
-    _videoController?.dispose();
+    Future.delayed(Duration.zero, () async {
+      await FilePicker.platform.clearTemporaryFiles();
+      await _videoController?.dispose();
+    });
     super.dispose();
   }
 
@@ -174,7 +178,8 @@ class _VideoMateriPostPageState extends State<VideoMateriPostPage> {
                                     ? _videoController!.pause()
                                     : _videoController!.play();
                               },
-                              onLongPress: () {
+                              onLongPress: () async {
+                                await FilePicker.platform.clearTemporaryFiles();
                                 setState(() {
                                   _videoController = null;
                                 });
@@ -220,17 +225,22 @@ class _VideoMateriPostPageState extends State<VideoMateriPostPage> {
                         onTap: () async {
                           await Future.delayed(
                               const Duration(milliseconds: 500));
-                          final result = await FilePicker.platform.pickFiles(
+                          await FilePicker.platform
+                              .pickFiles(
                             type: FileType.video,
                             withData: false,
                             allowMultiple: false,
+                          )
+                              .then(
+                            (value) {
+                              if (value != null) {
+                                videoFile = File(value.files.first.path!);
+                                videoPlayerInit(videoFile!);
+                                formCheck();
+                                value.files.clear();
+                              }
+                            },
                           );
-                          if (result != null) {
-                            videoFile = File(result.files.first.path!);
-                            videoPlayerInit(videoFile!);
-                            formCheck();
-                            result.files.clear();
-                          }
                         },
                         borderRadius: BorderRadius.circular(10),
                         child: SizedBox(
@@ -246,6 +256,7 @@ class _VideoMateriPostPageState extends State<VideoMateriPostPage> {
                               ),
                               Text(
                                 'Unggah Video\nMaks 7 Menit',
+                                textAlign: TextAlign.center,
                                 style: kTextTheme.bodyText2!.copyWith(
                                   color: kLightGrey,
                                   fontSize: 14,

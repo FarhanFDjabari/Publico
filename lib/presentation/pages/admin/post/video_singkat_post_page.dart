@@ -5,7 +5,6 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
-import 'package:get_storage/get_storage.dart';
 import 'package:publico/presentation/bloc/video_singkat/video_singkat_cubit.dart';
 import 'package:publico/presentation/widgets/loading_button.dart';
 import 'package:publico/presentation/widgets/primary_button.dart';
@@ -52,24 +51,30 @@ class _VideoSingkatPostPageState extends State<VideoSingkatPostPage> {
     }
   }
 
-  void videoPlayerInit(File videoFile) async {
-    _videoController = VideoPlayerController.file(videoFile)
-      ..addListener(() => setState(() {}))
-      ..setLooping(false)
-      ..initialize().then(
-        (value) => duration = _videoController?.value.duration.inSeconds,
+  void videoPlayerInit(File? videoFile) async {
+    if (videoFile != null) {
+      _videoController = VideoPlayerController.file(videoFile)
+        ..addListener(() => setState(() {}))
+        ..setLooping(false)
+        ..initialize().then(
+          (value) => duration = _videoController?.value.duration.inSeconds,
+        );
+      String? thumbnailPath = await VideoThumbnail.thumbnailFile(
+        video: videoFile.path,
+        timeMs: 2000,
+        imageFormat: ImageFormat.JPEG,
+        quality: 10,
       );
-    String? thumbnailPath = await VideoThumbnail.thumbnailFile(
-      video: videoFile.path,
-      imageFormat: ImageFormat.JPEG,
-      quality: 10,
-    );
-    thumbnailImage = File(thumbnailPath!);
+      thumbnailImage = File(thumbnailPath!);
+    }
   }
 
   @override
-  void dispose() {
-    _videoController?.dispose();
+  void dispose() async {
+    Future.delayed(Duration.zero, () async {
+      await FilePicker.platform.clearTemporaryFiles();
+      await _videoController?.dispose();
+    });
     super.dispose();
   }
 
@@ -198,7 +203,8 @@ class _VideoSingkatPostPageState extends State<VideoSingkatPostPage> {
                                     ? _videoController!.pause()
                                     : _videoController!.play();
                               },
-                              onLongPress: () {
+                              onLongPress: () async {
+                                await FilePicker.platform.clearTemporaryFiles();
                                 setState(() {
                                   _videoController = null;
                                 });
@@ -244,16 +250,22 @@ class _VideoSingkatPostPageState extends State<VideoSingkatPostPage> {
                         onTap: () async {
                           await Future.delayed(
                               const Duration(milliseconds: 500));
-                          final result = await FilePicker.platform.pickFiles(
+                          await FilePicker.platform
+                              .pickFiles(
                             type: FileType.video,
                             withData: false,
                             allowMultiple: false,
+                          )
+                              .then(
+                            (value) {
+                              if (value != null) {
+                                videoFile = File(value.files.first.path!);
+                                videoPlayerInit(videoFile);
+                                formCheck();
+                                value.files.clear();
+                              }
+                            },
                           );
-                          if (result != null) {
-                            videoFile = File(result.files.first.path!);
-                            videoPlayerInit(videoFile!);
-                            formCheck();
-                          }
                         },
                         borderRadius: BorderRadius.circular(10),
                         child: SizedBox(
@@ -269,6 +281,7 @@ class _VideoSingkatPostPageState extends State<VideoSingkatPostPage> {
                               ),
                               Text(
                                 'Unggah Video\nMaks 60 Detik',
+                                textAlign: TextAlign.center,
                                 style: kTextTheme.bodyText2!.copyWith(
                                   color: kLightGrey,
                                   fontSize: 14,

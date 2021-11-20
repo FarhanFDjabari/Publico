@@ -66,35 +66,57 @@ class _VideoSingkatTabState extends State<VideoSingkatTab> {
                 child: BlocBuilder<VideoSingkatCubit, VideoSingkatState>(
                   builder: (context, state) {
                     if (state is GetVideoSingkatPostsByUidSuccess) {
-                      return StaggeredGridView.countBuilder(
-                        crossAxisCount: 4,
-                        itemCount: state.videoSingkats.length,
-                        itemBuilder: (BuildContext itemContext, int index) {
-                          return InkWell(
-                            onTap: () {
-                              Navigator.pushNamed(
-                                context,
-                                AdminVideoSingkatDetailPage.routeName,
-                                arguments: state.videoSingkats[index],
-                              );
-                            },
-                            borderRadius: BorderRadius.circular(10),
-                            child: PublicoStaggeredTileAdmin(
-                              tileIndex: index,
-                              title: state.videoSingkats[index].title,
-                              imageUrl: state.videoSingkats[index].thumbnailUrl,
-                              category: state.videoSingkats[index].type,
-                            ),
-                          );
-                        },
-                        staggeredTileBuilder: (int index) =>
-                            const StaggeredTile.fit(2),
-                        mainAxisSpacing: 15.0,
-                        crossAxisSpacing: 8.0,
-                      );
+                      if (state.videoSingkats.isNotEmpty) {
+                        return StaggeredGridView.countBuilder(
+                          crossAxisCount: 4,
+                          itemCount: state.videoSingkats.length,
+                          itemBuilder: (BuildContext itemContext, int index) {
+                            return InkWell(
+                              onTap: () {
+                                Navigator.pushNamed(
+                                  context,
+                                  AdminVideoSingkatDetailPage.routeName,
+                                  arguments: state.videoSingkats[index],
+                                ).then(
+                                  (value) => context
+                                      .read<VideoSingkatCubit>()
+                                      .getVideoSingkatPostsByUidFirestore(
+                                        GetStorage().read('uid'),
+                                      ),
+                                );
+                              },
+                              borderRadius: BorderRadius.circular(10),
+                              child: PublicoStaggeredTileAdmin(
+                                tileIndex: index,
+                                duration: state.videoSingkats[index].duration,
+                                title: state.videoSingkats[index].title,
+                                imageUrl:
+                                    state.videoSingkats[index].thumbnailUrl,
+                                category: state.videoSingkats[index].type,
+                              ),
+                            );
+                          },
+                          staggeredTileBuilder: (int index) =>
+                              const StaggeredTile.fit(2),
+                          mainAxisSpacing: 15.0,
+                          crossAxisSpacing: 8.0,
+                        );
+                      } else {
+                        return Center(
+                          child: Text(
+                            'Belum ada video singkat yang tersedia',
+                            style: kTextTheme.bodyText2!
+                                .copyWith(color: kRichBlack),
+                          ),
+                        );
+                      }
                     } else if (state is GetVideoSingkatPostsByUidError) {
-                      return const Center(
-                        child: Text('Tidak ada video singkat'),
+                      return Center(
+                        child: Text(
+                          'Kesalahan Koneksi: ${state.message}',
+                          style:
+                              kTextTheme.bodyText2!.copyWith(color: kRichBlack),
+                        ),
                       );
                     }
                     return const Center(

@@ -14,6 +14,7 @@ class InfographicTile extends StatefulWidget {
 
 class _InfographicTileState extends State<InfographicTile> {
   int _currentIndex = 0;
+  bool _isExpand = false;
 
   @override
   Widget build(BuildContext context) {
@@ -105,6 +106,7 @@ class _InfographicTileState extends State<InfographicTile> {
           ),
           const SizedBox(height: 10),
           Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const CircleAvatar(
                 radius: 18,
@@ -115,31 +117,39 @@ class _InfographicTileState extends State<InfographicTile> {
                   size: 18,
                 ),
               ),
-              const SizedBox(width: 5),
+              const SizedBox(width: 8),
               Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'Lorem Ipsum is simply dummy text of the printing[Sumber]',
-                      style: kTextTheme.overline!.copyWith(
-                        color: kMikadoOrange,
-                        fontWeight: FontWeight.w400,
+                child: InkWell(
+                  borderRadius: BorderRadius.circular(10),
+                  onTap: () {
+                    setState(() {
+                      _isExpand = !_isExpand;
+                    });
+                  },
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Lorem Ipsum is simply dummy text of the printing[Sumber]',
+                        style: kTextTheme.overline!.copyWith(
+                          color: kMikadoOrange,
+                          fontWeight: FontWeight.w400,
+                        ),
+                        maxLines: 2,
+                        overflow: TextOverflow.fade,
                       ),
-                      maxLines: 2,
-                      overflow: TextOverflow.fade,
-                    ),
-                    const SizedBox(height: 3),
-                    Text(
-                      'Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. [Caption]',
-                      style: kTextTheme.overline!.copyWith(
-                        color: kRichBlack,
-                        fontWeight: FontWeight.w400,
+                      const SizedBox(height: 3),
+                      Text(
+                        'Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. [Caption]',
+                        style: kTextTheme.overline!.copyWith(
+                          color: kRichBlack,
+                          fontWeight: FontWeight.w400,
+                        ),
+                        maxLines: _isExpand ? 500 : 2,
+                        overflow: TextOverflow.ellipsis,
                       ),
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
             ],

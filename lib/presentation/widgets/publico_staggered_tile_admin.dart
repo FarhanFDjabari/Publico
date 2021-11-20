@@ -8,13 +8,35 @@ class PublicoStaggeredTileAdmin extends StatelessWidget {
   final String imageUrl;
   final String category;
   final String title;
+  final int? duration;
+  final int? sourcesCount;
+
   const PublicoStaggeredTileAdmin({
     Key? key,
     this.tileIndex = 0,
     required this.imageUrl,
     required this.category,
     required this.title,
+    this.duration,
+    this.sourcesCount,
   }) : super(key: key);
+
+  String formatedTime(int? secTime) {
+    if (secTime == null) return '';
+
+    String getParsedTime(String time) {
+      if (time.length <= 1) return "0$time";
+      return time;
+    }
+
+    int min = secTime ~/ 60;
+    int sec = secTime % 60;
+
+    String parsedTime =
+        getParsedTime(min.toString()) + " : " + getParsedTime(sec.toString());
+
+    return parsedTime;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -51,29 +73,34 @@ class PublicoStaggeredTileAdmin extends StatelessWidget {
               top: 5,
               left: 5,
               child: Container(
-                width: 40,
-                height: 20,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(16),
                   color: kLightGrey2,
                 ),
                 padding: const EdgeInsets.symmetric(horizontal: 5),
                 child: Center(
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      const Icon(
-                        Icons.collections_bookmark_rounded,
-                        color: kRichBlack,
-                        size: 12,
-                      ),
-                      Text(
-                        '5',
-                        style: kTextTheme.overline!
-                            .copyWith(color: kRichBlack, fontSize: 12),
-                      )
-                    ],
-                  ),
+                  child: category == 'Video Singkat' ||
+                          category == 'Video Materi'
+                      ? Text(
+                          formatedTime(duration!),
+                          style: kTextTheme.overline!
+                              .copyWith(color: kRichBlack, fontSize: 10),
+                        )
+                      : Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: [
+                            const Icon(
+                              Icons.collections_bookmark_rounded,
+                              color: kRichBlack,
+                              size: 12,
+                            ),
+                            Text(
+                              '$sourcesCount',
+                              style: kTextTheme.overline!
+                                  .copyWith(color: kRichBlack, fontSize: 12),
+                            )
+                          ],
+                        ),
                 ),
               ),
             ),

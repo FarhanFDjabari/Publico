@@ -1,16 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:get/get.dart';
-import 'package:publico/presentation/bloc/video_materi/video_materi_cubit.dart';
-import 'package:publico/presentation/widgets/publico_snackbar.dart';
 import 'package:publico/styles/colors.dart';
 import 'package:publico/styles/text_styles.dart';
 
-class PublicoEditBottomSheet extends StatelessWidget {
+class PublicoInfoEditBottomSheet extends StatelessWidget {
   final BuildContext parentContext;
   final Function()? onEditPressed;
   final Function()? onDeletePressed;
-  const PublicoEditBottomSheet({
+  const PublicoInfoEditBottomSheet({
     Key? key,
     required this.parentContext,
     this.onEditPressed,
@@ -99,39 +95,13 @@ class PublicoEditBottomSheet extends StatelessWidget {
                                   .copyWith(color: kRichBlack),
                             ),
                           ),
-                          BlocConsumer<VideoMateriCubit, VideoMateriState>(
-                            builder: (builderContext, state) {
-                              if (state is DeleteVideoMateriLoading) {
-                                return const CircularProgressIndicator();
-                              }
-                              return TextButton(
-                                onPressed: onDeletePressed,
-                                child: Text(
-                                  'Hapus',
-                                  style: kTextTheme.headline6!
-                                      .copyWith(color: kRed),
-                                ),
-                              );
-                            },
-                            listener: (_, state) {
-                              if (state is DeleteVideoMateriSuccess) {
-                                Navigator.of(parentContext)
-                                  ..pop()
-                                  ..pop();
-                                Get.showSnackbar(
-                                  PublicoSnackbar(
-                                    message: state.message,
-                                  ),
-                                );
-                              } else if (state is VideoMateriError) {
-                                Navigator.pop(parentContext);
-                                Get.showSnackbar(
-                                  PublicoSnackbar(
-                                    message: state.message,
-                                  ),
-                                );
-                              }
-                            },
+                          TextButton(
+                            onPressed: onDeletePressed,
+                            child: Text(
+                              'Hapus',
+                              style:
+                                  kTextTheme.headline6!.copyWith(color: kRed),
+                            ),
                           ),
                         ],
                       ),

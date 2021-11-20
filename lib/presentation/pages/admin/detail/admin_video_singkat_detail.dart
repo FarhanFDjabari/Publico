@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:publico/domain/entities/video_singkat.dart';
+import 'package:publico/presentation/bloc/video_singkat/video_singkat_cubit.dart';
 import 'package:publico/presentation/pages/admin/edit/video_singkat_edit_page.dart';
-import 'package:publico/presentation/widgets/publico_edit_bottom_sheet.dart';
+import 'package:publico/presentation/widgets/publico_singkat_edit_bottom_sheet.dart';
 import 'package:publico/styles/colors.dart';
 import 'package:publico/styles/text_styles.dart';
 import 'package:video_player/video_player.dart';
@@ -68,14 +70,23 @@ class _AdminVideoSingkatDetailPageState
                 backgroundColor: kRichWhite,
                 context: context,
                 isDismissible: true,
-                builder: (_) => PublicoEditBottomSheet(
+                builder: (_) => PublicoSingkatEditBottomSheet(
                   parentContext: context,
-                  onDeletePressed: () {},
+                  onDeletePressed: () {
+                    context
+                        .read<VideoSingkatCubit>()
+                        .deleteVideoSingkatFirestore(
+                          widget.videoSingkat.id,
+                          widget.videoSingkat.videoUrl,
+                          widget.videoSingkat.thumbnailUrl,
+                          'video_singkat',
+                        );
+                  },
                   onEditPressed: () {
                     Navigator.pushNamed(
                       context,
                       VideoSingkatEditPage.routeName,
-                      arguments: 'secret',
+                      arguments: widget.videoSingkat,
                     );
                   },
                 ),

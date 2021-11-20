@@ -65,37 +65,52 @@ class _VideoMateriTabState extends State<VideoMateriTab> {
               child: BlocBuilder<VideoMateriCubit, VideoMateriState>(
                 builder: (context, state) {
                   if (state is GetVideoMateriPostsByUidSuccess) {
-                    return StaggeredGridView.countBuilder(
-                      crossAxisCount: 4,
-                      itemCount: state.videoMateriList.length,
-                      itemBuilder: (BuildContext itemContext, int index) =>
-                          InkWell(
-                        onTap: () {
-                          Navigator.pushNamed(
-                            context,
-                            AdminVideoMateriDetailPage.routeName,
-                            arguments: state.videoMateriList[index],
-                          ).then((_) => context
-                              .read<VideoMateriCubit>()
-                              .getVideoMateriPostsByUidFirestore(
-                                  GetStorage().read('uid')));
-                        },
-                        borderRadius: BorderRadius.circular(10),
-                        child: PublicoStaggeredTileAdmin(
-                          tileIndex: index,
-                          title: state.videoMateriList[index].title,
-                          imageUrl: state.videoMateriList[index].thumbnailUrl,
-                          category: state.videoMateriList[index].type,
+                    if (state.videoMateriList.isNotEmpty) {
+                      return StaggeredGridView.countBuilder(
+                        crossAxisCount: 4,
+                        itemCount: state.videoMateriList.length,
+                        itemBuilder: (BuildContext itemContext, int index) =>
+                            InkWell(
+                          onTap: () {
+                            Navigator.pushNamed(
+                              context,
+                              AdminVideoMateriDetailPage.routeName,
+                              arguments: state.videoMateriList[index],
+                            ).then((_) => context
+                                .read<VideoMateriCubit>()
+                                .getVideoMateriPostsByUidFirestore(
+                                    GetStorage().read('uid')));
+                          },
+                          borderRadius: BorderRadius.circular(10),
+                          child: PublicoStaggeredTileAdmin(
+                            tileIndex: index,
+                            duration: state.videoMateriList[index].duration,
+                            title: state.videoMateriList[index].title,
+                            imageUrl: state.videoMateriList[index].thumbnailUrl,
+                            category: state.videoMateriList[index].type,
+                          ),
                         ),
-                      ),
-                      staggeredTileBuilder: (int index) =>
-                          const StaggeredTile.fit(2),
-                      mainAxisSpacing: 15.0,
-                      crossAxisSpacing: 8.0,
-                    );
+                        staggeredTileBuilder: (int index) =>
+                            const StaggeredTile.fit(2),
+                        mainAxisSpacing: 15.0,
+                        crossAxisSpacing: 8.0,
+                      );
+                    } else {
+                      return Center(
+                        child: Text(
+                          'Belum ada video materi yang tersedia',
+                          style:
+                              kTextTheme.bodyText2!.copyWith(color: kRichBlack),
+                        ),
+                      );
+                    }
                   } else if (state is GetVideoMateriPostsByUidError) {
-                    return const Center(
-                      child: Text('Tidak ada video materi'),
+                    return Center(
+                      child: Text(
+                        'Kesalahan Koneksi: ${state.message}',
+                        style:
+                            kTextTheme.bodyText2!.copyWith(color: kRichBlack),
+                      ),
                     );
                   }
                   return const Center(
