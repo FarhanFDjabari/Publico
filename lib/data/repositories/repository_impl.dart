@@ -6,6 +6,7 @@ import 'package:get_storage/get_storage.dart';
 import 'package:path/path.dart';
 import 'package:publico/data/datasources/remote_datasources.dart';
 import 'package:publico/domain/entities/user.dart';
+import 'package:publico/domain/entities/video_materi.dart';
 import 'package:publico/domain/entities/video_singkat.dart';
 import 'package:publico/domain/repositories/repository.dart';
 import 'package:publico/util/exception.dart';
@@ -152,6 +153,23 @@ class RepositoryImpl extends Repository {
           .map((videoSingkatModel) => videoSingkatModel.toEntity())
           .toList();
       return Right(videoSingkatList);
+    } on FirebaseException catch (e) {
+      return Left(ServerFailure(e.toString()));
+    } on ServerException catch (e) {
+      return Left(ServerFailure(e.message));
+    }
+  }
+
+  @override
+  Future<Either<Failure, List<VideoMateri>>> getVideoMateriPostsByUid(
+      String uid) async {
+    try {
+      final videoMateriModels =
+          await remoteDataSources.getVideoMateriPostsByUid(uid);
+      final videoMateriList = videoMateriModels
+          .map((videoSingkatModel) => videoSingkatModel.toEntity())
+          .toList();
+      return Right(videoMateriList);
     } on FirebaseException catch (e) {
       return Left(ServerFailure(e.toString()));
     } on ServerException catch (e) {

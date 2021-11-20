@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+import 'package:get_storage/get_storage.dart';
+import 'package:publico/presentation/bloc/video_materi/video_materi_cubit.dart';
 import 'package:publico/presentation/pages/admin/detail/admin_video_materi_detail.dart';
 import 'package:publico/presentation/pages/admin/post/video_materi_post_page.dart';
 import 'package:publico/presentation/widgets/publico_staggered_tile_admin.dart';
@@ -19,6 +22,9 @@ class _VideoMateriTabState extends State<VideoMateriTab> {
 
   @override
   Widget build(BuildContext context) {
+    context
+        .read<VideoMateriCubit>()
+        .getVideoMateriPostsByUidFirestore(GetStorage().read('uid'));
     return Scaffold(
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 0.0),
@@ -56,30 +62,46 @@ class _VideoMateriTabState extends State<VideoMateriTab> {
             ),
             const SizedBox(height: 10),
             Expanded(
-              child: StaggeredGridView.countBuilder(
-                crossAxisCount: 4,
-                itemCount: 12,
-                itemBuilder: (BuildContext itemContext, int index) => InkWell(
-                  onTap: () {
-                    Navigator.pushNamed(
-                      context,
-                      AdminVideoMateriDetailPage.routeName,
-                      arguments: 'secret',
+              child: BlocBuilder<VideoMateriCubit, VideoMateriState>(
+                builder: (context, state) {
+                  if (state is GetVideoMateriPostsByUidSuccess) {
+                    return StaggeredGridView.countBuilder(
+                      crossAxisCount: 4,
+                      itemCount: state.videoMateriList.length,
+                      itemBuilder: (BuildContext itemContext, int index) =>
+                          InkWell(
+                        onTap: () {
+                          Navigator.pushNamed(
+                            context,
+                            AdminVideoMateriDetailPage.routeName,
+                            arguments: state.videoMateriList[index],
+                          ).then((_) => context
+                              .read<VideoMateriCubit>()
+                              .getVideoMateriPostsByUidFirestore(
+                                  GetStorage().read('uid')));
+                        },
+                        borderRadius: BorderRadius.circular(10),
+                        child: PublicoStaggeredTileAdmin(
+                          tileIndex: index,
+                          title: state.videoMateriList[index].title,
+                          imageUrl: state.videoMateriList[index].thumbnailUrl,
+                          category: state.videoMateriList[index].type,
+                        ),
+                      ),
+                      staggeredTileBuilder: (int index) =>
+                          const StaggeredTile.fit(2),
+                      mainAxisSpacing: 15.0,
+                      crossAxisSpacing: 8.0,
                     );
-                  },
-                  borderRadius: BorderRadius.circular(10),
-                  child: PublicoStaggeredTileAdmin(
-                    tileIndex: index,
-                    title:
-                        'Subsidi Pemerintah dan Bantuan untuk lorem ipsum asdaksdka sdass dasdasdas',
-                    imageUrl:
-                        'https://marketplace.canva.com/EADaooG1kwk/2/0/704w/canva-top-major-south-america-commodities-_IBpJMSh0_Y.jpg',
-                    category: 'Video Materi',
-                  ),
-                ),
-                staggeredTileBuilder: (int index) => const StaggeredTile.fit(2),
-                mainAxisSpacing: 15.0,
-                crossAxisSpacing: 8.0,
+                  } else if (state is GetVideoMateriPostsByUidError) {
+                    return const Center(
+                      child: Text('Tidak ada video materi'),
+                    );
+                  }
+                  return const Center(
+                    child: CircularProgressIndicator(),
+                  );
+                },
               ),
             ),
           ],
@@ -88,10 +110,13 @@ class _VideoMateriTabState extends State<VideoMateriTab> {
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (_) => const VideoMateriPostPage(),
-              ));
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) => const VideoMateriPostPage(),
+                  ))
+              .then((_) => context
+                  .read<VideoMateriCubit>()
+                  .getVideoMateriPostsByUidFirestore(GetStorage().read('uid')));
         },
         child: const Icon(
           Icons.add,

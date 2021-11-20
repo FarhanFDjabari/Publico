@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:publico/domain/entities/video_materi.dart';
 import 'package:publico/presentation/widgets/primary_button.dart';
 import 'package:publico/styles/colors.dart';
 import 'package:publico/styles/text_styles.dart';
@@ -10,8 +11,9 @@ import 'package:video_player/video_player.dart';
 
 class VideoMateriEditPage extends StatefulWidget {
   static const routeName = '/admin-video-materi-edit';
-  final String postId;
-  const VideoMateriEditPage({Key? key, required this.postId}) : super(key: key);
+  final VideoMateri videoMateri;
+  const VideoMateriEditPage({Key? key, required this.videoMateri})
+      : super(key: key);
 
   @override
   _VideoMateriEditPageState createState() => _VideoMateriEditPageState();
