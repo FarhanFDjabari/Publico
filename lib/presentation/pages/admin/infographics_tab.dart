@@ -198,6 +198,11 @@ class _InfographicsTabState extends State<InfographicsTab> {
                     builder: (_) => InfographicPostPage(
                           themes: themeList,
                         )),
+              ).then(
+                (_) => context
+                    .read<InfographicCubit>()
+                    .getInfographicThemesByUidFirestore(
+                        GetStorage().read('uid')),
               );
             },
             child: const Icon(

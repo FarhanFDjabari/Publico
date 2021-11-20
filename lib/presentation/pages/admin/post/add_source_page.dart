@@ -101,7 +101,7 @@ class _AddSourcePageState extends State<AddSourcePage> {
                   ),
                 ),
                 onChanged: (value) {
-                  Timer(const Duration(milliseconds: 750), () {
+                  Timer(const Duration(milliseconds: 500), () {
                     formCheck();
                   });
                 },
@@ -133,7 +133,7 @@ class _AddSourcePageState extends State<AddSourcePage> {
                   ),
                 ),
                 onChanged: (value) {
-                  Timer(const Duration(milliseconds: 750), () {
+                  Timer(const Duration(milliseconds: 500), () {
                     formCheck();
                   });
                 },

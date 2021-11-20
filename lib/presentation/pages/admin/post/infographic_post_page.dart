@@ -3,11 +3,13 @@ import 'dart:async';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get/get.dart';
 import 'package:publico/domain/entities/theme.dart' as theme_entity;
 import 'package:publico/presentation/bloc/infographic/infographic_cubit.dart';
 import 'package:publico/presentation/pages/admin/post/add_source_page.dart';
 import 'package:publico/presentation/widgets/loading_button.dart';
 import 'package:publico/presentation/widgets/primary_button.dart';
+import 'package:publico/presentation/widgets/publico_snackbar.dart';
 import 'package:publico/styles/colors.dart';
 import 'package:publico/styles/text_styles.dart';
 
@@ -42,6 +44,12 @@ class _InfographicPostPageState extends State<InfographicPostPage> {
         isValidate = false;
       });
     }
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _titleController.dispose();
   }
 
   @override
@@ -115,7 +123,11 @@ class _InfographicPostPageState extends State<InfographicPostPage> {
                   ),
                   contentPadding: const EdgeInsets.symmetric(horizontal: 15),
                 ),
-                onChanged: (value) {},
+                onChanged: (value) {
+                  Timer(const Duration(milliseconds: 500), () {
+                    formCheck();
+                  });
+                },
                 hint: Text(
                   'Pilih Tema',
                   style: kTextTheme.bodyText2!.copyWith(
@@ -147,7 +159,7 @@ class _InfographicPostPageState extends State<InfographicPostPage> {
                   ),
                 ),
                 onChanged: (value) {
-                  Timer(const Duration(milliseconds: 750), () {
+                  Timer(const Duration(milliseconds: 500), () {
                     formCheck();
                   });
                 },
@@ -225,8 +237,17 @@ class _InfographicPostPageState extends State<InfographicPostPage> {
               ),
               const SizedBox(height: 15),
               BlocConsumer<InfographicCubit, InfographicState>(
-                listener: (context, state) {
-                  // TODO: implement listener
+                listener: (listenerContext, state) {
+                  if (state is PostInfographicSuccess) {
+                    Navigator.pop(context);
+                    Get.showSnackbar(PublicoSnackbar(
+                      message: state.message,
+                    ));
+                  } else if (state is PostInfographicError) {
+                    Get.showSnackbar(PublicoSnackbar(
+                      message: state.message,
+                    ));
+                  }
                 },
                 builder: (builderContext, state) {
                   if (state is PostInfographicLoading) {
@@ -234,8 +255,11 @@ class _InfographicPostPageState extends State<InfographicPostPage> {
                         borderRadius: 10,
                         child: const SizedBox(
                             height: 45,
-                            child: Center(child: CircularProgressIndicator())),
-                        onPressed: null);
+                            child: Center(
+                                child: CircularProgressIndicator(
+                              color: kRichWhite,
+                            ))),
+                        onPressed: () {});
                   }
                   return PrimaryButton(
                     borderRadius: 10,
