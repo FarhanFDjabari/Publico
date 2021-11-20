@@ -307,10 +307,6 @@ class _VideoSingkatPostPageState extends State<VideoSingkatPostPage> {
                       ),
                     );
                   } else if (state is PostVideoSingkatSuccess) {
-                    context
-                        .read<VideoSingkatCubit>()
-                        .getVideoSingkatPostsByUidFirestore(
-                            GetStorage().read('uid'));
                     Navigator.pop(context);
                     Get.showSnackbar(
                       PublicoSnackbar(
