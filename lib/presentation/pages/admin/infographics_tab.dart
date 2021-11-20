@@ -65,75 +65,89 @@ class _InfographicsTabState extends State<InfographicsTab> {
               child: BlocBuilder<InfographicCubit, InfographicState>(
                 builder: (context, state) {
                   if (state is GetInfographicThemesByUidSuccess) {
-                    return GridView.builder(
-                      gridDelegate:
-                          const SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 2,
-                        mainAxisSpacing: 8,
-                        crossAxisSpacing: 8,
-                        childAspectRatio: 175 / 75,
-                      ),
-                      shrinkWrap: true,
-                      itemCount: state.themeList.length,
-                      itemBuilder: (_, index) => Container(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
+                    if (state.themeList.isNotEmpty) {
+                      return GridView.builder(
+                        gridDelegate:
+                            const SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 2,
+                          mainAxisSpacing: 8,
+                          crossAxisSpacing: 8,
+                          childAspectRatio: 175 / 75,
                         ),
-                        child: Stack(
-                          alignment: Alignment.center,
-                          fit: StackFit.expand,
-                          children: [
-                            ClipRRect(
-                              borderRadius: BorderRadius.circular(10),
-                              child: CachedNetworkImage(
-                                imageUrl: state.themeList[index].imgPath,
-                                imageBuilder: (_, image) {
-                                  return ColorFiltered(
-                                    colorFilter: ColorFilter.mode(
-                                      kRichBlack.withOpacity(0.45),
-                                      BlendMode.darken,
-                                    ),
-                                    child: Image.network(
-                                      state.themeList[index].imgPath,
-                                      fit: BoxFit.cover,
-                                    ),
-                                  );
-                                },
-                                placeholder: (_, value) {
-                                  return const SizedBox(
-                                    height: 75,
-                                    child: Center(
-                                      child: SizedBox(
-                                        width: 25,
-                                        height: 25,
-                                        child: CircularProgressIndicator(
-                                          color: kMikadoOrange,
-                                          strokeWidth: 3,
+                        shrinkWrap: true,
+                        itemCount: state.themeList.length,
+                        itemBuilder: (_, index) => Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: Stack(
+                            alignment: Alignment.center,
+                            fit: StackFit.expand,
+                            children: [
+                              ClipRRect(
+                                borderRadius: BorderRadius.circular(10),
+                                child: CachedNetworkImage(
+                                  imageUrl: state.themeList[index].imgPath,
+                                  imageBuilder: (_, image) {
+                                    return ColorFiltered(
+                                      colorFilter: ColorFilter.mode(
+                                        kRichBlack.withOpacity(0.45),
+                                        BlendMode.darken,
+                                      ),
+                                      child: Image.network(
+                                        state.themeList[index].imgPath,
+                                        fit: BoxFit.cover,
+                                      ),
+                                    );
+                                  },
+                                  placeholder: (_, value) {
+                                    return const SizedBox(
+                                      height: 75,
+                                      child: Center(
+                                        child: SizedBox(
+                                          width: 25,
+                                          height: 25,
+                                          child: CircularProgressIndicator(
+                                            color: kMikadoOrange,
+                                            strokeWidth: 3,
+                                          ),
                                         ),
                                       ),
-                                    ),
-                                  );
-                                },
-                              ),
-                            ),
-                            Positioned.fill(
-                              child: Center(
-                                child: Text(
-                                  state.themeList[index].themeName,
-                                  style: kTextTheme.caption!.copyWith(
-                                    color: kRichWhite,
-                                  ),
-                                  textAlign: TextAlign.center,
+                                    );
+                                  },
                                 ),
                               ),
-                            ),
-                          ],
+                              Positioned.fill(
+                                child: Center(
+                                  child: Text(
+                                    state.themeList[index].themeName,
+                                    style: kTextTheme.caption!.copyWith(
+                                      color: kRichWhite,
+                                    ),
+                                    textAlign: TextAlign.center,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
-                      ),
-                    );
+                      );
+                    } else {
+                      return Center(
+                        child: Text(
+                          'Belum ada tema yang tersedia',
+                          style:
+                              kTextTheme.bodyText2!.copyWith(color: kRichBlack),
+                        ),
+                      );
+                    }
                   } else if (state is GetInfographicThemesByUidError) {
                     return Center(
-                      child: Text(state.message),
+                      child: Text(
+                        state.message,
+                        style:
+                            kTextTheme.bodyText2!.copyWith(color: kRichBlack),
+                      ),
                     );
                   }
                   return const Center(
