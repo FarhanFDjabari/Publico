@@ -93,167 +93,176 @@ class _PostThemePageState extends State<PostThemePage> {
         ),
         centerTitle: true,
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(20),
-        child: Column(
-          children: [
-            TextField(
-              controller: _themeNameController,
-              decoration: InputDecoration(
-                label: const Text('Nama Tema'),
-                hintText: 'Masukkan nama tema',
-                hintStyle: kTextTheme.bodyText2!.copyWith(
-                  color: kLightGrey,
-                ),
-                floatingLabelBehavior: FloatingLabelBehavior.always,
-                isDense: true,
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10),
-                ),
-              ),
-              onChanged: (value) {
-                Timer(const Duration(milliseconds: 750), () {
-                  formCheck();
-                });
-              },
-              style: kTextTheme.bodyText2!.copyWith(
-                color: kRichBlack,
-              ),
-              autofocus: false,
-            ),
-            const SizedBox(height: 15),
-            InkWell(
-              onTap: () async {
-                await Future.delayed(const Duration(milliseconds: 500));
-                final result = await FilePicker.platform.pickFiles(
-                  type: FileType.image,
-                );
-                if (result == null) return;
-                imageFile = await compressFile(File(result.files.first.path!));
-                formCheck();
-              },
-              borderRadius: BorderRadius.circular(10),
-              child: Container(
-                width: double.infinity,
-                height: MediaQuery.of(context).size.height * 0.2,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                  border: Border.all(
-                    color: kMikadoOrange,
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(20),
+          child: Column(
+            children: [
+              TextField(
+                controller: _themeNameController,
+                decoration: InputDecoration(
+                  label: const Text('Nama Tema'),
+                  hintText: 'Masukkan nama tema',
+                  hintStyle: kTextTheme.bodyText2!.copyWith(
+                    color: kLightGrey,
+                  ),
+                  floatingLabelBehavior: FloatingLabelBehavior.always,
+                  isDense: true,
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10),
                   ),
                 ),
-                child: imageFile != null
-                    ? ClipRRect(
-                        borderRadius: BorderRadius.circular(10),
-                        child: Image.file(
-                          imageFile!,
-                          fit: BoxFit.cover,
-                        ),
-                      )
-                    : Column(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          const Icon(
-                            Icons.camera_alt_outlined,
-                            color: kLightGrey,
-                            size: 35,
+                onChanged: (value) {
+                  Timer(const Duration(milliseconds: 750), () {
+                    formCheck();
+                  });
+                },
+                style: kTextTheme.bodyText2!.copyWith(
+                  color: kRichBlack,
+                ),
+                autofocus: false,
+              ),
+              const SizedBox(height: 15),
+              InkWell(
+                onTap: () async {
+                  await Future.delayed(const Duration(milliseconds: 500));
+                  await FilePicker.platform
+                      .pickFiles(
+                    type: FileType.image,
+                  )
+                      .then(
+                    (value) async {
+                      if (value != null) {
+                        imageFile =
+                            await compressFile(File(value.files.first.path!));
+                        formCheck();
+                      }
+                    },
+                  );
+                },
+                borderRadius: BorderRadius.circular(10),
+                child: Container(
+                  width: double.infinity,
+                  height: MediaQuery.of(context).size.height * 0.2,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    border: Border.all(
+                      color: kMikadoOrange,
+                    ),
+                  ),
+                  child: imageFile != null
+                      ? ClipRRect(
+                          borderRadius: BorderRadius.circular(10),
+                          child: Image.file(
+                            imageFile!,
+                            fit: BoxFit.cover,
                           ),
-                          Text(
-                            'Unggah Gambar',
-                            style: kTextTheme.bodyText2!.copyWith(
+                        )
+                      : Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            const Icon(
+                              Icons.camera_alt_outlined,
                               color: kLightGrey,
-                              fontSize: 14,
+                              size: 35,
                             ),
+                            Text(
+                              'Unggah Gambar',
+                              style: kTextTheme.bodyText2!.copyWith(
+                                color: kLightGrey,
+                                fontSize: 14,
+                              ),
+                            ),
+                          ],
+                        ),
+                ),
+              ),
+              const SizedBox(height: 15),
+              BlocConsumer<InfographicCubit, InfographicState>(
+                listener: (listenerContext, state) {
+                  if (state is InfographicError) {
+                    ScaffoldMessenger.of(context).showMaterialBanner(
+                      MaterialBanner(
+                        content: Text(
+                            'Gagal menambahkan tema baru: ${state.message}'),
+                        actions: [
+                          TextButton(
+                            onPressed: () {
+                              ScaffoldMessenger.of(context)
+                                  .hideCurrentMaterialBanner();
+                            },
+                            child: const Text('Oke'),
                           ),
                         ],
-                      ),
-              ),
-            ),
-            const SizedBox(height: 15),
-            BlocConsumer<InfographicCubit, InfographicState>(
-              listener: (listenerContext, state) {
-                if (state is InfographicError) {
-                  ScaffoldMessenger.of(context).showMaterialBanner(
-                    MaterialBanner(
-                      content:
-                          Text('Gagal menambahkan tema baru: ${state.message}'),
-                      actions: [
-                        TextButton(
-                          onPressed: () {
-                            ScaffoldMessenger.of(context)
-                                .hideCurrentMaterialBanner();
-                          },
-                          child: const Text('Oke'),
+                        padding: const EdgeInsets.only(top: 20),
+                        leadingPadding:
+                            const EdgeInsets.symmetric(horizontal: 10),
+                        leading: const Icon(
+                          Icons.error,
+                          color: Colors.red,
                         ),
-                      ],
-                      padding: const EdgeInsets.only(top: 20),
-                      leadingPadding:
-                          const EdgeInsets.symmetric(horizontal: 10),
-                      leading: const Icon(
-                        Icons.error,
-                        color: Colors.red,
+                        backgroundColor: kRichBlack.withOpacity(0.75),
                       ),
-                      backgroundColor: kRichBlack.withOpacity(0.75),
-                    ),
-                  );
-                } else if (state is PostInfographicThemeSuccess) {
-                  Navigator.pop(context);
-                  Get.showSnackbar(
-                    PublicoSnackbar(
-                      message: state.message,
-                    ),
-                  );
-                }
-              },
-              builder: (builderContext, state) {
-                if (state is InfographicLoading) {
-                  return LoadingButton(
+                    );
+                  } else if (state is PostInfographicThemeSuccess) {
+                    Navigator.pop(context);
+                    Get.showSnackbar(
+                      PublicoSnackbar(
+                        message: state.message,
+                      ),
+                    );
+                  }
+                },
+                builder: (builderContext, state) {
+                  if (state is InfographicLoading) {
+                    return LoadingButton(
+                      borderRadius: 10,
+                      primaryColor: kLightGrey,
+                      child: const SizedBox(
+                        width: double.infinity,
+                        height: 45,
+                        child: Center(
+                          child: SizedBox(
+                            width: 20,
+                            height: 20,
+                            child: CircularProgressIndicator(
+                              color: kRichWhite,
+                              strokeWidth: 3,
+                            ),
+                          ),
+                        ),
+                      ),
+                    );
+                  }
+                  return PrimaryButton(
                     borderRadius: 10,
-                    primaryColor: kLightGrey,
-                    child: const SizedBox(
-                      width: double.infinity,
+                    child: SizedBox(
                       height: 45,
                       child: Center(
-                        child: SizedBox(
-                          width: 20,
-                          height: 20,
-                          child: CircularProgressIndicator(
+                        child: Text(
+                          'Simpan',
+                          style: kTextTheme.button!.copyWith(
                             color: kRichWhite,
-                            strokeWidth: 3,
                           ),
                         ),
                       ),
                     ),
+                    onPressed: !isValidate
+                        ? null
+                        : () {
+                            builderContext
+                                .read<InfographicCubit>()
+                                .postNewInfographicTheme(
+                                    _themeNameController.text,
+                                    'infographic_themes',
+                                    imageFile!);
+                          },
                   );
-                }
-                return PrimaryButton(
-                  borderRadius: 10,
-                  child: SizedBox(
-                    height: 45,
-                    child: Center(
-                      child: Text(
-                        'Simpan',
-                        style: kTextTheme.button!.copyWith(
-                          color: kRichWhite,
-                        ),
-                      ),
-                    ),
-                  ),
-                  onPressed: !isValidate
-                      ? null
-                      : () {
-                          builderContext
-                              .read<InfographicCubit>()
-                              .postNewInfographicTheme(
-                                  _themeNameController.text,
-                                  'infographic_themes',
-                                  imageFile!);
-                        },
-                );
-              },
-            ),
-          ],
+                },
+              ),
+            ],
+          ),
         ),
       ),
     );

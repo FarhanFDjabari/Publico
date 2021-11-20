@@ -250,17 +250,22 @@ class _VideoSingkatPostPageState extends State<VideoSingkatPostPage> {
                         onTap: () async {
                           await Future.delayed(
                               const Duration(milliseconds: 500));
-                          final result = await FilePicker.platform.pickFiles(
+                          await FilePicker.platform
+                              .pickFiles(
                             type: FileType.video,
                             withData: false,
                             allowMultiple: false,
+                          )
+                              .then(
+                            (value) {
+                              if (value != null) {
+                                videoFile = File(value.files.first.path!);
+                                videoPlayerInit(videoFile);
+                                formCheck();
+                                value.files.clear();
+                              }
+                            },
                           );
-                          if (result != null) {
-                            videoFile = File(result.files.first.path!);
-                            videoPlayerInit(videoFile);
-                            formCheck();
-                            result.files.clear();
-                          }
                         },
                         borderRadius: BorderRadius.circular(10),
                         child: SizedBox(
