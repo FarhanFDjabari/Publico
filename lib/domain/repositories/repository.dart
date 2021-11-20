@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:dartz/dartz.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:publico/domain/entities/theme.dart';
 import 'package:publico/domain/entities/user.dart';
 import 'package:publico/domain/entities/video_materi.dart';
 import 'package:publico/domain/entities/video_singkat.dart';
@@ -35,6 +36,7 @@ abstract class Repository {
       String uid);
   Future<Either<Failure, List<VideoMateri>>> getVideoMateriPostsByUid(
       String uid);
+  Future<Either<Failure, List<Theme>>> getInfographicThemesByUid(String uid);
   Future<Either<Failure, void>> postInfographicTheme(
       String themeName, File themeImage, String destination);
   Future<Either<Failure, void>> deleteVideoPost(

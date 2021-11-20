@@ -1,6 +1,9 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
+import 'package:get_storage/get_storage.dart';
+import 'package:publico/presentation/bloc/infographic/infographic_cubit.dart';
 import 'package:publico/presentation/pages/admin/post/infographic_post_page.dart';
 import 'package:publico/presentation/pages/admin/post/post_theme_page.dart';
 import 'package:publico/styles/colors.dart';
@@ -19,6 +22,9 @@ class _InfographicsTabState extends State<InfographicsTab> {
 
   @override
   Widget build(BuildContext context) {
+    context
+        .read<InfographicCubit>()
+        .getInfographicThemesByUidFirestore(GetStorage().read('uid'));
     return Scaffold(
       body: Padding(
         padding: const EdgeInsets.all(0.0),
@@ -56,71 +62,84 @@ class _InfographicsTabState extends State<InfographicsTab> {
             ),
             const SizedBox(height: 10),
             Expanded(
-              child: GridView.builder(
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
-                  mainAxisSpacing: 8,
-                  crossAxisSpacing: 8,
-                  childAspectRatio: 175 / 75,
-                ),
-                shrinkWrap: true,
-                itemCount: 9,
-                itemBuilder: (_, index) => Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: Stack(
-                    alignment: Alignment.center,
-                    fit: StackFit.expand,
-                    children: [
-                      ClipRRect(
-                        borderRadius: BorderRadius.circular(10),
-                        child: CachedNetworkImage(
-                          imageUrl:
-                              'https://images.pexels.com/photos/7947707/pexels-photo-7947707.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500',
-                          imageBuilder: (_, image) {
-                            return ColorFiltered(
-                              colorFilter: ColorFilter.mode(
-                                kRichBlack.withOpacity(0.45),
-                                BlendMode.darken,
+              child: BlocBuilder<InfographicCubit, InfographicState>(
+                builder: (context, state) {
+                  if (state is GetInfographicThemesByUidSuccess) {
+                    return GridView.builder(
+                      gridDelegate:
+                          const SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 2,
+                        mainAxisSpacing: 8,
+                        crossAxisSpacing: 8,
+                        childAspectRatio: 175 / 75,
+                      ),
+                      shrinkWrap: true,
+                      itemCount: state.themeList.length,
+                      itemBuilder: (_, index) => Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: Stack(
+                          alignment: Alignment.center,
+                          fit: StackFit.expand,
+                          children: [
+                            ClipRRect(
+                              borderRadius: BorderRadius.circular(10),
+                              child: CachedNetworkImage(
+                                imageUrl: state.themeList[index].imgPath,
+                                imageBuilder: (_, image) {
+                                  return ColorFiltered(
+                                    colorFilter: ColorFilter.mode(
+                                      kRichBlack.withOpacity(0.45),
+                                      BlendMode.darken,
+                                    ),
+                                    child: Image.network(
+                                      state.themeList[index].imgPath,
+                                      fit: BoxFit.cover,
+                                    ),
+                                  );
+                                },
+                                placeholder: (_, value) {
+                                  return const SizedBox(
+                                    height: 75,
+                                    child: Center(
+                                      child: SizedBox(
+                                        width: 25,
+                                        height: 25,
+                                        child: CircularProgressIndicator(
+                                          color: kMikadoOrange,
+                                          strokeWidth: 3,
+                                        ),
+                                      ),
+                                    ),
+                                  );
+                                },
                               ),
-                              child: Image.network(
-                                'https://images.pexels.com/photos/7947707/pexels-photo-7947707.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500',
-                                fit: BoxFit.cover,
-                              ),
-                            );
-                          },
-                          placeholder: (_, value) {
-                            return const SizedBox(
-                              height: 75,
+                            ),
+                            Positioned.fill(
                               child: Center(
-                                child: SizedBox(
-                                  width: 25,
-                                  height: 25,
-                                  child: CircularProgressIndicator(
-                                    color: kMikadoOrange,
-                                    strokeWidth: 3,
+                                child: Text(
+                                  state.themeList[index].themeName,
+                                  style: kTextTheme.caption!.copyWith(
+                                    color: kRichWhite,
                                   ),
+                                  textAlign: TextAlign.center,
                                 ),
                               ),
-                            );
-                          },
-                        ),
-                      ),
-                      Positioned.fill(
-                        child: Center(
-                          child: Text(
-                            'Semua',
-                            style: kTextTheme.caption!.copyWith(
-                              color: kRichWhite,
                             ),
-                            textAlign: TextAlign.center,
-                          ),
+                          ],
                         ),
                       ),
-                    ],
-                  ),
-                ),
+                    );
+                  } else if (state is GetInfographicThemesByUidError) {
+                    return Center(
+                      child: Text(state.message),
+                    );
+                  }
+                  return const Center(
+                    child: CircularProgressIndicator(),
+                  );
+                },
               ),
             ),
           ],
@@ -141,6 +160,11 @@ class _InfographicsTabState extends State<InfographicsTab> {
               Navigator.push(
                 context,
                 MaterialPageRoute(builder: (_) => const PostThemePage()),
+              ).then(
+                (_) => context
+                    .read<InfographicCubit>()
+                    .getInfographicThemesByUidFirestore(
+                        GetStorage().read('uid')),
               );
             },
             child: const Icon(

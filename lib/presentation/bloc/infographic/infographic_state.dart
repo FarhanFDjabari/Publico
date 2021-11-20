@@ -27,3 +27,24 @@ class InfographicError extends InfographicState {
   @override
   List<Object> get props => [message];
 }
+
+class GetInfographicThemesByUidLoading extends InfographicState {
+  @override
+  List<Object?> get props => [];
+}
+
+class GetInfographicThemesByUidSuccess extends InfographicState {
+  final List<Theme> themeList;
+  const GetInfographicThemesByUidSuccess(this.themeList);
+
+  @override
+  List<Object?> get props => [themeList];
+}
+
+class GetInfographicThemesByUidError extends InfographicState {
+  final String message;
+  const GetInfographicThemesByUidError(this.message);
+
+  @override
+  List<Object?> get props => [message];
+}
