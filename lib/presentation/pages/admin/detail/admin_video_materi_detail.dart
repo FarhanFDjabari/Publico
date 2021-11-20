@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:get/get.dart';
 import 'package:publico/domain/entities/video_materi.dart';
 import 'package:publico/presentation/bloc/video_materi/video_materi_cubit.dart';
 import 'package:publico/presentation/pages/admin/edit/video_materi_edit_page.dart';
-import 'package:publico/presentation/widgets/publico_edit_bottom_sheet.dart';
-import 'package:publico/presentation/widgets/publico_snackbar.dart';
+import 'package:publico/presentation/widgets/publico_materi_edit_bottom_sheet.dart';
 import 'package:publico/styles/colors.dart';
 import 'package:publico/styles/text_styles.dart';
 import 'package:video_player/video_player.dart';
@@ -72,7 +70,7 @@ class _AdminVideoMateriDetailPageState
                 backgroundColor: kRichWhite,
                 context: context,
                 isDismissible: true,
-                builder: (ctx) => PublicoEditBottomSheet(
+                builder: (_) => PublicoMateriEditBottomSheet(
                   parentContext: context,
                   onDeletePressed: () {
                     context.read<VideoMateriCubit>().deleteVideoMateriFirestore(

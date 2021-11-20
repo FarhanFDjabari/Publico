@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:publico/presentation/pages/admin/edit/infographic_edit_page.dart';
 import 'package:publico/presentation/widgets/infographic_tile.dart';
-import 'package:publico/presentation/widgets/publico_edit_bottom_sheet.dart';
+import 'package:publico/presentation/widgets/publico_info_edit_bottom_sheet.dart';
 import 'package:publico/styles/colors.dart';
 import 'package:publico/styles/text_styles.dart';
 
@@ -49,7 +49,7 @@ class _AdminInfographicsDetailPageState
                 backgroundColor: kRichWhite,
                 context: context,
                 isDismissible: true,
-                builder: (_) => PublicoEditBottomSheet(
+                builder: (_) => PublicoInfoEditBottomSheet(
                   parentContext: context,
                   onDeletePressed: () {},
                   onEditPressed: () {

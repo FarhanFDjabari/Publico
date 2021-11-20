@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:publico/domain/entities/video_singkat.dart';
 import 'package:publico/presentation/widgets/primary_button.dart';
 import 'package:publico/styles/colors.dart';
 import 'package:publico/styles/text_styles.dart';
@@ -10,8 +11,8 @@ import 'package:video_player/video_player.dart';
 
 class VideoSingkatEditPage extends StatefulWidget {
   static const routeName = '/admin-video-singkat-edit';
-  final String postId;
-  const VideoSingkatEditPage({Key? key, required this.postId})
+  final VideoSingkat videoSingkat;
+  const VideoSingkatEditPage({Key? key, required this.videoSingkat})
       : super(key: key);
 
   @override

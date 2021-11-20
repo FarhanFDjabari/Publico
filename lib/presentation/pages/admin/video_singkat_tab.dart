@@ -76,11 +76,18 @@ class _VideoSingkatTabState extends State<VideoSingkatTab> {
                                 context,
                                 AdminVideoSingkatDetailPage.routeName,
                                 arguments: state.videoSingkats[index],
+                              ).then(
+                                (value) => context
+                                    .read<VideoSingkatCubit>()
+                                    .getVideoSingkatPostsByUidFirestore(
+                                      GetStorage().read('uid'),
+                                    ),
                               );
                             },
                             borderRadius: BorderRadius.circular(10),
                             child: PublicoStaggeredTileAdmin(
                               tileIndex: index,
+                              duration: state.videoSingkats[index].duration,
                               title: state.videoSingkats[index].title,
                               imageUrl: state.videoSingkats[index].thumbnailUrl,
                               category: state.videoSingkats[index].type,

@@ -83,6 +83,7 @@ class _VideoMateriTabState extends State<VideoMateriTab> {
                         borderRadius: BorderRadius.circular(10),
                         child: PublicoStaggeredTileAdmin(
                           tileIndex: index,
+                          duration: state.videoMateriList[index].duration,
                           title: state.videoMateriList[index].title,
                           imageUrl: state.videoMateriList[index].thumbnailUrl,
                           category: state.videoMateriList[index].type,
