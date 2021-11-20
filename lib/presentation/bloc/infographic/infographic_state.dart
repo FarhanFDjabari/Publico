@@ -48,3 +48,24 @@ class GetInfographicThemesByUidError extends InfographicState {
   @override
   List<Object?> get props => [message];
 }
+
+class PostInfographicLoading extends InfographicState {
+  @override
+  List<Object?> get props => [];
+}
+
+class PostInfographicSuccess extends InfographicState {
+  final String message;
+  const PostInfographicSuccess(this.message);
+
+  @override
+  List<Object?> get props => [message];
+}
+
+class PostInfographicError extends InfographicState {
+  final String message;
+  const PostInfographicError(this.message);
+
+  @override
+  List<Object?> get props => [message];
+}
