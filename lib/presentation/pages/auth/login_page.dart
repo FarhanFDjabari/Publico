@@ -6,6 +6,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:publico/presentation/bloc/auth/auth_cubit.dart';
 import 'package:publico/presentation/pages/auth/forget_password_page.dart';
 import 'package:publico/presentation/pages/home/home_page_admin.dart';
+import 'package:publico/presentation/pages/home/home_page_user.dart';
 import 'package:publico/presentation/widgets/loading_button.dart';
 import 'package:publico/presentation/widgets/primary_button.dart';
 import 'package:publico/styles/colors.dart';
@@ -289,11 +290,9 @@ class _LoginPageState extends State<LoginPage> {
                               ),
                               TextButton(
                                 onPressed: () {
-                                  Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (_) => ForgetPasswordPage(),
-                                      ));
+                                  Navigator.of(context).pushReplacementNamed(
+                                    HomePageUser.routeName,
+                                  );
                                 },
                                 child: Text(
                                   'Bukan admin? Masuk',
