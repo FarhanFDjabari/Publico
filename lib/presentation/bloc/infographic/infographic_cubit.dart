@@ -4,6 +4,7 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:publico/domain/entities/theme.dart';
 import 'package:publico/domain/usecases/admin/get_infographic_themes_by_uid.dart';
+import 'package:publico/domain/usecases/admin/post_infographic.dart';
 import 'package:publico/domain/usecases/admin/post_infographic_theme.dart';
 
 part 'infographic_state.dart';
@@ -11,9 +12,11 @@ part 'infographic_state.dart';
 class InfographicCubit extends Cubit<InfographicState> {
   InfographicCubit(
       {required this.postInfographicTheme,
-      required this.getInfographicThemesByUid})
+      required this.getInfographicThemesByUid,
+      required this.postInfographic})
       : super(InfographicInitial());
 
+  final PostInfographic postInfographic;
   final PostInfographicTheme postInfographicTheme;
   final GetInfographicThemesByUid getInfographicThemesByUid;
 
@@ -38,6 +41,18 @@ class InfographicCubit extends Cubit<InfographicState> {
     result.fold(
       (l) => emit(GetInfographicThemesByUidError(l.message)),
       (r) => emit(GetInfographicThemesByUidSuccess(r)),
+    );
+  }
+
+  void postInfographicFirestore(
+      String themeId, String title, List sources, String destination) async {
+    emit(PostInfographicLoading());
+    final result =
+        await postInfographic.execute(themeId, title, sources, destination);
+    result.fold(
+      (l) => emit(PostInfographicError(l.message)),
+      (r) =>
+          emit(const PostInfographicSuccess('Infografis berhasil ditambahkan')),
     );
   }
 }

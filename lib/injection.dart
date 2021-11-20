@@ -10,6 +10,7 @@ import 'package:publico/domain/usecases/admin/get_infographic_themes_by_uid.dart
 import 'package:publico/domain/usecases/admin/get_video_materi_posts_by_uid.dart';
 import 'package:publico/domain/usecases/admin/get_video_singkat_posts_by_uid.dart';
 import 'package:publico/domain/usecases/admin/delete_video_post.dart';
+import 'package:publico/domain/usecases/admin/post_infographic.dart';
 import 'package:publico/domain/usecases/admin/post_infographic_theme.dart';
 import 'package:publico/domain/usecases/admin/post_video_singkat.dart';
 import 'package:publico/domain/usecases/login_with_email_and_password.dart';
@@ -53,6 +54,7 @@ void init() {
     () => InfographicCubit(
       postInfographicTheme: locator(),
       getInfographicThemesByUid: locator(),
+      postInfographic: locator(),
     ),
   );
 
@@ -69,6 +71,7 @@ void init() {
   locator.registerLazySingleton(() => GetInfographicThemesByUid(locator()));
   locator.registerLazySingleton(() => PostInfographicTheme(locator()));
   locator.registerLazySingleton(() => DeleteVideoPost(locator()));
+  locator.registerLazySingleton(() => PostInfographic(locator()));
 
   // repository
   locator.registerLazySingleton<Repository>(

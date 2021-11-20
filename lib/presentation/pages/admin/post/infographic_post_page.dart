@@ -2,14 +2,19 @@ import 'dart:async';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:publico/domain/entities/theme.dart' as theme_entity;
+import 'package:publico/presentation/bloc/infographic/infographic_cubit.dart';
 import 'package:publico/presentation/pages/admin/post/add_source_page.dart';
+import 'package:publico/presentation/widgets/loading_button.dart';
 import 'package:publico/presentation/widgets/primary_button.dart';
 import 'package:publico/styles/colors.dart';
 import 'package:publico/styles/text_styles.dart';
 
 class InfographicPostPage extends StatefulWidget {
   static const routeName = '/admin-infographics-post';
-  const InfographicPostPage({Key? key}) : super(key: key);
+  final List<theme_entity.Theme> themes;
+  const InfographicPostPage({Key? key, required this.themes}) : super(key: key);
 
   @override
   _InfographicPostPageState createState() => _InfographicPostPageState();
@@ -79,22 +84,23 @@ class _InfographicPostPageState extends State<InfographicPostPage> {
               DropdownButtonFormField(
                 isExpanded: true,
                 icon: const Icon(Icons.keyboard_arrow_down_rounded),
-                items: List.generate(
-                  1,
-                  (dropdownData) => DropdownMenuItem(
-                    child: Text(
-                      '$dropdownData',
-                      style: kTextTheme.bodyText2!.copyWith(
-                        color: kMikadoOrange,
+                items: widget.themes
+                    .map(
+                      (theme) => DropdownMenuItem(
+                        child: Text(
+                          theme.themeName,
+                          style: kTextTheme.bodyText2!.copyWith(
+                            color: kMikadoOrange,
+                          ),
+                        ),
+                        value: theme.id,
+                        onTap: () {
+                          selectedTheme = theme.id;
+                          formCheck();
+                        },
                       ),
-                    ),
-                    value: dropdownData,
-                    onTap: () {
-                      selectedTheme = dropdownData.toString();
-                      formCheck();
-                    },
-                  ),
-                ).toList(),
+                    )
+                    .toList(),
                 isDense: true,
                 dropdownColor: kLightGrey2,
                 elevation: 0,
@@ -159,37 +165,41 @@ class _InfographicPostPageState extends State<InfographicPostPage> {
               Column(
                 children: sources
                     .map(
-                      (source) => TextField(
-                        readOnly: true,
-                        onTap: () {},
-                        controller: TextEditingController(
-                          text: source,
-                        ),
-                        decoration: InputDecoration(
-                          isDense: true,
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10),
+                      (source) => Container(
+                        margin: const EdgeInsets.only(bottom: 16),
+                        child: TextField(
+                          readOnly: true,
+                          onTap: () {},
+                          controller: TextEditingController(
+                            text: source['source'],
                           ),
-                          enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10),
-                            borderSide: const BorderSide(
-                              color: kMikadoOrange,
+                          decoration: InputDecoration(
+                            isDense: true,
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(10),
+                              borderSide: const BorderSide(
+                                color: kMikadoOrange,
+                              ),
                             ),
                           ),
-                        ),
-                        style: kTextTheme.bodyText2!.copyWith(
-                          color: kRichBlack,
+                          style: kTextTheme.bodyText2!.copyWith(
+                            color: kRichBlack,
+                          ),
                         ),
                       ),
                     )
                     .toList(),
               ),
               OutlinedButton(
-                onPressed: () {
-                  Navigator.pushNamed(
+                onPressed: () async {
+                  final Map<String, dynamic> result = await Navigator.pushNamed(
                     context,
                     AddSourcePage.routeName,
-                  );
+                  ) as Map<String, dynamic>;
+                  setState(() => sources.add(result));
                 },
                 style: OutlinedButton.styleFrom(
                   shape: RoundedRectangleBorder(
@@ -214,20 +224,45 @@ class _InfographicPostPageState extends State<InfographicPostPage> {
                 ),
               ),
               const SizedBox(height: 15),
-              PrimaryButton(
-                borderRadius: 10,
-                child: SizedBox(
-                  height: 45,
-                  child: Center(
-                    child: Text(
-                      'Simpan',
-                      style: kTextTheme.button!.copyWith(
-                        color: kRichWhite,
+              BlocConsumer<InfographicCubit, InfographicState>(
+                listener: (context, state) {
+                  // TODO: implement listener
+                },
+                builder: (builderContext, state) {
+                  if (state is PostInfographicLoading) {
+                    return PrimaryButton(
+                        borderRadius: 10,
+                        child: const SizedBox(
+                            height: 45,
+                            child: Center(child: CircularProgressIndicator())),
+                        onPressed: null);
+                  }
+                  return PrimaryButton(
+                    borderRadius: 10,
+                    child: SizedBox(
+                      height: 45,
+                      child: Center(
+                        child: Text(
+                          'Simpan',
+                          style: kTextTheme.button!.copyWith(
+                            color: kRichWhite,
+                          ),
+                        ),
                       ),
                     ),
-                  ),
-                ),
-                onPressed: !isValidate ? null : () {},
+                    onPressed: !isValidate
+                        ? null
+                        : () {
+                            builderContext
+                                .read<InfographicCubit>()
+                                .postInfographicFirestore(
+                                    selectedTheme as String,
+                                    _titleController.text,
+                                    sources,
+                                    'infographics');
+                          },
+                  );
+                },
               ),
             ],
           ),

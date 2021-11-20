@@ -41,6 +41,13 @@ class _AddSourcePageState extends State<AddSourcePage> {
   }
 
   @override
+  void dispose() {
+    super.dispose();
+    _sumberController.dispose();
+    _deskripsiController.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -223,7 +230,16 @@ class _AddSourcePageState extends State<AddSourcePage> {
                     ),
                   ),
                 ),
-                onPressed: !isValidate ? null : () {},
+                onPressed: !isValidate
+                    ? null
+                    : () {
+                        final Map<String, dynamic> sourceData = {
+                          'source': _sumberController.text,
+                          'description': _deskripsiController.text,
+                          'illustration': illustrations,
+                        };
+                        Navigator.pop(context, sourceData);
+                      },
               ),
             ],
           ),

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:publico/domain/entities/theme.dart' as themeEntity;
 import 'package:publico/presentation/bloc/infographic/infographic_cubit.dart';
 import 'package:publico/presentation/pages/admin/post/infographic_post_page.dart';
 import 'package:publico/presentation/pages/admin/post/post_theme_page.dart';
@@ -19,9 +20,11 @@ class InfographicsTab extends StatefulWidget {
 
 class _InfographicsTabState extends State<InfographicsTab> {
   final _searchQueryController = TextEditingController();
+  var themeClicked = false;
 
   @override
   Widget build(BuildContext context) {
+    List<themeEntity.Theme> themeList = [];
     context
         .read<InfographicCubit>()
         .getInfographicThemesByUidFirestore(GetStorage().read('uid'));
@@ -62,85 +65,95 @@ class _InfographicsTabState extends State<InfographicsTab> {
             ),
             const SizedBox(height: 10),
             Expanded(
-              child: BlocBuilder<InfographicCubit, InfographicState>(
-                builder: (context, state) {
-                  if (state is GetInfographicThemesByUidSuccess) {
-                    return GridView.builder(
-                      gridDelegate:
-                          const SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 2,
-                        mainAxisSpacing: 8,
-                        crossAxisSpacing: 8,
-                        childAspectRatio: 175 / 75,
-                      ),
-                      shrinkWrap: true,
-                      itemCount: state.themeList.length,
-                      itemBuilder: (_, index) => Container(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        child: Stack(
-                          alignment: Alignment.center,
-                          fit: StackFit.expand,
-                          children: [
-                            ClipRRect(
-                              borderRadius: BorderRadius.circular(10),
-                              child: CachedNetworkImage(
-                                imageUrl: state.themeList[index].imgPath,
-                                imageBuilder: (_, image) {
-                                  return ColorFiltered(
-                                    colorFilter: ColorFilter.mode(
-                                      kRichBlack.withOpacity(0.45),
-                                      BlendMode.darken,
+              child: themeClicked
+                  ? Container()
+                  : BlocBuilder<InfographicCubit, InfographicState>(
+                      builder: (context, state) {
+                        if (state is GetInfographicThemesByUidSuccess) {
+                          themeList = state.themeList;
+                          return GridView.builder(
+                            gridDelegate:
+                                const SliverGridDelegateWithFixedCrossAxisCount(
+                              crossAxisCount: 2,
+                              mainAxisSpacing: 8,
+                              crossAxisSpacing: 8,
+                              childAspectRatio: 175 / 75,
+                            ),
+                            shrinkWrap: true,
+                            itemCount: state.themeList.length,
+                            itemBuilder: (_, index) => InkWell(
+                              onTap: () {
+                                setState(() => themeClicked = true);
+                              },
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                child: Stack(
+                                  alignment: Alignment.center,
+                                  fit: StackFit.expand,
+                                  children: [
+                                    ClipRRect(
+                                      borderRadius: BorderRadius.circular(10),
+                                      child: CachedNetworkImage(
+                                        imageUrl:
+                                            state.themeList[index].imgPath,
+                                        imageBuilder: (_, image) {
+                                          return ColorFiltered(
+                                            colorFilter: ColorFilter.mode(
+                                              kRichBlack.withOpacity(0.45),
+                                              BlendMode.darken,
+                                            ),
+                                            child: Image.network(
+                                              state.themeList[index].imgPath,
+                                              fit: BoxFit.cover,
+                                            ),
+                                          );
+                                        },
+                                        placeholder: (_, value) {
+                                          return const SizedBox(
+                                            height: 75,
+                                            child: Center(
+                                              child: SizedBox(
+                                                width: 25,
+                                                height: 25,
+                                                child:
+                                                    CircularProgressIndicator(
+                                                  color: kMikadoOrange,
+                                                  strokeWidth: 3,
+                                                ),
+                                              ),
+                                            ),
+                                          );
+                                        },
+                                      ),
                                     ),
-                                    child: Image.network(
-                                      state.themeList[index].imgPath,
-                                      fit: BoxFit.cover,
-                                    ),
-                                  );
-                                },
-                                placeholder: (_, value) {
-                                  return const SizedBox(
-                                    height: 75,
-                                    child: Center(
-                                      child: SizedBox(
-                                        width: 25,
-                                        height: 25,
-                                        child: CircularProgressIndicator(
-                                          color: kMikadoOrange,
-                                          strokeWidth: 3,
+                                    Positioned.fill(
+                                      child: Center(
+                                        child: Text(
+                                          state.themeList[index].themeName,
+                                          style: kTextTheme.caption!.copyWith(
+                                            color: kRichWhite,
+                                          ),
+                                          textAlign: TextAlign.center,
                                         ),
                                       ),
                                     ),
-                                  );
-                                },
-                              ),
-                            ),
-                            Positioned.fill(
-                              child: Center(
-                                child: Text(
-                                  state.themeList[index].themeName,
-                                  style: kTextTheme.caption!.copyWith(
-                                    color: kRichWhite,
-                                  ),
-                                  textAlign: TextAlign.center,
+                                  ],
                                 ),
                               ),
                             ),
-                          ],
-                        ),
-                      ),
-                    );
-                  } else if (state is GetInfographicThemesByUidError) {
-                    return Center(
-                      child: Text(state.message),
-                    );
-                  }
-                  return const Center(
-                    child: CircularProgressIndicator(),
-                  );
-                },
-              ),
+                          );
+                        } else if (state is GetInfographicThemesByUidError) {
+                          return Center(
+                            child: Text(state.message),
+                          );
+                        }
+                        return const Center(
+                          child: CircularProgressIndicator(),
+                        );
+                      },
+                    ),
             ),
           ],
         ),
@@ -181,7 +194,10 @@ class _InfographicsTabState extends State<InfographicsTab> {
             onTap: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (_) => const InfographicPostPage()),
+                MaterialPageRoute(
+                    builder: (_) => InfographicPostPage(
+                          themes: themeList,
+                        )),
               );
             },
             child: const Icon(

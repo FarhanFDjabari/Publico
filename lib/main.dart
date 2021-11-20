@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:publico/domain/entities/theme.dart' as theme_entity;
 import 'package:publico/domain/entities/video_materi.dart';
 import 'package:publico/domain/entities/video_singkat.dart';
 import 'package:publico/presentation/bloc/auth/auth_cubit.dart';
@@ -105,8 +106,9 @@ class MyApp extends StatelessWidget {
             case InfographicsTab.routeName:
               return MaterialPageRoute(builder: (_) => const InfographicsTab());
             case InfographicPostPage.routeName:
+              final themes = settings.arguments as List<theme_entity.Theme>;
               return MaterialPageRoute(
-                  builder: (_) => const InfographicPostPage());
+                  builder: (_) => InfographicPostPage(themes: themes));
             case PostThemePage.routeName:
               return MaterialPageRoute(builder: (_) => const PostThemePage());
             case VideoMateriPostPage.routeName:
