@@ -73,9 +73,6 @@ class PublicoStaggeredTile extends StatelessWidget {
               top: 5,
               left: 5,
               child: Container(
-                width: category == 'Video Singkat' || category == 'Video Materi'
-                    ? 45
-                    : 40,
                 height: 20,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(16),
