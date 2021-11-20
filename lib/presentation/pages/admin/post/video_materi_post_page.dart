@@ -71,6 +71,7 @@ class _VideoMateriPostPageState extends State<VideoMateriPostPage> {
   @override
   void dispose() {
     _videoController?.dispose();
+    FilePicker.platform.clearTemporaryFiles();
     super.dispose();
   }
 

@@ -5,7 +5,6 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
-import 'package:get_storage/get_storage.dart';
 import 'package:publico/presentation/bloc/video_singkat/video_singkat_cubit.dart';
 import 'package:publico/presentation/widgets/loading_button.dart';
 import 'package:publico/presentation/widgets/primary_button.dart';
@@ -70,6 +69,7 @@ class _VideoSingkatPostPageState extends State<VideoSingkatPostPage> {
   @override
   void dispose() {
     _videoController?.dispose();
+    FilePicker.platform.clearTemporaryFiles();
     super.dispose();
   }
 
@@ -253,6 +253,7 @@ class _VideoSingkatPostPageState extends State<VideoSingkatPostPage> {
                             videoFile = File(result.files.first.path!);
                             videoPlayerInit(videoFile!);
                             formCheck();
+                            result.files.clear();
                           }
                         },
                         borderRadius: BorderRadius.circular(10),
