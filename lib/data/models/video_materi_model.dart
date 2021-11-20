@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
 import 'package:publico/domain/entities/video_materi.dart';
 
@@ -21,6 +22,19 @@ class VideoMateriModel extends Equatable {
     required this.videoUrl,
     required this.thumbnailUrl,
   });
+
+  static VideoMateriModel fromSnapshot(DocumentSnapshot snapshot) {
+    return VideoMateriModel(
+      id: snapshot.id,
+      adminId: snapshot['admin_id'],
+      type: snapshot['type'],
+      title: snapshot['title'],
+      duration: snapshot['duration'],
+      description: snapshot['description'],
+      videoUrl: snapshot['video_url'],
+      thumbnailUrl: snapshot['thumbnail_url'],
+    );
+  }
 
   VideoMateri toEntity() {
     return VideoMateri(

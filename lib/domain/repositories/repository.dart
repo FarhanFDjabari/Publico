@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:dartz/dartz.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:publico/domain/entities/user.dart';
+import 'package:publico/domain/entities/video_materi.dart';
 import 'package:publico/domain/entities/video_singkat.dart';
 import 'package:publico/util/failure.dart';
 
@@ -31,6 +32,8 @@ abstract class Repository {
       File thumbnailFile,
       int duration);
   Future<Either<Failure, List<VideoSingkat>>> getVideoSingkatPostsByUid(
+      String uid);
+  Future<Either<Failure, List<VideoMateri>>> getVideoMateriPostsByUid(
       String uid);
   Future<Either<Failure, void>> postInfographicTheme(
       String themeName, File themeImage, String destination);

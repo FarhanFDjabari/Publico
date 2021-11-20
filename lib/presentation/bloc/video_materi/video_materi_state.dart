@@ -39,3 +39,23 @@ class VideoMateriError extends VideoMateriState {
   @override
   List<Object> get props => [message];
 }
+
+class GetVideoMateriPostsByUidLoading extends VideoMateriState {
+  @override
+  List<Object> get props => [];
+}
+
+class GetVideoMateriPostsByUidSuccess extends VideoMateriState {
+  final List<VideoMateri> videoMateriList;
+  const GetVideoMateriPostsByUidSuccess(this.videoMateriList);
+  @override
+  List<Object> get props => [videoMateriList];
+}
+
+class GetVideoMateriPostsByUidError extends VideoMateriState {
+  final String message;
+  const GetVideoMateriPostsByUidError(this.message);
+
+  @override
+  List<Object> get props => [message];
+}

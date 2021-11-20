@@ -114,7 +114,7 @@ class _VideoSingkatTabState extends State<VideoSingkatTab> {
               MaterialPageRoute(
                 builder: (_) => const VideoSingkatPostPage(),
               )).then(
-            (value) => context
+            (_) => context
                 .read<VideoSingkatCubit>()
                 .getVideoSingkatPostsByUidFirestore(
                   GetStorage().read('uid'),

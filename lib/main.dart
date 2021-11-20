@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:publico/domain/entities/video_materi.dart';
 import 'package:publico/domain/entities/video_singkat.dart';
 import 'package:publico/presentation/bloc/auth/auth_cubit.dart';
 import 'package:publico/presentation/bloc/infographic/infographic_cubit.dart';
@@ -141,9 +142,10 @@ class MyApp extends StatelessWidget {
                 settings: settings,
               );
             case AdminVideoMateriDetailPage.routeName:
-              final id = settings.arguments as String;
+              final videoMateri = settings.arguments as VideoMateri;
               return CupertinoPageRoute(
-                builder: (_) => AdminVideoMateriDetailPage(videoId: id),
+                builder: (_) =>
+                    AdminVideoMateriDetailPage(videoMateri: videoMateri),
                 settings: settings,
               );
             case VideoSingkatDetailPage.routeName:

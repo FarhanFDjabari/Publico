@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:publico/domain/entities/video_materi.dart';
 import 'package:publico/presentation/pages/admin/edit/video_materi_edit_page.dart';
 import 'package:publico/presentation/widgets/publico_edit_bottom_sheet.dart';
 import 'package:publico/styles/colors.dart';
@@ -8,8 +9,8 @@ import 'package:video_player/video_player.dart';
 
 class AdminVideoMateriDetailPage extends StatefulWidget {
   static const routeName = '/admin-video-materi-detail';
-  final String videoId;
-  const AdminVideoMateriDetailPage({Key? key, required this.videoId})
+  final VideoMateri videoMateri;
+  const AdminVideoMateriDetailPage({Key? key, required this.videoMateri})
       : super(key: key);
 
   @override
@@ -24,8 +25,7 @@ class _AdminVideoMateriDetailPageState
   @override
   void initState() {
     super.initState();
-    videoPlayerInit(
-        'https://ak.picdn.net/shutterstock/videos/1040697206/preview/stock-footage-authentication-by-facial-recognition-concept-biometric-security-system.webm');
+    videoPlayerInit(widget.videoMateri.videoUrl);
   }
 
   void videoPlayerInit(String url) {
@@ -155,7 +155,7 @@ class _AdminVideoMateriDetailPageState
               const SizedBox(height: 10),
               SizedBox(
                 child: Text(
-                  'Exposure image of business profit growth',
+                  widget.videoMateri.title,
                   maxLines: 1,
                   style: kTextTheme.caption!.copyWith(color: kRichBlack),
                 ),
@@ -163,7 +163,7 @@ class _AdminVideoMateriDetailPageState
               const SizedBox(height: 5),
               SizedBox(
                 child: Text(
-                  'Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and ',
+                  widget.videoMateri.description,
                   overflow: TextOverflow.fade,
                   style: kTextTheme.caption!.copyWith(
                     color: kGrey,

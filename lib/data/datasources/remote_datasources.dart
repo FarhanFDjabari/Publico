@@ -5,6 +5,7 @@ import 'package:firebase_auth/firebase_auth.dart' as auth;
 import 'package:firebase_storage/firebase_storage.dart' as storage;
 import 'package:get_storage/get_storage.dart';
 import 'package:publico/data/models/user_model.dart';
+import 'package:publico/data/models/video_materi_model.dart';
 import 'package:publico/data/models/video_singkat_model.dart';
 import 'package:publico/util/exception.dart';
 
@@ -18,6 +19,7 @@ abstract class RemoteDataSources {
   Future<void> postVideoMateri(String title, String description,
       String videoUrl, String thumbnailUrl, int duration);
   Future<List<VideoSingkatModel>> getVideoSingkatPostsByUid(String uid);
+  Future<List<VideoMateriModel>> getVideoMateriPostsByUid(String uid);
   Future<void> postNewTheme(String themeName, String imagePath);
   Future<void> deleteFromStorage(String downloadUrl);
   Future<void> deletePost(String id, String collectionName);
@@ -154,6 +156,22 @@ class RemoteDataSourcesImpl extends RemoteDataSources {
     }
   }
 
+  @override
+  Future<List<VideoMateriModel>> getVideoMateriPostsByUid(String uid) async {
+    try {
+      final ref = firebaseFirestore.collection('video_materi');
+      final result = await ref
+          .where('admin_id', isEqualTo: GetStorage().read('uid'))
+          .get();
+      final videoMateriModels =
+          result.docs.map((doc) => VideoMateriModel.fromSnapshot(doc)).toList();
+      return videoMateriModels;
+    } catch (error) {
+      throw ServerException(error.toString());
+    }
+  }
+
+  @override
   Future<void> postNewTheme(String themeName, String imagePath) async {
     try {
       final ref = firebaseFirestore.collection('infographic_themes');
