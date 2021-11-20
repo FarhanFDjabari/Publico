@@ -62,6 +62,7 @@ class _VideoMateriPostPageState extends State<VideoMateriPostPage> {
       });
     String? thumbnailPath = await VideoThumbnail.thumbnailFile(
       video: videoFile.path,
+      timeMs: 2000,
       imageFormat: ImageFormat.JPEG,
       quality: 10,
     );
@@ -70,8 +71,11 @@ class _VideoMateriPostPageState extends State<VideoMateriPostPage> {
 
   @override
   void dispose() {
-    _videoController?.dispose();
-    FilePicker.platform.clearTemporaryFiles();
+    Future.delayed(Duration.zero, () async {
+      await FilePicker.platform.clearTemporaryFiles();
+      await _videoController?.dispose();
+      await thumbnailImage?.delete();
+    });
     super.dispose();
   }
 
@@ -175,7 +179,9 @@ class _VideoMateriPostPageState extends State<VideoMateriPostPage> {
                                     ? _videoController!.pause()
                                     : _videoController!.play();
                               },
-                              onLongPress: () {
+                              onLongPress: () async {
+                                await FilePicker.platform.clearTemporaryFiles();
+                                await thumbnailImage!.delete();
                                 setState(() {
                                   _videoController = null;
                                 });

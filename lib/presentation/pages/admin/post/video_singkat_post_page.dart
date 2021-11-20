@@ -51,25 +51,31 @@ class _VideoSingkatPostPageState extends State<VideoSingkatPostPage> {
     }
   }
 
-  void videoPlayerInit(File videoFile) async {
-    _videoController = VideoPlayerController.file(videoFile)
-      ..addListener(() => setState(() {}))
-      ..setLooping(false)
-      ..initialize().then(
-        (value) => duration = _videoController?.value.duration.inSeconds,
+  void videoPlayerInit(File? videoFile) async {
+    if (videoFile != null) {
+      _videoController = VideoPlayerController.file(videoFile)
+        ..addListener(() => setState(() {}))
+        ..setLooping(false)
+        ..initialize().then(
+          (value) => duration = _videoController?.value.duration.inSeconds,
+        );
+      String? thumbnailPath = await VideoThumbnail.thumbnailFile(
+        video: videoFile.path,
+        timeMs: 2000,
+        imageFormat: ImageFormat.JPEG,
+        quality: 10,
       );
-    String? thumbnailPath = await VideoThumbnail.thumbnailFile(
-      video: videoFile.path,
-      imageFormat: ImageFormat.JPEG,
-      quality: 10,
-    );
-    thumbnailImage = File(thumbnailPath!);
+      thumbnailImage = File(thumbnailPath!);
+    }
   }
 
   @override
-  void dispose() {
-    _videoController?.dispose();
-    FilePicker.platform.clearTemporaryFiles();
+  void dispose() async {
+    Future.delayed(Duration.zero, () async {
+      await FilePicker.platform.clearTemporaryFiles();
+      await _videoController?.dispose();
+      await thumbnailImage?.delete();
+    });
     super.dispose();
   }
 
@@ -198,8 +204,10 @@ class _VideoSingkatPostPageState extends State<VideoSingkatPostPage> {
                                     ? _videoController!.pause()
                                     : _videoController!.play();
                               },
-                              onLongPress: () {
-                                setState(() {
+                              onLongPress: () async {
+                                await FilePicker.platform.clearTemporaryFiles();
+                                await thumbnailImage!.delete();
+                                setState(() async {
                                   _videoController = null;
                                 });
                               },
@@ -251,7 +259,7 @@ class _VideoSingkatPostPageState extends State<VideoSingkatPostPage> {
                           );
                           if (result != null) {
                             videoFile = File(result.files.first.path!);
-                            videoPlayerInit(videoFile!);
+                            videoPlayerInit(videoFile);
                             formCheck();
                             result.files.clear();
                           }
