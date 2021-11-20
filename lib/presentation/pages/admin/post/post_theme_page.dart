@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:get/get.dart';
 import 'package:publico/presentation/bloc/infographic/infographic_cubit.dart';
 import 'package:publico/presentation/widgets/loading_button.dart';
@@ -41,9 +42,28 @@ class _PostThemePageState extends State<PostThemePage> {
     }
   }
 
+  Future<File?> compressFile(File file) async {
+    final filePath = file.absolute.path;
+
+    final lastIndex = filePath.lastIndexOf(RegExp(r'.jp'));
+    final splitted = filePath.substring(0, (lastIndex));
+    final outPath = "${splitted}_out${filePath.substring(lastIndex)}";
+    var result = await FlutterImageCompress.compressAndGetFile(
+      file.absolute.path,
+      outPath,
+      quality: 25,
+    );
+
+    if (result != null) {
+      return result;
+    }
+
+    return null;
+  }
+
   @override
   void dispose() {
-    imageFile = null;
+    imageFile?.deleteSync();
     FilePicker.platform.clearTemporaryFiles();
     super.dispose();
   }
@@ -109,7 +129,7 @@ class _PostThemePageState extends State<PostThemePage> {
                   type: FileType.image,
                 );
                 if (result == null) return;
-                imageFile = File(result.files.first.path!);
+                imageFile = await compressFile(File(result.files.first.path!));
                 formCheck();
               },
               borderRadius: BorderRadius.circular(10),
