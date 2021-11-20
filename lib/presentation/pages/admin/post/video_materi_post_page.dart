@@ -74,7 +74,6 @@ class _VideoMateriPostPageState extends State<VideoMateriPostPage> {
     Future.delayed(Duration.zero, () async {
       await FilePicker.platform.clearTemporaryFiles();
       await _videoController?.dispose();
-      await thumbnailImage?.delete();
     });
     super.dispose();
   }
@@ -181,7 +180,6 @@ class _VideoMateriPostPageState extends State<VideoMateriPostPage> {
                               },
                               onLongPress: () async {
                                 await FilePicker.platform.clearTemporaryFiles();
-                                await thumbnailImage!.delete();
                                 setState(() {
                                   _videoController = null;
                                 });
@@ -253,6 +251,7 @@ class _VideoMateriPostPageState extends State<VideoMateriPostPage> {
                               ),
                               Text(
                                 'Unggah Video\nMaks 7 Menit',
+                                textAlign: TextAlign.center,
                                 style: kTextTheme.bodyText2!.copyWith(
                                   color: kLightGrey,
                                   fontSize: 14,

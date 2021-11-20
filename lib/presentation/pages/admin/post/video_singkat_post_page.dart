@@ -74,7 +74,6 @@ class _VideoSingkatPostPageState extends State<VideoSingkatPostPage> {
     Future.delayed(Duration.zero, () async {
       await FilePicker.platform.clearTemporaryFiles();
       await _videoController?.dispose();
-      await thumbnailImage?.delete();
     });
     super.dispose();
   }
@@ -206,8 +205,7 @@ class _VideoSingkatPostPageState extends State<VideoSingkatPostPage> {
                               },
                               onLongPress: () async {
                                 await FilePicker.platform.clearTemporaryFiles();
-                                await thumbnailImage!.delete();
-                                setState(() async {
+                                setState(() {
                                   _videoController = null;
                                 });
                               },
@@ -278,6 +276,7 @@ class _VideoSingkatPostPageState extends State<VideoSingkatPostPage> {
                               ),
                               Text(
                                 'Unggah Video\nMaks 60 Detik',
+                                textAlign: TextAlign.center,
                                 style: kTextTheme.bodyText2!.copyWith(
                                   color: kLightGrey,
                                   fontSize: 14,

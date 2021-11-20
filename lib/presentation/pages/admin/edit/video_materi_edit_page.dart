@@ -8,6 +8,7 @@ import 'package:publico/presentation/widgets/primary_button.dart';
 import 'package:publico/styles/colors.dart';
 import 'package:publico/styles/text_styles.dart';
 import 'package:video_player/video_player.dart';
+import 'package:video_thumbnail/video_thumbnail.dart';
 
 class VideoMateriEditPage extends StatefulWidget {
   static const routeName = '/admin-video-materi-edit';
@@ -24,6 +25,7 @@ class _VideoMateriEditPageState extends State<VideoMateriEditPage> {
   final _descriptionController = TextEditingController();
   VideoPlayerController? _videoController;
   File? videoFile;
+  File? thumbnailImage;
   bool isValidate = false;
 
   @override
@@ -52,7 +54,7 @@ class _VideoMateriEditPageState extends State<VideoMateriEditPage> {
     }
   }
 
-  void videoPlayerInit(File videoFile) {
+  void videoPlayerInit(File videoFile) async {
     _videoController = VideoPlayerController.file(videoFile)
       ..addListener(() {
         if (mounted) {
@@ -61,6 +63,13 @@ class _VideoMateriEditPageState extends State<VideoMateriEditPage> {
       })
       ..setLooping(false)
       ..initialize();
+    String? thumbnailPath = await VideoThumbnail.thumbnailFile(
+      video: videoFile.path,
+      timeMs: 2000,
+      imageFormat: ImageFormat.JPEG,
+      quality: 10,
+    );
+    thumbnailImage = File(thumbnailPath!);
   }
 
   void videoPlayerNetworkInit(String url) {
@@ -76,9 +85,11 @@ class _VideoMateriEditPageState extends State<VideoMateriEditPage> {
 
   @override
   void dispose() {
+    Future.delayed(Duration.zero, () async {
+      await FilePicker.platform.clearTemporaryFiles();
+      await _videoController?.dispose();
+    });
     super.dispose();
-    _videoController?.dispose();
-    FilePicker.platform.clearTemporaryFiles();
   }
 
   @override
@@ -106,175 +117,178 @@ class _VideoMateriEditPageState extends State<VideoMateriEditPage> {
         ),
         centerTitle: true,
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(20),
-        child: Column(
-          children: [
-            TextField(
-              controller: _titleController,
-              decoration: InputDecoration(
-                label: const Text('Judul'),
-                hintText: 'Masukkan judul',
-                hintStyle: kTextTheme.bodyText2!.copyWith(
-                  color: kLightGrey,
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(20),
+          child: Column(
+            children: [
+              TextField(
+                controller: _titleController,
+                decoration: InputDecoration(
+                  label: const Text('Judul'),
+                  hintText: 'Masukkan judul',
+                  hintStyle: kTextTheme.bodyText2!.copyWith(
+                    color: kLightGrey,
+                  ),
+                  floatingLabelBehavior: FloatingLabelBehavior.always,
+                  isDense: true,
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
                 ),
-                floatingLabelBehavior: FloatingLabelBehavior.always,
-                isDense: true,
-                border: OutlineInputBorder(
+                onChanged: (value) {
+                  Timer(const Duration(milliseconds: 750), () {
+                    formCheck();
+                  });
+                },
+                style: kTextTheme.bodyText2!.copyWith(
+                  color: kRichBlack,
+                ),
+                autofocus: false,
+              ),
+              const SizedBox(height: 15),
+              TextField(
+                controller: _descriptionController,
+                decoration: InputDecoration(
+                  label: const Text('Deskripsi'),
+                  hintText: 'Masukkan deskripsi',
+                  hintStyle: kTextTheme.bodyText2!.copyWith(
+                    color: kLightGrey,
+                  ),
+                  floatingLabelBehavior: FloatingLabelBehavior.always,
+                  isDense: true,
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                ),
+                onChanged: (value) {
+                  Timer(const Duration(milliseconds: 750), () {
+                    formCheck();
+                  });
+                },
+                style: kTextTheme.bodyText2!.copyWith(
+                  color: kRichBlack,
+                ),
+                autofocus: false,
+              ),
+              const SizedBox(height: 15),
+              Container(
+                width: double.infinity,
+                padding: const EdgeInsets.all(0),
+                decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10),
+                  border: Border.all(
+                    color: kMikadoOrange,
+                  ),
                 ),
-              ),
-              onChanged: (value) {
-                Timer(const Duration(milliseconds: 750), () {
-                  formCheck();
-                });
-              },
-              style: kTextTheme.bodyText2!.copyWith(
-                color: kRichBlack,
-              ),
-              autofocus: false,
-            ),
-            const SizedBox(height: 15),
-            TextField(
-              controller: _descriptionController,
-              decoration: InputDecoration(
-                label: const Text('Deskripsi'),
-                hintText: 'Masukkan deskripsi',
-                hintStyle: kTextTheme.bodyText2!.copyWith(
-                  color: kLightGrey,
-                ),
-                floatingLabelBehavior: FloatingLabelBehavior.always,
-                isDense: true,
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10),
-                ),
-              ),
-              onChanged: (value) {
-                Timer(const Duration(milliseconds: 750), () {
-                  formCheck();
-                });
-              },
-              style: kTextTheme.bodyText2!.copyWith(
-                color: kRichBlack,
-              ),
-              autofocus: false,
-            ),
-            const SizedBox(height: 15),
-            Container(
-              width: double.infinity,
-              padding: const EdgeInsets.all(0),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
-                border: Border.all(
-                  color: kMikadoOrange,
-                ),
-              ),
-              child: _videoController != null
-                  ? _videoController!.value.isInitialized
-                      ? ClipRRect(
-                          borderRadius: BorderRadius.circular(10),
-                          child: GestureDetector(
-                            behavior: HitTestBehavior.opaque,
-                            onTap: () {
-                              _videoController!.value.isPlaying
-                                  ? _videoController!.pause()
-                                  : _videoController!.play();
-                            },
-                            onLongPress: () async {
-                              await FilePicker.platform.clearTemporaryFiles();
-                              setState(() {
-                                _videoController = null;
-                              });
-                            },
-                            child: Stack(
-                              fit: StackFit.loose,
-                              children: [
-                                AspectRatio(
-                                  aspectRatio:
-                                      _videoController!.value.aspectRatio,
-                                  child: VideoPlayer(
-                                    _videoController!,
+                child: _videoController != null
+                    ? _videoController!.value.isInitialized
+                        ? ClipRRect(
+                            borderRadius: BorderRadius.circular(10),
+                            child: GestureDetector(
+                              behavior: HitTestBehavior.opaque,
+                              onTap: () {
+                                _videoController!.value.isPlaying
+                                    ? _videoController!.pause()
+                                    : _videoController!.play();
+                              },
+                              onLongPress: () async {
+                                await FilePicker.platform.clearTemporaryFiles();
+                                setState(() {
+                                  _videoController = null;
+                                });
+                              },
+                              child: Stack(
+                                fit: StackFit.loose,
+                                children: [
+                                  AspectRatio(
+                                    aspectRatio:
+                                        _videoController!.value.aspectRatio,
+                                    child: VideoPlayer(
+                                      _videoController!,
+                                    ),
                                   ),
-                                ),
-                                Positioned.fill(
-                                  child: Center(
-                                    child: _videoController!.value.isPlaying
-                                        ? Container()
-                                        : Container(
-                                            alignment: Alignment.center,
-                                            color: Colors.black26,
-                                            child: const Icon(
-                                              Icons.play_arrow,
-                                              color: kRichWhite,
-                                              size: 80,
+                                  Positioned.fill(
+                                    child: Center(
+                                      child: _videoController!.value.isPlaying
+                                          ? Container()
+                                          : Container(
+                                              alignment: Alignment.center,
+                                              color: Colors.black26,
+                                              child: const Icon(
+                                                Icons.play_arrow,
+                                                color: kRichWhite,
+                                                size: 80,
+                                              ),
                                             ),
-                                          ),
+                                    ),
                                   ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        )
-                      : SizedBox(
-                          height: MediaQuery.of(context).size.height * 0.2,
-                          child: const Center(
-                            child: CircularProgressIndicator(
-                              color: kMikadoOrange,
-                            ),
-                          ),
-                        )
-                  : InkWell(
-                      onTap: () async {
-                        await Future.delayed(const Duration(milliseconds: 500));
-                        final result = await FilePicker.platform.pickFiles(
-                          type: FileType.video,
-                        );
-                        if (result == null) return;
-                        videoFile = File(result.files.first.path!);
-                        videoPlayerInit(videoFile!);
-                        formCheck();
-                      },
-                      borderRadius: BorderRadius.circular(10),
-                      child: SizedBox(
-                        height: MediaQuery.of(context).size.height * 0.2,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            const Icon(
-                              Icons.camera_alt_outlined,
-                              color: kLightGrey,
-                              size: 35,
-                            ),
-                            Text(
-                              'Unggah Video',
-                              style: kTextTheme.bodyText2!.copyWith(
-                                color: kLightGrey,
-                                fontSize: 14,
+                                ],
                               ),
                             ),
-                          ],
+                          )
+                        : SizedBox(
+                            height: MediaQuery.of(context).size.height * 0.2,
+                            child: const Center(
+                              child: CircularProgressIndicator(
+                                color: kMikadoOrange,
+                              ),
+                            ),
+                          )
+                    : InkWell(
+                        onTap: () async {
+                          await Future.delayed(
+                              const Duration(milliseconds: 500));
+                          final result = await FilePicker.platform.pickFiles(
+                            type: FileType.video,
+                          );
+                          if (result == null) return;
+                          videoFile = File(result.files.first.path!);
+                          videoPlayerInit(videoFile!);
+                          formCheck();
+                        },
+                        borderRadius: BorderRadius.circular(10),
+                        child: SizedBox(
+                          height: MediaQuery.of(context).size.height * 0.2,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              const Icon(
+                                Icons.camera_alt_outlined,
+                                color: kLightGrey,
+                                size: 35,
+                              ),
+                              Text(
+                                'Unggah Video',
+                                style: kTextTheme.bodyText2!.copyWith(
+                                  color: kLightGrey,
+                                  fontSize: 14,
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
                       ),
-                    ),
-            ),
-            const SizedBox(height: 15),
-            PrimaryButton(
-              borderRadius: 10,
-              child: SizedBox(
-                height: 45,
-                child: Center(
-                  child: Text(
-                    'Simpan',
-                    style: kTextTheme.button!.copyWith(
-                      color: kRichWhite,
+              ),
+              const SizedBox(height: 15),
+              PrimaryButton(
+                borderRadius: 10,
+                child: SizedBox(
+                  height: 45,
+                  child: Center(
+                    child: Text(
+                      'Simpan',
+                      style: kTextTheme.button!.copyWith(
+                        color: kRichWhite,
+                      ),
                     ),
                   ),
                 ),
+                onPressed: !isValidate ? null : () {},
               ),
-              onPressed: !isValidate ? null : () {},
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
