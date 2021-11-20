@@ -75,7 +75,10 @@ class _VideoMateriTabState extends State<VideoMateriTab> {
                             context,
                             AdminVideoMateriDetailPage.routeName,
                             arguments: state.videoMateriList[index],
-                          );
+                          ).then((_) => context
+                              .read<VideoMateriCubit>()
+                              .getVideoMateriPostsByUidFirestore(
+                                  GetStorage().read('uid')));
                         },
                         borderRadius: BorderRadius.circular(10),
                         child: PublicoStaggeredTileAdmin(

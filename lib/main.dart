@@ -169,9 +169,9 @@ class MyApp extends StatelessWidget {
                 settings: settings,
               );
             case VideoMateriEditPage.routeName:
-              final id = settings.arguments as String;
+              final videoMateri = settings.arguments as VideoMateri;
               return CupertinoPageRoute(
-                builder: (_) => VideoMateriEditPage(postId: id),
+                builder: (_) => VideoMateriEditPage(videoMateri: videoMateri),
                 settings: settings,
               );
             case VideoSingkatEditPage.routeName:
