@@ -302,4 +302,30 @@ class RepositoryImpl extends Repository {
       return Left(ServerFailure(e.message));
     }
   }
+
+  @override
+  Future<Either<Failure, List<dynamic>>> getExplore() async {
+    try {
+      final models = await remoteDataSources.getExplore();
+      final infographicList = models['infographic_models']
+          .map((model) => model.toEntity())
+          .toList();
+      final videoMateriList = models['video_materi_models']
+          .map((model) => model.toEntity())
+          .toList();
+      final videoSingkatList = models['video_singkat_models']
+          .map((model) => model.toEntity())
+          .toList();
+      final entities = [infographicList, videoMateriList, videoSingkatList];
+
+      final entitiesFlattened = entities.expand((element) => element).toList();
+      entitiesFlattened.shuffle();
+
+      return Right(entitiesFlattened);
+    } on FirebaseException catch (e) {
+      return Left(ServerFailure(e.toString()));
+    } on ServerException catch (e) {
+      return Left(ServerFailure(e.message));
+    }
+  }
 }

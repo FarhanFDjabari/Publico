@@ -19,7 +19,9 @@ import 'package:publico/domain/usecases/login_with_email_and_password.dart';
 import 'package:publico/domain/usecases/logout.dart';
 import 'package:publico/domain/usecases/send_forget_password.dart';
 import 'package:publico/domain/usecases/upload_file_to_storage.dart';
+import 'package:publico/domain/usecases/user/get_explore.dart';
 import 'package:publico/presentation/bloc/auth/auth_cubit.dart';
+import 'package:publico/presentation/bloc/explore/cubit/explore_cubit.dart';
 import 'package:publico/presentation/bloc/infographic/infographic_cubit.dart';
 import 'package:publico/presentation/bloc/video_materi/video_materi_cubit.dart';
 import 'package:publico/presentation/bloc/video_singkat/video_singkat_cubit.dart';
@@ -61,6 +63,7 @@ void init() {
       deleteInfographicPost: locator(),
     ),
   );
+  locator.registerFactory(() => ExploreCubit(getExplore: locator()));
 
   // usecases
   locator.registerLazySingleton(() => LoginWithEmailAndPassword(locator()));
@@ -78,6 +81,8 @@ void init() {
   locator.registerLazySingleton(() => DeleteVideoPost(locator()));
   locator.registerLazySingleton(() => PostInfographic(locator()));
   locator.registerLazySingleton(() => DeleteInfographicPost(locator()));
+
+  locator.registerLazySingleton(() => GetExplore(locator()));
 
   // repository
   locator.registerLazySingleton<Repository>(

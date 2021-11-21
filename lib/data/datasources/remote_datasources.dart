@@ -9,6 +9,7 @@ import 'package:publico/data/models/theme_model.dart';
 import 'package:publico/data/models/user_model.dart';
 import 'package:publico/data/models/video_materi_model.dart';
 import 'package:publico/data/models/video_singkat_model.dart';
+import 'package:publico/domain/entities/infographic.dart';
 import 'package:publico/util/exception.dart';
 
 abstract class RemoteDataSources {
@@ -29,6 +30,8 @@ abstract class RemoteDataSources {
   Future<void> deletePost(String id, String collectionName);
   Future<void> postInfographic(
       String themeId, String themeName, String title, List sources);
+
+  Future<Map<String, dynamic>> getExplore();
 }
 
 class RemoteDataSourcesImpl extends RemoteDataSources {
@@ -273,6 +276,35 @@ class RemoteDataSourcesImpl extends RemoteDataSources {
         'admin_id': GetStorage().read('uid'),
         'type': 'Infografis'
       });
+    } catch (error) {
+      throw ServerException(error.toString());
+    }
+  }
+
+  @override
+  Future<Map<String, dynamic>> getExplore() async {
+    try {
+      final infographicsRef = firebaseFirestore.collection('infographics');
+      final videoMateriRef = firebaseFirestore.collection('video_materi');
+      final videoSingkatRef = firebaseFirestore.collection('video_singkat');
+      final resultInfographics = await infographicsRef.get();
+      final resultVideoMateri = await videoMateriRef.get();
+      final resultVideoSingkat = await videoSingkatRef.get();
+
+      final infographicModels = resultInfographics.docs
+          .map((doc) => InfographicModel.fromSnapshot(doc))
+          .toList();
+      final videoMateriModels = resultVideoMateri.docs
+          .map((doc) => VideoMateriModel.fromSnapshot(doc))
+          .toList();
+      final videoSingkatModels = resultVideoSingkat.docs
+          .map((doc) => VideoSingkatModel.fromSnapshot(doc))
+          .toList();
+      return {
+        'infographic_models': infographicModels,
+        'video_materi_models': videoMateriModels,
+        'video_singkat_models': videoSingkatModels,
+      };
     } catch (error) {
       throw ServerException(error.toString());
     }
