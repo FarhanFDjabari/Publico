@@ -4,6 +4,7 @@ import 'package:publico/domain/entities/video_singkat.dart';
 
 class VideoSingkatModel extends Equatable {
   final String id;
+  final String adminId;
   final String type;
   final String title;
   final int duration;
@@ -14,6 +15,7 @@ class VideoSingkatModel extends Equatable {
 
   const VideoSingkatModel({
     required this.id,
+    required this.adminId,
     required this.type,
     required this.title,
     required this.duration,
@@ -26,6 +28,7 @@ class VideoSingkatModel extends Equatable {
   static VideoSingkatModel fromSnapshot(DocumentSnapshot snapshot) {
     return VideoSingkatModel(
       id: snapshot.id,
+      adminId: snapshot['admin_id'],
       type: snapshot['type'],
       title: snapshot['title'],
       duration: snapshot['duration'],
@@ -39,6 +42,7 @@ class VideoSingkatModel extends Equatable {
   VideoSingkat toEntity() {
     return VideoSingkat(
       id: id,
+      adminId: adminId,
       type: type,
       title: title,
       duration: duration,
@@ -52,6 +56,7 @@ class VideoSingkatModel extends Equatable {
   @override
   List<Object?> get props => [
         id,
+        adminId,
         type,
         title,
         duration,

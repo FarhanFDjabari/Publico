@@ -55,4 +55,9 @@ abstract class Repository {
   Future<Either<Failure, List<Infographic>>> getInfographicPosts(String query);
 
   Future<Either<Failure, List<dynamic>>> getExplore();
+  Future<Either<Failure, String>> saveVideoMateriToBookmark(VideoMateri video);
+  Future<Either<Failure, String>> removeVideoMateriFromBookmark(
+      VideoMateri video);
+  Future<bool> isVideoMateriAddedToWatchlist(String id);
+  Future<Either<Failure, List<VideoMateri>>> getVideoMateriBookmark();
 }

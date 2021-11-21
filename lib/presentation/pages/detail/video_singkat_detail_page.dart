@@ -5,6 +5,7 @@ import 'package:publico/domain/entities/video_singkat.dart';
 import 'package:publico/presentation/widgets/publico_snackbar.dart';
 import 'package:publico/styles/colors.dart';
 import 'package:publico/styles/text_styles.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:video_player/video_player.dart';
 
 class VideoSingkatDetailPage extends StatefulWidget {
@@ -160,10 +161,16 @@ class _VideoSingkatDetailPageState extends State<VideoSingkatDetailPage> {
               ),
               const SizedBox(height: 5),
               InkWell(
-                onTap: () {},
+                onTap: () async {
+                  if (!await launch(widget.videoSingkat.tiktokUrl)) {
+                    Get.showSnackbar(PublicoSnackbar(
+                      message: 'Error Launch Url',
+                    ));
+                  }
+                },
                 borderRadius: BorderRadius.circular(50),
                 child: CircleAvatar(
-                  radius: 24,
+                  radius: 22,
                   backgroundColor: kRichBlack,
                   child: SvgPicture.asset(
                     'assets/svg/tik-tok-logo.svg',

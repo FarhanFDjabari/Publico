@@ -13,7 +13,8 @@ class InfographicTile extends StatefulWidget {
   _InfographicTileState createState() => _InfographicTileState();
 }
 
-class _InfographicTileState extends State<InfographicTile> {
+class _InfographicTileState extends State<InfographicTile>
+    with SingleTickerProviderStateMixin {
   int _currentIndex = 0;
   bool _isExpand = false;
 
@@ -54,11 +55,16 @@ class _InfographicTileState extends State<InfographicTile> {
                             fit: BoxFit.cover,
                           );
                         },
-                        placeholder: (_, status) {
-                          return const Center(
-                            child: CircularProgressIndicator(
-                              color: kMikadoOrange,
-                              strokeWidth: 3,
+                        progressIndicatorBuilder: (context, value, progress) {
+                          return SizedBox(
+                            height: MediaQuery.of(context).size.height * 0.45,
+                            child: Center(
+                              child: CircularProgressIndicator(
+                                color: kMikadoOrange,
+                                value: progress.progress,
+                                backgroundColor: kGrey,
+                                strokeWidth: 3,
+                              ),
                             ),
                           );
                         },
