@@ -92,7 +92,19 @@ class _InfographicsTabState extends State<InfographicsTab> {
                                       context,
                                       AdminInfographicsDetailPage.routeName,
                                       arguments: state.infographicList[index],
-                                    );
+                                    ).then((_) {
+                                      if (themeClicked) {
+                                        context
+                                            .read<InfographicCubit>()
+                                            .getInfographicsByThemeIdFirestore(
+                                                selectedTheme);
+                                      } else {
+                                        context
+                                            .read<InfographicCubit>()
+                                            .getInfographicThemesByUidFirestore(
+                                                GetStorage().read('uid'));
+                                      }
+                                    });
                                   },
                                   borderRadius: BorderRadius.circular(10),
                                   child: PublicoStaggeredTileAdmin(

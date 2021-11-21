@@ -46,4 +46,6 @@ abstract class Repository {
       String themeName, String title, List sources, String destination);
   Future<Either<Failure, List<Infographic>>> getInfographicsByThemeId(
       String themeId);
+  Future<Either<Failure, void>> deleteInfographicPost(
+      String id, List<dynamic> illustrationsUrl, String collectionPath);
 }

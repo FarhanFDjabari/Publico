@@ -2,11 +2,11 @@ import 'dart:ui';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:publico/domain/entities/infographic.dart';
 import 'package:publico/presentation/bloc/infographic/infographic_cubit.dart';
 import 'package:publico/presentation/pages/admin/edit/infographic_edit_page.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:publico/presentation/widgets/infographic_tile.dart';
 import 'package:publico/presentation/widgets/publico_info_edit_bottom_sheet.dart';
 import 'package:publico/styles/colors.dart';
@@ -54,7 +54,15 @@ class _AdminInfographicsDetailPageState
                 isDismissible: true,
                 builder: (_) => PublicoInfoEditBottomSheet(
                   parentContext: context,
-                  onDeletePressed: () {},
+                  onDeletePressed: () {
+                    final illustrationsUrl = widget.infographic.sources
+                        .expand((element) => element['illustrations'])
+                        .toList();
+                    context
+                        .read<InfographicCubit>()
+                        .deleteInfographicPostFirestore(widget.infographic.id,
+                            illustrationsUrl, 'infographics');
+                  },
                   onEditPressed: () {
                     Navigator.pushNamed(
                       context,

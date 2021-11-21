@@ -286,4 +286,20 @@ class RepositoryImpl extends Repository {
       return Left(ServerFailure(e.message));
     }
   }
+
+  @override
+  Future<Either<Failure, void>> deleteInfographicPost(
+      String id, List<dynamic> illustrationsUrl, String collectionPath) async {
+    try {
+      for (var url in illustrationsUrl) {
+        await remoteDataSources.deleteFromStorage(url);
+      }
+      await remoteDataSources.deletePost(id, collectionPath);
+      return const Right(null);
+    } on FirebaseException catch (e) {
+      return Left(ServerFailure(e.toString()));
+    } on ServerException catch (e) {
+      return Left(ServerFailure(e.message));
+    }
+  }
 }

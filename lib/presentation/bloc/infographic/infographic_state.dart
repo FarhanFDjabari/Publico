@@ -98,3 +98,11 @@ class PostInfographicError extends InfographicState {
   @override
   List<Object?> get props => [message];
 }
+
+class DeleteInfographicSucces extends InfographicState {
+  final String message;
+  const DeleteInfographicSucces(this.message);
+
+  @override
+  List<Object?> get props => [message];
+}

@@ -6,6 +6,7 @@ import 'package:publico/data/datasources/local_datasources.dart';
 import 'package:publico/data/datasources/remote_datasources.dart';
 import 'package:publico/data/repositories/repository_impl.dart';
 import 'package:publico/domain/repositories/repository.dart';
+import 'package:publico/domain/usecases/admin/delete_infographic_post.dart';
 import 'package:publico/domain/usecases/admin/get_infographic_by_theme_id.dart';
 import 'package:publico/domain/usecases/admin/get_infographic_themes_by_uid.dart';
 import 'package:publico/domain/usecases/admin/get_video_materi_posts_by_uid.dart';
@@ -57,6 +58,7 @@ void init() {
       getInfographicThemesByUid: locator(),
       postInfographic: locator(),
       getInfographicsByThemeId: locator(),
+      deleteInfographicPost: locator(),
     ),
   );
 
@@ -75,6 +77,7 @@ void init() {
   locator.registerLazySingleton(() => PostInfographicTheme(locator()));
   locator.registerLazySingleton(() => DeleteVideoPost(locator()));
   locator.registerLazySingleton(() => PostInfographic(locator()));
+  locator.registerLazySingleton(() => DeleteInfographicPost(locator()));
 
   // repository
   locator.registerLazySingleton<Repository>(
