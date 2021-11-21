@@ -2,6 +2,7 @@ import 'package:equatable/equatable.dart';
 
 class VideoSingkat extends Equatable {
   final String id;
+  final String adminId;
   final String type;
   final String title;
   final int duration;
@@ -12,6 +13,7 @@ class VideoSingkat extends Equatable {
 
   const VideoSingkat({
     required this.id,
+    required this.adminId,
     required this.type,
     required this.title,
     required this.duration,
@@ -20,9 +22,23 @@ class VideoSingkat extends Equatable {
     required this.thumbnailUrl,
     required this.tiktokUrl,
   });
+
+  const VideoSingkat.bookmark({
+    required this.id,
+    required this.adminId,
+    required this.type,
+    required this.title,
+    required this.duration,
+    required this.description,
+    required this.videoUrl,
+    required this.thumbnailUrl,
+    required this.tiktokUrl,
+  });
+
   @override
   List<Object?> get props => [
         id,
+        adminId,
         type,
         title,
         duration,
