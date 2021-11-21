@@ -9,6 +9,7 @@ import 'package:publico/domain/usecases/admin/get_infographic_by_theme_id.dart';
 import 'package:publico/domain/usecases/admin/get_infographic_themes_by_uid.dart';
 import 'package:publico/domain/usecases/admin/post_infographic.dart';
 import 'package:publico/domain/usecases/admin/post_infographic_theme.dart';
+import 'package:publico/domain/usecases/user/get_infographics_by_query.dart';
 
 part 'infographic_state.dart';
 
@@ -19,6 +20,7 @@ class InfographicCubit extends Cubit<InfographicState> {
     required this.postInfographic,
     required this.getInfographicsByThemeId,
     required this.deleteInfographicPost,
+    required this.getInfographicsByQuery,
   }) : super(InfographicInitial());
 
   final PostInfographic postInfographic;
@@ -26,6 +28,7 @@ class InfographicCubit extends Cubit<InfographicState> {
   final GetInfographicThemesByUid getInfographicThemesByUid;
   final GetInfographicsByThemeId getInfographicsByThemeId;
   final DeleteInfographicPost deleteInfographicPost;
+  final GetInfographicsByQuery getInfographicsByQuery;
 
   void postNewInfographicTheme(
       String themeName, String destination, File themeImage) async {
@@ -78,6 +81,15 @@ class InfographicCubit extends Cubit<InfographicState> {
       (l) => emit(PostInfographicError(l.message)),
       (r) =>
           emit(const PostInfographicSuccess('Infografis berhasil ditambahkan')),
+    );
+  }
+
+  void getInfographicPosts(String query) async {
+    emit(InfographicLoading());
+    final result = await getInfographicsByQuery.execute(query);
+    result.fold(
+      (l) => emit(InfographicError(l.message)),
+      (r) => emit(GetInfographicsByQuerySuccess(r)),
     );
   }
 }

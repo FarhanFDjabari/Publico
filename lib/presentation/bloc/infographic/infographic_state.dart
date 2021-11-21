@@ -106,3 +106,11 @@ class DeleteInfographicSucces extends InfographicState {
   @override
   List<Object?> get props => [message];
 }
+
+class GetInfographicsByQuerySuccess extends InfographicState {
+  final List<Infographic> infographicList;
+  const GetInfographicsByQuerySuccess(this.infographicList);
+
+  @override
+  List<Object?> get props => [infographicList];
+}

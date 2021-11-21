@@ -20,6 +20,9 @@ import 'package:publico/domain/usecases/logout.dart';
 import 'package:publico/domain/usecases/send_forget_password.dart';
 import 'package:publico/domain/usecases/upload_file_to_storage.dart';
 import 'package:publico/domain/usecases/user/get_explore.dart';
+import 'package:publico/domain/usecases/user/get_infographics_by_query.dart';
+import 'package:publico/domain/usecases/user/get_video_materi_by_query.dart';
+import 'package:publico/domain/usecases/user/get_video_singkat_by_query.dart';
 import 'package:publico/presentation/bloc/auth/auth_cubit.dart';
 import 'package:publico/presentation/bloc/explore/cubit/explore_cubit.dart';
 import 'package:publico/presentation/bloc/infographic/infographic_cubit.dart';
@@ -45,6 +48,7 @@ void init() {
       postVideoSingkat: locator(),
       getVideoSingkatPostsByUid: locator(),
       deleteVideoPost: locator(),
+      getVideoSingkatByQuery: locator(),
     ),
   );
   locator.registerFactory(
@@ -52,6 +56,7 @@ void init() {
       postVideoMateri: locator(),
       getVideoMateriPostsByUid: locator(),
       deleteVideoPost: locator(),
+      getVideoMateriByQuery: locator(),
     ),
   );
   locator.registerFactory(
@@ -61,6 +66,7 @@ void init() {
       postInfographic: locator(),
       getInfographicsByThemeId: locator(),
       deleteInfographicPost: locator(),
+      getInfographicsByQuery: locator(),
     ),
   );
   locator.registerFactory(() => ExploreCubit(getExplore: locator()));
@@ -83,6 +89,9 @@ void init() {
   locator.registerLazySingleton(() => DeleteInfographicPost(locator()));
 
   locator.registerLazySingleton(() => GetExplore(locator()));
+  locator.registerLazySingleton(() => GetVideoSingkatByQuery(locator()));
+  locator.registerLazySingleton(() => GetVideoMateriByQuery(locator()));
+  locator.registerLazySingleton(() => GetInfographicsByQuery(locator()));
 
   // repository
   locator.registerLazySingleton<Repository>(
