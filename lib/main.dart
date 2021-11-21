@@ -145,9 +145,9 @@ class MyApp extends StatelessWidget {
                 builder: (_) => const AddSourcePage(),
               );
             case VideoMateriDetailPage.routeName:
-              final id = settings.arguments as String;
+              final videoMateri = settings.arguments as VideoMateri;
               return CupertinoPageRoute(
-                builder: (_) => VideoMateriDetailPage(videoId: id),
+                builder: (_) => VideoMateriDetailPage(videoMateri: videoMateri),
                 settings: settings,
               );
             case AdminVideoMateriDetailPage.routeName:

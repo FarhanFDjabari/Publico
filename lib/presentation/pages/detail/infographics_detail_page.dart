@@ -65,7 +65,7 @@ class _InfographicsDetailPageState extends State<InfographicsDetailPage> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  widget.infographic.themeId,
+                  widget.infographic.themeName,
                   style: kTextTheme.overline!.copyWith(
                     color: kMikadoOrange,
                     fontWeight: FontWeight.w400,

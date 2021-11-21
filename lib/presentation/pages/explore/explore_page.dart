@@ -40,7 +40,7 @@ class _ExplorePageState extends State<ExplorePage> {
                           Navigator.pushNamed(
                             context,
                             InfographicsDetailPage.routeName,
-                            arguments: 'secret',
+                            arguments: state.exploreList[index],
                           );
                         },
                         borderRadius: BorderRadius.circular(10),
@@ -49,6 +49,7 @@ class _ExplorePageState extends State<ExplorePage> {
                           title: state.exploreList[index].title,
                           imageUrl: state.exploreList[index].sources
                               .first['illustrations'][0],
+                          sourcesCount: state.exploreList[index].sources.length,
                           category: 'Infografis',
                         ),
                       );
@@ -58,7 +59,7 @@ class _ExplorePageState extends State<ExplorePage> {
                           Navigator.pushNamed(
                             context,
                             VideoMateriDetailPage.routeName,
-                            arguments: 'secret',
+                            arguments: state.exploreList[index],
                           );
                         },
                         borderRadius: BorderRadius.circular(10),
@@ -76,7 +77,7 @@ class _ExplorePageState extends State<ExplorePage> {
                         Navigator.pushNamed(
                           context,
                           VideoSingkatDetailPage.routeName,
-                          arguments: 'secret',
+                          arguments: state.exploreList[index],
                         );
                       },
                       borderRadius: BorderRadius.circular(10),
