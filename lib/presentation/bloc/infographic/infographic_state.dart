@@ -41,6 +41,14 @@ class GetInfographicsByThemeIdSuccess extends InfographicState {
   List<Object?> get props => [infographicList];
 }
 
+class GetInfographicThemeNameSuccess extends InfographicState {
+  final String themeName;
+  const GetInfographicThemeNameSuccess(this.themeName);
+
+  @override
+  List<Object?> get props => [themeName];
+}
+
 class GetInfographicsByThemeIdError extends InfographicState {
   final String message;
   const GetInfographicsByThemeIdError(this.message);

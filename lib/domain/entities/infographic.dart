@@ -5,6 +5,7 @@ class Infographic extends Equatable {
   final String title;
   final String adminId;
   final String themeId;
+  final String themeName;
   final List<dynamic> sources;
 
   const Infographic({
@@ -12,6 +13,7 @@ class Infographic extends Equatable {
     required this.title,
     required this.adminId,
     required this.themeId,
+    required this.themeName,
     required this.sources,
   });
 

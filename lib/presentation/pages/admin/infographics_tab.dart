@@ -6,6 +6,7 @@ import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:publico/domain/entities/theme.dart' as theme_entity;
 import 'package:publico/presentation/bloc/infographic/infographic_cubit.dart';
+import 'package:publico/presentation/pages/admin/detail/admin_infographics_detail.dart';
 import 'package:publico/presentation/pages/admin/post/infographic_post_page.dart';
 import 'package:publico/presentation/pages/admin/post/post_theme_page.dart';
 import 'package:publico/presentation/pages/detail/infographics_detail_page.dart';
@@ -89,8 +90,8 @@ class _InfographicsTabState extends State<InfographicsTab> {
                                   onTap: () {
                                     Navigator.pushNamed(
                                       context,
-                                      InfographicsDetailPage.routeName,
-                                      arguments: 'arguments',
+                                      AdminInfographicsDetailPage.routeName,
+                                      arguments: state.infographicList[index],
                                     );
                                   },
                                   borderRadius: BorderRadius.circular(10),
@@ -100,6 +101,8 @@ class _InfographicsTabState extends State<InfographicsTab> {
                                     title: state.infographicList[index].title,
                                     imageUrl: state.infographicList[index]
                                         .sources.first['illustrations'][0],
+                                    sourcesCount: state
+                                        .infographicList[index].sources.length,
                                     category: 'Infografis',
                                   ),
                                 );

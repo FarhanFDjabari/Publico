@@ -27,7 +27,8 @@ abstract class RemoteDataSources {
   Future<void> postNewTheme(String themeName, String imagePath);
   Future<void> deleteFromStorage(String downloadUrl);
   Future<void> deletePost(String id, String collectionName);
-  Future<void> postInfographic(String themeId, String title, List sources);
+  Future<void> postInfographic(
+      String themeId, String themeName, String title, List sources);
 }
 
 class RemoteDataSourcesImpl extends RemoteDataSources {
@@ -261,14 +262,16 @@ class RemoteDataSourcesImpl extends RemoteDataSources {
 
   @override
   Future<void> postInfographic(
-      String themeId, String title, List sources) async {
+      String themeId, String themeName, String title, List sources) async {
     try {
       final ref = firebaseFirestore.collection('infographics');
       await ref.add({
         'theme_id': themeId,
+        'theme_name': themeName,
         'title': title,
         'sources': sources,
         'admin_id': GetStorage().read('uid'),
+        'type': 'Infografis'
       });
     } catch (error) {
       throw ServerException(error.toString());

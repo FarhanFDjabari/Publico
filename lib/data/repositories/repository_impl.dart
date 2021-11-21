@@ -237,8 +237,8 @@ class RepositoryImpl extends Repository {
   }
 
   @override
-  Future<Either<Failure, void>> postInfographic(
-      String themeId, String title, List sources, String destination) async {
+  Future<Either<Failure, void>> postInfographic(String themeId,
+      String themeName, String title, List sources, String destination) async {
     try {
       List<Map<String, dynamic>> _sources = [];
       for (var source in sources) {
@@ -261,7 +261,8 @@ class RepositoryImpl extends Repository {
           "illustrations": illustrationList
         });
       }
-      await remoteDataSources.postInfographic(themeId, title, _sources);
+      await remoteDataSources.postInfographic(
+          themeId, themeName, title, _sources);
       return const Right(null);
     } on FirebaseException catch (e) {
       return Left(ServerFailure(e.toString()));

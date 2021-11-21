@@ -25,13 +25,13 @@ class InfographicPostPage extends StatefulWidget {
 class _InfographicPostPageState extends State<InfographicPostPage> {
   final _titleController = TextEditingController();
   List sources = [];
-  String? selectedTheme;
+  List selectedTheme = [];
   bool isValidate = false;
 
   void formCheck() {
     if (_titleController.text.isNotEmpty &&
         sources.isNotEmpty &&
-        selectedTheme != null) {
+        selectedTheme.isNotEmpty) {
       if (isValidate) {
         return;
       } else {
@@ -103,7 +103,7 @@ class _InfographicPostPageState extends State<InfographicPostPage> {
                         ),
                         value: theme.id,
                         onTap: () {
-                          selectedTheme = theme.id;
+                          selectedTheme = [theme.id, theme.themeName];
                           formCheck();
                         },
                       ),
@@ -280,7 +280,8 @@ class _InfographicPostPageState extends State<InfographicPostPage> {
                             builderContext
                                 .read<InfographicCubit>()
                                 .postInfographicFirestore(
-                                    selectedTheme as String,
+                                    selectedTheme[0] as String,
+                                    selectedTheme[1] as String,
                                     _titleController.text,
                                     sources,
                                     'infographics');

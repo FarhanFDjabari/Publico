@@ -7,6 +7,7 @@ class InfographicModel extends Equatable {
   final String title;
   final String adminId;
   final String themeId;
+  final String themeName;
   final List<dynamic> sources;
 
   const InfographicModel({
@@ -14,6 +15,7 @@ class InfographicModel extends Equatable {
     required this.title,
     required this.adminId,
     required this.themeId,
+    required this.themeName,
     required this.sources,
   });
 
@@ -24,6 +26,7 @@ class InfographicModel extends Equatable {
       title: snapshot.data()!['title'],
       adminId: snapshot.data()!['admin_id'],
       themeId: snapshot.data()!['theme_id'],
+      themeName: snapshot.data()!['theme_name'],
       sources: snapshot.data()!['sources'],
     );
   }
@@ -34,6 +37,7 @@ class InfographicModel extends Equatable {
         title: title,
         adminId: adminId,
         themeId: themeId,
+        themeName: themeName,
         sources: sources);
   }
 

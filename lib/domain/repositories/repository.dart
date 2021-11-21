@@ -42,8 +42,8 @@ abstract class Repository {
       String themeName, File themeImage, String destination);
   Future<Either<Failure, void>> deleteVideoPost(
       String id, String videoUrl, String thumbnailUrl, String collectionPath);
-  Future<Either<Failure, void>> postInfographic(
-      String themeId, String title, List sources, String destination);
+  Future<Either<Failure, void>> postInfographic(String themeId,
+      String themeName, String title, List sources, String destination);
   Future<Either<Failure, List<Infographic>>> getInfographicsByThemeId(
       String themeId);
 }

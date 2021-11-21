@@ -6,7 +6,8 @@ import 'package:publico/styles/text_styles.dart';
 import 'expandable_page_view.dart';
 
 class InfographicTile extends StatefulWidget {
-  const InfographicTile({Key? key}) : super(key: key);
+  final source;
+  const InfographicTile({Key? key, required this.source}) : super(key: key);
 
   @override
   _InfographicTileState createState() => _InfographicTileState();
@@ -34,7 +35,7 @@ class _InfographicTileState extends State<InfographicTile> {
                   });
                 },
                 children: List.generate(
-                  3,
+                  widget.source['illustrations'].length,
                   (index) => Container(
                     padding: const EdgeInsets.all(0),
                     margin: const EdgeInsets.symmetric(horizontal: 2),
@@ -46,11 +47,10 @@ class _InfographicTileState extends State<InfographicTile> {
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(10),
                       child: CachedNetworkImage(
-                        imageUrl:
-                            'https://marketplace.canva.com/EADaooG1kwk/2/0/704w/canva-top-major-south-america-commodities-_IBpJMSh0_Y.jpg',
+                        imageUrl: widget.source['illustrations'][index],
                         imageBuilder: (_, provider) {
                           return Image.network(
-                            'https://marketplace.canva.com/EADaooG1kwk/2/0/704w/canva-top-major-south-america-commodities-_IBpJMSh0_Y.jpg',
+                            widget.source['illustrations'][index],
                             fit: BoxFit.cover,
                           );
                         },
@@ -70,40 +70,49 @@ class _InfographicTileState extends State<InfographicTile> {
               Positioned(
                 top: 10,
                 right: 10,
-                child: Container(
-                  width: 40,
-                  height: 20,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(16),
-                    color: kLightGrey2,
-                  ),
-                  padding: const EdgeInsets.symmetric(horizontal: 5),
-                  child: Center(
-                    child: Text(
-                      '${_currentIndex + 1}/3',
-                      style: kTextTheme.overline!.copyWith(
-                        color: kRichBlack,
-                        fontSize: 11,
-                        fontWeight: FontWeight.w400,
+                child: widget.source['illustrations'].length > 1
+                    ? Container(
+                        width: 40,
+                        height: 20,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(16),
+                          color: kLightGrey2,
+                        ),
+                        padding: const EdgeInsets.symmetric(horizontal: 5),
+                        child: Center(
+                          child: Text(
+                            '${_currentIndex + 1}/${widget.source['illustrations'].length}',
+                            style: kTextTheme.overline!.copyWith(
+                              color: kRichBlack,
+                              fontSize: 11,
+                              fontWeight: FontWeight.w400,
+                            ),
+                          ),
+                        ),
+                      )
+                    : const SizedBox(
+                        width: 40,
+                        height: 20,
                       ),
-                    ),
-                  ),
-                ),
               ),
             ],
           ),
           const SizedBox(height: 5),
-          SizedBox(
-            height: 5,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: List.generate(
-                3,
-                (pictureIndex) => _buildInfographicsDot(
-                    index: pictureIndex, currentIndex: _currentIndex),
-              ),
-            ),
-          ),
+          widget.source['illustrations'].length > 1
+              ? SizedBox(
+                  height: 5,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: List.generate(
+                      widget.source['illustrations'].length,
+                      (pictureIndex) => _buildInfographicsDot(
+                          index: pictureIndex, currentIndex: _currentIndex),
+                    ),
+                  ),
+                )
+              : const SizedBox(
+                  height: 5,
+                ),
           const SizedBox(height: 10),
           Row(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -130,7 +139,7 @@ class _InfographicTileState extends State<InfographicTile> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Lorem Ipsum is simply dummy text of the printing[Sumber]',
+                        widget.source['source_name'],
                         style: kTextTheme.overline!.copyWith(
                           color: kMikadoOrange,
                           fontWeight: FontWeight.w400,
@@ -140,7 +149,7 @@ class _InfographicTileState extends State<InfographicTile> {
                       ),
                       const SizedBox(height: 3),
                       Text(
-                        'Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. [Caption]',
+                        widget.source['description'],
                         style: kTextTheme.overline!.copyWith(
                           color: kRichBlack,
                           fontWeight: FontWeight.w400,

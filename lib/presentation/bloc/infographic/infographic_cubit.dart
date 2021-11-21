@@ -55,11 +55,11 @@ class InfographicCubit extends Cubit<InfographicState> {
     );
   }
 
-  void postInfographicFirestore(
-      String themeId, String title, List sources, String destination) async {
+  void postInfographicFirestore(String themeId, String themeName, String title,
+      List sources, String destination) async {
     emit(PostInfographicLoading());
-    final result =
-        await postInfographic.execute(themeId, title, sources, destination);
+    final result = await postInfographic.execute(
+        themeId, themeName, title, sources, destination);
     result.fold(
       (l) => emit(PostInfographicError(l.message)),
       (r) =>

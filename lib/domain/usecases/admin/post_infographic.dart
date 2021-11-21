@@ -8,7 +8,8 @@ class PostInfographic {
   const PostInfographic(this.repository);
 
   Future<Either<Failure, void>> execute(
-      themeId, title, sources, destination) async {
-    return repository.postInfographic(themeId, title, sources, destination);
+      themeId, themeName, title, sources, destination) async {
+    return repository.postInfographic(
+        themeId, themeName, title, sources, destination);
   }
 }
