@@ -9,7 +9,6 @@ import 'package:publico/data/models/theme_model.dart';
 import 'package:publico/data/models/user_model.dart';
 import 'package:publico/data/models/video_materi_model.dart';
 import 'package:publico/data/models/video_singkat_model.dart';
-import 'package:publico/domain/entities/infographic.dart';
 import 'package:publico/util/exception.dart';
 
 abstract class RemoteDataSources {
@@ -32,6 +31,9 @@ abstract class RemoteDataSources {
       String themeId, String themeName, String title, List sources);
 
   Future<Map<String, dynamic>> getExplore();
+  Future<List<VideoMateriModel>> getVideoMateriPosts(String query);
+  Future<List<VideoSingkatModel>> getVideoSingkatPosts(String query);
+  Future<List<InfographicModel>> getInfographicPosts(String query);
 }
 
 class RemoteDataSourcesImpl extends RemoteDataSources {
@@ -118,6 +120,7 @@ class RemoteDataSourcesImpl extends RemoteDataSources {
       await ref.add({
         'type': 'Video Singkat',
         'title': title,
+        'query': title.toLowerCase(),
         'description': description,
         'video_url': videoUrl,
         'thumbnail_url': thumbnailUrl,
@@ -138,6 +141,7 @@ class RemoteDataSourcesImpl extends RemoteDataSources {
       await ref.add({
         'type': 'Video Materi',
         'title': title,
+        'query': title.toLowerCase(),
         'description': description,
         'video_url': videoUrl,
         'thumbnail_url': thumbnailUrl,
@@ -184,7 +188,8 @@ class RemoteDataSourcesImpl extends RemoteDataSources {
   Future<List<VideoMateriModel>> getVideoMateriPosts(String query) async {
     try {
       final ref = firebaseFirestore.collection('video_materi');
-      final result = await ref.where('title', arrayContains: query).get();
+      final result =
+          await ref.where('query', isGreaterThanOrEqualTo: query).get();
       final videoMateriModels =
           result.docs.map((doc) => VideoMateriModel.fromSnapshot(doc)).toList();
       return videoMateriModels;
@@ -197,11 +202,26 @@ class RemoteDataSourcesImpl extends RemoteDataSources {
   Future<List<VideoSingkatModel>> getVideoSingkatPosts(String query) async {
     try {
       final ref = firebaseFirestore.collection('video_materi');
-      final result = await ref.where('title', arrayContains: query).get();
+      final result =
+          await ref.where('query', isGreaterThanOrEqualTo: query).get();
       final videoSingkatModels = result.docs
           .map((doc) => VideoSingkatModel.fromSnapshot(doc))
           .toList();
       return videoSingkatModels;
+    } catch (error) {
+      throw ServerException(error.toString());
+    }
+  }
+
+  @override
+  Future<List<InfographicModel>> getInfographicPosts(String query) async {
+    try {
+      final ref = firebaseFirestore.collection('infographics');
+      final result =
+          await ref.where('query', isGreaterThanOrEqualTo: query).get();
+      final infographicModels =
+          result.docs.map((doc) => InfographicModel.fromSnapshot(doc)).toList();
+      return infographicModels;
     } catch (error) {
       throw ServerException(error.toString());
     }
@@ -272,6 +292,7 @@ class RemoteDataSourcesImpl extends RemoteDataSources {
         'theme_id': themeId,
         'theme_name': themeName,
         'title': title,
+        'query': title.toLowerCase(),
         'sources': sources,
         'admin_id': GetStorage().read('uid'),
         'type': 'Infografis'

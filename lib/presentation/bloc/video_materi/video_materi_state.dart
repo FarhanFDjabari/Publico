@@ -9,6 +9,11 @@ class VideoMateriInitial extends VideoMateriState {
   List<Object?> get props => [];
 }
 
+class VideoMateriLoading extends VideoMateriState {
+  @override
+  List<Object?> get props => [];
+}
+
 class PostVideoMateriLoading extends VideoMateriState {
   @override
   List<Object> get props => [];
@@ -58,4 +63,12 @@ class GetVideoMateriPostsByUidError extends VideoMateriState {
 
   @override
   List<Object> get props => [message];
+}
+
+class GetVideoMateriByQuerySuccess extends VideoMateriState {
+  final List<VideoMateri> videoMateriList;
+  const GetVideoMateriByQuerySuccess(this.videoMateriList);
+
+  @override
+  List<Object?> get props => [videoMateriList];
 }
