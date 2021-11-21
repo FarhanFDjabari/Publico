@@ -2,11 +2,15 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
+import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:get_storage/get_storage.dart';
-import 'package:publico/domain/entities/theme.dart' as themeEntity;
+import 'package:publico/domain/entities/theme.dart' as theme_entity;
 import 'package:publico/presentation/bloc/infographic/infographic_cubit.dart';
+import 'package:publico/presentation/pages/admin/detail/admin_infographics_detail.dart';
 import 'package:publico/presentation/pages/admin/post/infographic_post_page.dart';
 import 'package:publico/presentation/pages/admin/post/post_theme_page.dart';
+import 'package:publico/presentation/pages/detail/infographics_detail_page.dart';
+import 'package:publico/presentation/widgets/publico_staggered_tile_admin.dart';
 import 'package:publico/styles/colors.dart';
 import 'package:publico/styles/text_styles.dart';
 
@@ -21,13 +25,20 @@ class InfographicsTab extends StatefulWidget {
 class _InfographicsTabState extends State<InfographicsTab> {
   final _searchQueryController = TextEditingController();
   var themeClicked = false;
+  var selectedTheme = '';
+  List<theme_entity.Theme> themeList = [];
 
   @override
   Widget build(BuildContext context) {
-    List<themeEntity.Theme> themeList = [];
-    context
-        .read<InfographicCubit>()
-        .getInfographicThemesByUidFirestore(GetStorage().read('uid'));
+    if (themeClicked) {
+      context
+          .read<InfographicCubit>()
+          .getInfographicsByThemeIdFirestore(selectedTheme);
+    } else {
+      context
+          .read<InfographicCubit>()
+          .getInfographicThemesByUidFirestore(GetStorage().read('uid'));
+    }
     return Scaffold(
       body: Padding(
         padding: const EdgeInsets.all(0.0),
@@ -66,7 +77,76 @@ class _InfographicsTabState extends State<InfographicsTab> {
             const SizedBox(height: 10),
             Expanded(
               child: themeClicked
-                  ? Container()
+                  ? BlocBuilder<InfographicCubit, InfographicState>(
+                      builder: (context, state) {
+                        if (state is GetInfographicsByThemeIdSuccess) {
+                          if (state.infographicList.isNotEmpty) {
+                            return StaggeredGridView.countBuilder(
+                              crossAxisCount: 4,
+                              itemCount: state.infographicList.length,
+                              itemBuilder:
+                                  (BuildContext itemContext, int index) {
+                                return InkWell(
+                                  onTap: () {
+                                    Navigator.pushNamed(
+                                      context,
+                                      AdminInfographicsDetailPage.routeName,
+                                      arguments: state.infographicList[index],
+                                    ).then((_) {
+                                      if (themeClicked) {
+                                        context
+                                            .read<InfographicCubit>()
+                                            .getInfographicsByThemeIdFirestore(
+                                                selectedTheme);
+                                      } else {
+                                        context
+                                            .read<InfographicCubit>()
+                                            .getInfographicThemesByUidFirestore(
+                                                GetStorage().read('uid'));
+                                      }
+                                    });
+                                  },
+                                  borderRadius: BorderRadius.circular(10),
+                                  child: PublicoStaggeredTileAdmin(
+                                    tileIndex: index,
+                                    duration: 2,
+                                    title: state.infographicList[index].title,
+                                    imageUrl: state.infographicList[index]
+                                        .sources.first['illustrations'][0],
+                                    sourcesCount: state
+                                        .infographicList[index].sources.length,
+                                    category: 'Infografis',
+                                  ),
+                                );
+                              },
+                              staggeredTileBuilder: (int index) =>
+                                  const StaggeredTile.fit(2),
+                              mainAxisSpacing: 15.0,
+                              crossAxisSpacing: 8.0,
+                            );
+                          } else {
+                            return Center(
+                              child: Text(
+                                'Belum ada infografis yang tersedia',
+                                style: kTextTheme.bodyText2!
+                                    .copyWith(color: kRichBlack),
+                              ),
+                            );
+                          }
+                        } else if (state is GetInfographicsByThemeIdError) {
+                          return Center(
+                            child: Text(
+                              'Kesalahan Koneksi: ${state.message}',
+                              style: kTextTheme.bodyText2!
+                                  .copyWith(color: kRichBlack),
+                            ),
+                          );
+                        }
+                        return const Center(
+                          child: CircularProgressIndicator(),
+                        );
+                      },
+                    )
                   : BlocBuilder<InfographicCubit, InfographicState>(
                       builder: (context, state) {
                         if (state is GetInfographicThemesByUidSuccess) {
@@ -84,7 +164,10 @@ class _InfographicsTabState extends State<InfographicsTab> {
                               itemCount: state.themeList.length,
                               itemBuilder: (_, index) => InkWell(
                                 onTap: () {
-                                  setState(() => themeClicked = true);
+                                  setState(() { 
+                                    themeClicked = true; 
+                                    selectedTheme = state.themeList[index].id;
+                                  });
                                 },
                                 child: Container(
                                   decoration: BoxDecoration(
@@ -187,12 +270,18 @@ class _InfographicsTabState extends State<InfographicsTab> {
               Navigator.push(
                 context,
                 MaterialPageRoute(builder: (_) => const PostThemePage()),
-              ).then(
-                (_) => context
-                    .read<InfographicCubit>()
-                    .getInfographicThemesByUidFirestore(
-                        GetStorage().read('uid')),
-              );
+              ).then((_) {
+                if (themeClicked) {
+                  context
+                      .read<InfographicCubit>()
+                      .getInfographicsByThemeIdFirestore(selectedTheme);
+                } else {
+                  context
+                      .read<InfographicCubit>()
+                      .getInfographicThemesByUidFirestore(
+                          GetStorage().read('uid'));
+                }
+              });
             },
             child: const Icon(
               Icons.create_new_folder_outlined,
@@ -212,12 +301,18 @@ class _InfographicsTabState extends State<InfographicsTab> {
                     builder: (_) => InfographicPostPage(
                           themes: themeList,
                         )),
-              ).then(
-                (_) => context
-                    .read<InfographicCubit>()
-                    .getInfographicThemesByUidFirestore(
-                        GetStorage().read('uid')),
-              );
+              ).then((_) {
+                if (themeClicked) {
+                  context
+                      .read<InfographicCubit>()
+                      .getInfographicsByThemeIdFirestore(selectedTheme);
+                } else {
+                  context
+                      .read<InfographicCubit>()
+                      .getInfographicThemesByUidFirestore(
+                          GetStorage().read('uid'));
+                }
+              });
             },
             child: const Icon(
               Icons.insights_outlined,

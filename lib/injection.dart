@@ -6,6 +6,8 @@ import 'package:publico/data/datasources/local_datasources.dart';
 import 'package:publico/data/datasources/remote_datasources.dart';
 import 'package:publico/data/repositories/repository_impl.dart';
 import 'package:publico/domain/repositories/repository.dart';
+import 'package:publico/domain/usecases/admin/delete_infographic_post.dart';
+import 'package:publico/domain/usecases/admin/get_infographic_by_theme_id.dart';
 import 'package:publico/domain/usecases/admin/get_infographic_themes_by_uid.dart';
 import 'package:publico/domain/usecases/admin/get_video_materi_posts_by_uid.dart';
 import 'package:publico/domain/usecases/admin/get_video_singkat_posts_by_uid.dart';
@@ -17,7 +19,9 @@ import 'package:publico/domain/usecases/login_with_email_and_password.dart';
 import 'package:publico/domain/usecases/logout.dart';
 import 'package:publico/domain/usecases/send_forget_password.dart';
 import 'package:publico/domain/usecases/upload_file_to_storage.dart';
+import 'package:publico/domain/usecases/user/get_explore.dart';
 import 'package:publico/presentation/bloc/auth/auth_cubit.dart';
+import 'package:publico/presentation/bloc/explore/cubit/explore_cubit.dart';
 import 'package:publico/presentation/bloc/infographic/infographic_cubit.dart';
 import 'package:publico/presentation/bloc/video_materi/video_materi_cubit.dart';
 import 'package:publico/presentation/bloc/video_singkat/video_singkat_cubit.dart';
@@ -55,8 +59,11 @@ void init() {
       postInfographicTheme: locator(),
       getInfographicThemesByUid: locator(),
       postInfographic: locator(),
+      getInfographicsByThemeId: locator(),
+      deleteInfographicPost: locator(),
     ),
   );
+  locator.registerFactory(() => ExploreCubit(getExplore: locator()));
 
   // usecases
   locator.registerLazySingleton(() => LoginWithEmailAndPassword(locator()));
@@ -68,10 +75,14 @@ void init() {
   locator.registerLazySingleton(() => PostVideoMateri(locator()));
   locator.registerLazySingleton(() => GetVideoSingkatPostsByUid(locator()));
   locator.registerLazySingleton(() => GetVideoMateriPostsByUid(locator()));
+  locator.registerLazySingleton(() => GetInfographicsByThemeId(locator()));
   locator.registerLazySingleton(() => GetInfographicThemesByUid(locator()));
   locator.registerLazySingleton(() => PostInfographicTheme(locator()));
   locator.registerLazySingleton(() => DeleteVideoPost(locator()));
   locator.registerLazySingleton(() => PostInfographic(locator()));
+  locator.registerLazySingleton(() => DeleteInfographicPost(locator()));
+
+  locator.registerLazySingleton(() => GetExplore(locator()));
 
   // repository
   locator.registerLazySingleton<Repository>(

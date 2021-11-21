@@ -4,10 +4,12 @@ import 'package:cloud_firestore/cloud_firestore.dart' as firestore;
 import 'package:firebase_auth/firebase_auth.dart' as auth;
 import 'package:firebase_storage/firebase_storage.dart' as storage;
 import 'package:get_storage/get_storage.dart';
+import 'package:publico/data/models/infographic_model.dart';
 import 'package:publico/data/models/theme_model.dart';
 import 'package:publico/data/models/user_model.dart';
 import 'package:publico/data/models/video_materi_model.dart';
 import 'package:publico/data/models/video_singkat_model.dart';
+import 'package:publico/domain/entities/infographic.dart';
 import 'package:publico/util/exception.dart';
 
 abstract class RemoteDataSources {
@@ -21,11 +23,15 @@ abstract class RemoteDataSources {
       String videoUrl, String thumbnailUrl, int duration);
   Future<List<VideoSingkatModel>> getVideoSingkatPostsByUid(String uid);
   Future<List<VideoMateriModel>> getVideoMateriPostsByUid(String uid);
+  Future<List<InfographicModel>> getInfographicsByThemeId(String themeId);
   Future<List<ThemeModel>> getInfographicThemesByUid(String uid);
   Future<void> postNewTheme(String themeName, String imagePath);
   Future<void> deleteFromStorage(String downloadUrl);
   Future<void> deletePost(String id, String collectionName);
-  Future<void> postInfographic(String themeId, String title, List sources);
+  Future<void> postInfographic(
+      String themeId, String themeName, String title, List sources);
+
+  Future<Map<String, dynamic>> getExplore();
 }
 
 class RemoteDataSourcesImpl extends RemoteDataSources {
@@ -202,6 +208,23 @@ class RemoteDataSourcesImpl extends RemoteDataSources {
   }
 
   @override
+  Future<List<InfographicModel>> getInfographicsByThemeId(
+      String themeId) async {
+    try {
+      final ref = firebaseFirestore.collection('infographics');
+      final result = await ref
+          .where('admin_id', isEqualTo: GetStorage().read('uid'))
+          .where('theme_id', isEqualTo: themeId)
+          .get();
+      final infographicModels =
+          result.docs.map((doc) => InfographicModel.fromSnapshot(doc)).toList();
+      return infographicModels;
+    } catch (error) {
+      throw ServerException(error.toString());
+    }
+  }
+
+  @override
   Future<List<ThemeModel>> getInfographicThemesByUid(String uid) async {
     try {
       final ref = firebaseFirestore.collection('infographic_themes');
@@ -242,15 +265,46 @@ class RemoteDataSourcesImpl extends RemoteDataSources {
 
   @override
   Future<void> postInfographic(
-      String themeId, String title, List sources) async {
+      String themeId, String themeName, String title, List sources) async {
     try {
       final ref = firebaseFirestore.collection('infographics');
       await ref.add({
         'theme_id': themeId,
+        'theme_name': themeName,
         'title': title,
         'sources': sources,
         'admin_id': GetStorage().read('uid'),
+        'type': 'Infografis'
       });
+    } catch (error) {
+      throw ServerException(error.toString());
+    }
+  }
+
+  @override
+  Future<Map<String, dynamic>> getExplore() async {
+    try {
+      final infographicsRef = firebaseFirestore.collection('infographics');
+      final videoMateriRef = firebaseFirestore.collection('video_materi');
+      final videoSingkatRef = firebaseFirestore.collection('video_singkat');
+      final resultInfographics = await infographicsRef.get();
+      final resultVideoMateri = await videoMateriRef.get();
+      final resultVideoSingkat = await videoSingkatRef.get();
+
+      final infographicModels = resultInfographics.docs
+          .map((doc) => InfographicModel.fromSnapshot(doc))
+          .toList();
+      final videoMateriModels = resultVideoMateri.docs
+          .map((doc) => VideoMateriModel.fromSnapshot(doc))
+          .toList();
+      final videoSingkatModels = resultVideoSingkat.docs
+          .map((doc) => VideoSingkatModel.fromSnapshot(doc))
+          .toList();
+      return {
+        'infographic_models': infographicModels,
+        'video_materi_models': videoMateriModels,
+        'video_singkat_models': videoSingkatModels,
+      };
     } catch (error) {
       throw ServerException(error.toString());
     }

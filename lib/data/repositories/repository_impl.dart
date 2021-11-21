@@ -5,6 +5,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:path/path.dart';
 import 'package:publico/data/datasources/remote_datasources.dart';
+import 'package:publico/domain/entities/infographic.dart';
 import 'package:publico/domain/entities/theme.dart';
 import 'package:publico/domain/entities/user.dart';
 import 'package:publico/domain/entities/video_materi.dart';
@@ -179,6 +180,23 @@ class RepositoryImpl extends Repository {
   }
 
   @override
+  Future<Either<Failure, List<Infographic>>> getInfographicsByThemeId(
+      String themeId) async {
+    try {
+      final infographicModels =
+          await remoteDataSources.getInfographicsByThemeId(themeId);
+      final infographicList = infographicModels
+          .map((infographicModel) => infographicModel.toEntity())
+          .toList();
+      return Right(infographicList);
+    } on FirebaseException catch (e) {
+      return Left(ServerFailure(e.toString()));
+    } on ServerException catch (e) {
+      return Left(ServerFailure(e.toString()));
+    }
+  }
+
+  @override
   Future<Either<Failure, List<Theme>>> getInfographicThemesByUid(
       String uid) async {
     try {
@@ -219,8 +237,8 @@ class RepositoryImpl extends Repository {
   }
 
   @override
-  Future<Either<Failure, void>> postInfographic(
-      String themeId, String title, List sources, String destination) async {
+  Future<Either<Failure, void>> postInfographic(String themeId,
+      String themeName, String title, List sources, String destination) async {
     try {
       List<Map<String, dynamic>> _sources = [];
       for (var source in sources) {
@@ -243,7 +261,8 @@ class RepositoryImpl extends Repository {
           "illustrations": illustrationList
         });
       }
-      await remoteDataSources.postInfographic(themeId, title, _sources);
+      await remoteDataSources.postInfographic(
+          themeId, themeName, title, _sources);
       return const Right(null);
     } on FirebaseException catch (e) {
       return Left(ServerFailure(e.toString()));
@@ -261,6 +280,48 @@ class RepositoryImpl extends Repository {
       await remoteDataSources.deletePost(id, collectionPath);
 
       return const Right(null);
+    } on FirebaseException catch (e) {
+      return Left(ServerFailure(e.toString()));
+    } on ServerException catch (e) {
+      return Left(ServerFailure(e.message));
+    }
+  }
+
+  @override
+  Future<Either<Failure, void>> deleteInfographicPost(
+      String id, List<dynamic> illustrationsUrl, String collectionPath) async {
+    try {
+      for (var url in illustrationsUrl) {
+        await remoteDataSources.deleteFromStorage(url);
+      }
+      await remoteDataSources.deletePost(id, collectionPath);
+      return const Right(null);
+    } on FirebaseException catch (e) {
+      return Left(ServerFailure(e.toString()));
+    } on ServerException catch (e) {
+      return Left(ServerFailure(e.message));
+    }
+  }
+
+  @override
+  Future<Either<Failure, List<dynamic>>> getExplore() async {
+    try {
+      final models = await remoteDataSources.getExplore();
+      final infographicList = models['infographic_models']
+          .map((model) => model.toEntity())
+          .toList();
+      final videoMateriList = models['video_materi_models']
+          .map((model) => model.toEntity())
+          .toList();
+      final videoSingkatList = models['video_singkat_models']
+          .map((model) => model.toEntity())
+          .toList();
+      final entities = [infographicList, videoMateriList, videoSingkatList];
+
+      final entitiesFlattened = entities.expand((element) => element).toList();
+      entitiesFlattened.shuffle();
+
+      return Right(entitiesFlattened);
     } on FirebaseException catch (e) {
       return Left(ServerFailure(e.toString()));
     } on ServerException catch (e) {

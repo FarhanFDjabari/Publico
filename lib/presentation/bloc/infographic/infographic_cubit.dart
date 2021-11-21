@@ -2,7 +2,10 @@ import 'dart:io';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:publico/domain/entities/infographic.dart';
 import 'package:publico/domain/entities/theme.dart';
+import 'package:publico/domain/usecases/admin/delete_infographic_post.dart';
+import 'package:publico/domain/usecases/admin/get_infographic_by_theme_id.dart';
 import 'package:publico/domain/usecases/admin/get_infographic_themes_by_uid.dart';
 import 'package:publico/domain/usecases/admin/post_infographic.dart';
 import 'package:publico/domain/usecases/admin/post_infographic_theme.dart';
@@ -10,15 +13,19 @@ import 'package:publico/domain/usecases/admin/post_infographic_theme.dart';
 part 'infographic_state.dart';
 
 class InfographicCubit extends Cubit<InfographicState> {
-  InfographicCubit(
-      {required this.postInfographicTheme,
-      required this.getInfographicThemesByUid,
-      required this.postInfographic})
-      : super(InfographicInitial());
+  InfographicCubit({
+    required this.postInfographicTheme,
+    required this.getInfographicThemesByUid,
+    required this.postInfographic,
+    required this.getInfographicsByThemeId,
+    required this.deleteInfographicPost,
+  }) : super(InfographicInitial());
 
   final PostInfographic postInfographic;
   final PostInfographicTheme postInfographicTheme;
   final GetInfographicThemesByUid getInfographicThemesByUid;
+  final GetInfographicsByThemeId getInfographicsByThemeId;
+  final DeleteInfographicPost deleteInfographicPost;
 
   void postNewInfographicTheme(
       String themeName, String destination, File themeImage) async {
@@ -35,6 +42,13 @@ class InfographicCubit extends Cubit<InfographicState> {
     );
   }
 
+  void getInfographicsByThemeIdFirestore(String themeId) async {
+    emit(GetInfographicsByThemeIdLoading());
+    final result = await getInfographicsByThemeId.execute(themeId);
+    result.fold((l) => emit(GetInfographicsByThemeIdError(l.message)),
+        (r) => emit(GetInfographicsByThemeIdSuccess(r)));
+  }
+
   void getInfographicThemesByUidFirestore(String uid) async {
     emit(GetInfographicThemesByUidLoading());
     final result = await getInfographicThemesByUid.execute(uid);
@@ -44,11 +58,22 @@ class InfographicCubit extends Cubit<InfographicState> {
     );
   }
 
-  void postInfographicFirestore(
-      String themeId, String title, List sources, String destination) async {
+  void deleteInfographicPostFirestore(
+      String id, List<dynamic> illustrationsUrl, String collectionPath) async {
+    emit(InfographicLoading());
+    final result = await deleteInfographicPost.execute(
+        id, illustrationsUrl, collectionPath);
+    result.fold(
+        (l) => emit(InfographicError(l.message)),
+        (r) => emit(
+            const DeleteInfographicSucces('Berhasil menghapus infografis')));
+  }
+
+  void postInfographicFirestore(String themeId, String themeName, String title,
+      List sources, String destination) async {
     emit(PostInfographicLoading());
-    final result =
-        await postInfographic.execute(themeId, title, sources, destination);
+    final result = await postInfographic.execute(
+        themeId, themeName, title, sources, destination);
     result.fold(
       (l) => emit(PostInfographicError(l.message)),
       (r) =>

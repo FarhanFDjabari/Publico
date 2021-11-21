@@ -28,6 +28,35 @@ class InfographicError extends InfographicState {
   List<Object> get props => [message];
 }
 
+class GetInfographicsByThemeIdLoading extends InfographicState {
+  @override
+  List<Object?> get props => [];
+}
+
+class GetInfographicsByThemeIdSuccess extends InfographicState {
+  final List<Infographic> infographicList;
+  const GetInfographicsByThemeIdSuccess(this.infographicList);
+
+  @override
+  List<Object?> get props => [infographicList];
+}
+
+class GetInfographicThemeNameSuccess extends InfographicState {
+  final String themeName;
+  const GetInfographicThemeNameSuccess(this.themeName);
+
+  @override
+  List<Object?> get props => [themeName];
+}
+
+class GetInfographicsByThemeIdError extends InfographicState {
+  final String message;
+  const GetInfographicsByThemeIdError(this.message);
+
+  @override
+  List<Object?> get props => [message];
+}
+
 class GetInfographicThemesByUidLoading extends InfographicState {
   @override
   List<Object?> get props => [];
@@ -65,6 +94,14 @@ class PostInfographicSuccess extends InfographicState {
 class PostInfographicError extends InfographicState {
   final String message;
   const PostInfographicError(this.message);
+
+  @override
+  List<Object?> get props => [message];
+}
+
+class DeleteInfographicSucces extends InfographicState {
+  final String message;
+  const DeleteInfographicSucces(this.message);
 
   @override
   List<Object?> get props => [message];

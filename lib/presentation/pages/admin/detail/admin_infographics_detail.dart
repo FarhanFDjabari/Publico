@@ -3,7 +3,10 @@ import 'dart:ui';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:publico/domain/entities/infographic.dart';
+import 'package:publico/presentation/bloc/infographic/infographic_cubit.dart';
 import 'package:publico/presentation/pages/admin/edit/infographic_edit_page.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:publico/presentation/widgets/infographic_tile.dart';
 import 'package:publico/presentation/widgets/publico_info_edit_bottom_sheet.dart';
 import 'package:publico/styles/colors.dart';
@@ -11,8 +14,8 @@ import 'package:publico/styles/text_styles.dart';
 
 class AdminInfographicsDetailPage extends StatefulWidget {
   static const routeName = '/admin-infographics-detail';
-  final String postId;
-  const AdminInfographicsDetailPage({Key? key, required this.postId})
+  final Infographic infographic;
+  const AdminInfographicsDetailPage({Key? key, required this.infographic})
       : super(key: key);
 
   @override
@@ -51,7 +54,15 @@ class _AdminInfographicsDetailPageState
                 isDismissible: true,
                 builder: (_) => PublicoInfoEditBottomSheet(
                   parentContext: context,
-                  onDeletePressed: () {},
+                  onDeletePressed: () {
+                    final illustrationsUrl = widget.infographic.sources
+                        .expand((element) => element['illustrations'])
+                        .toList();
+                    context
+                        .read<InfographicCubit>()
+                        .deleteInfographicPostFirestore(widget.infographic.id,
+                            illustrationsUrl, 'infographics');
+                  },
                   onEditPressed: () {
                     Navigator.pushNamed(
                       context,
@@ -77,21 +88,22 @@ class _AdminInfographicsDetailPageState
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'Subsidi Pemerintah dan Bantuan untuk Masyarakat Miskin [Tema]',
+                  widget.infographic.themeName,
                   style: kTextTheme.overline!.copyWith(
                     color: kMikadoOrange,
                     fontWeight: FontWeight.w400,
                   ),
                 ),
                 Text(
-                  'Economy graph on night city scape with tall [Judul]',
+                  widget.infographic.title,
                   style: kTextTheme.headline6!.copyWith(color: kRichBlack),
                   overflow: TextOverflow.fade,
                 ),
                 Column(
                   children: List.generate(
-                    3,
-                    (index) => InfographicTile(),
+                    widget.infographic.sources.length,
+                    (index) => InfographicTile(
+                        source: widget.infographic.sources[index]),
                   ),
                 ),
               ],

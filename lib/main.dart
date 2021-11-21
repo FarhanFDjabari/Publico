@@ -4,10 +4,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:publico/domain/entities/infographic.dart';
 import 'package:publico/domain/entities/theme.dart' as theme_entity;
 import 'package:publico/domain/entities/video_materi.dart';
 import 'package:publico/domain/entities/video_singkat.dart';
 import 'package:publico/presentation/bloc/auth/auth_cubit.dart';
+import 'package:publico/presentation/bloc/explore/cubit/explore_cubit.dart';
 import 'package:publico/presentation/bloc/infographic/infographic_cubit.dart';
 import 'package:publico/presentation/bloc/video_materi/video_materi_cubit.dart';
 import 'package:publico/presentation/bloc/video_singkat/video_singkat_cubit.dart';
@@ -71,6 +73,9 @@ class MyApp extends StatelessWidget {
         BlocProvider<InfographicCubit>(
           create: (_) => di.locator<InfographicCubit>(),
         ),
+        BlocProvider<ExploreCubit>(
+          create: (_) => di.locator<ExploreCubit>(),
+        ),
       ],
       child: GetMaterialApp(
         title: 'Publico',
@@ -122,15 +127,17 @@ class MyApp extends StatelessWidget {
             case VideoSingkatTab.routeName:
               return MaterialPageRoute(builder: (_) => const VideoSingkatTab());
             case InfographicsDetailPage.routeName:
-              final id = settings.arguments as String;
+              final infographic = settings.arguments as Infographic;
               return CupertinoPageRoute(
-                builder: (_) => InfographicsDetailPage(postId: id),
+                builder: (_) =>
+                    InfographicsDetailPage(infographic: infographic),
                 settings: settings,
               );
             case AdminInfographicsDetailPage.routeName:
-              final id = settings.arguments as String;
+              final infographic = settings.arguments as Infographic;
               return CupertinoPageRoute(
-                builder: (_) => AdminInfographicsDetailPage(postId: id),
+                builder: (_) =>
+                    AdminInfographicsDetailPage(infographic: infographic),
                 settings: settings,
               );
             case AddSourcePage.routeName:
@@ -138,9 +145,9 @@ class MyApp extends StatelessWidget {
                 builder: (_) => const AddSourcePage(),
               );
             case VideoMateriDetailPage.routeName:
-              final id = settings.arguments as String;
+              final videoMateri = settings.arguments as VideoMateri;
               return CupertinoPageRoute(
-                builder: (_) => VideoMateriDetailPage(videoId: id),
+                builder: (_) => VideoMateriDetailPage(videoMateri: videoMateri),
                 settings: settings,
               );
             case AdminVideoMateriDetailPage.routeName:

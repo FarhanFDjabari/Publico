@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import 'package:publico/domain/entities/video_materi.dart';
 import 'package:publico/presentation/widgets/publico_snackbar.dart';
 import 'package:publico/styles/colors.dart';
 import 'package:publico/styles/text_styles.dart';
@@ -8,8 +9,8 @@ import 'package:video_player/video_player.dart';
 
 class VideoMateriDetailPage extends StatefulWidget {
   static const routeName = '/video-materi-detail';
-  final String videoId;
-  const VideoMateriDetailPage({Key? key, required this.videoId})
+  final VideoMateri videoMateri;
+  const VideoMateriDetailPage({Key? key, required this.videoMateri})
       : super(key: key);
 
   @override
@@ -22,8 +23,7 @@ class _VideoMateriDetailPageState extends State<VideoMateriDetailPage> {
   @override
   void initState() {
     super.initState();
-    videoPlayerInit(
-        'https://ak.picdn.net/shutterstock/videos/1040697206/preview/stock-footage-authentication-by-facial-recognition-concept-biometric-security-system.webm');
+    videoPlayerInit(widget.videoMateri.videoUrl);
   }
 
   void videoPlayerInit(String url) {
@@ -142,7 +142,7 @@ class _VideoMateriDetailPageState extends State<VideoMateriDetailPage> {
               const SizedBox(height: 10),
               SizedBox(
                 child: Text(
-                  'Exposure image of business profit growth',
+                  widget.videoMateri.title,
                   maxLines: 1,
                   style: kTextTheme.caption!.copyWith(color: kRichBlack),
                 ),
@@ -150,7 +150,7 @@ class _VideoMateriDetailPageState extends State<VideoMateriDetailPage> {
               const SizedBox(height: 5),
               SizedBox(
                 child: Text(
-                  'Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and ',
+                  widget.videoMateri.description,
                   overflow: TextOverflow.fade,
                   style: kTextTheme.caption!.copyWith(
                     color: kGrey,
