@@ -41,35 +41,54 @@ class BookmarkContent extends StatelessWidget {
     return BlocBuilder<BookmarkCubit, BookmarkState>(
       builder: (context, state) {
         if (state is GetAllBookmarkSuccess) {
-          return StaggeredGridView.countBuilder(
-            crossAxisCount: 4,
-            itemCount: state.bookmarks.length,
-            itemBuilder: (BuildContext itemContext, int index) {
-              if (state.bookmarks[index] is Infographic) {
+          if (state.bookmarks.isNotEmpty) {
+            return StaggeredGridView.countBuilder(
+              crossAxisCount: 4,
+              itemCount: state.bookmarks.length,
+              itemBuilder: (BuildContext itemContext, int index) {
+                if (state.bookmarks[index] is Infographic) {
+                  return InkWell(
+                    onTap: () {
+                      Navigator.pushNamed(
+                        context,
+                        InfographicsDetailPage.routeName,
+                        arguments: state.bookmarks[index],
+                      );
+                    },
+                    borderRadius: BorderRadius.circular(10),
+                    child: PublicoStaggeredTile(
+                      tileIndex: index,
+                      sourcesCount: state.bookmarks[index].sources.length,
+                      title: state.bookmarks[index].title,
+                      imageUrl: state
+                          .bookmarks[index].sources.first['illustrations'][0],
+                      category: 'Infografis',
+                    ),
+                  );
+                } else if (state.bookmarks[index] is VideoMateri) {
+                  return InkWell(
+                    onTap: () {
+                      Navigator.pushNamed(
+                        context,
+                        VideoMateriDetailPage.routeName,
+                        arguments: state.bookmarks[index],
+                      );
+                    },
+                    borderRadius: BorderRadius.circular(10),
+                    child: PublicoStaggeredTile(
+                      tileIndex: index,
+                      duration: state.bookmarks[index].duration,
+                      title: state.bookmarks[index].title,
+                      imageUrl: state.bookmarks[index].thumbnailUrl,
+                      category: state.bookmarks[index].type,
+                    ),
+                  );
+                }
                 return InkWell(
                   onTap: () {
                     Navigator.pushNamed(
                       context,
-                      InfographicsDetailPage.routeName,
-                      arguments: state.bookmarks[index],
-                    );
-                  },
-                  borderRadius: BorderRadius.circular(10),
-                  child: PublicoStaggeredTile(
-                    tileIndex: index,
-                    sourcesCount: state.bookmarks[index].sources.length,
-                    title: state.bookmarks[index].title,
-                    imageUrl: state
-                        .bookmarks[index].sources.first['illustrations'][0],
-                    category: 'Infografis',
-                  ),
-                );
-              } else if (state.bookmarks[index] is VideoMateri) {
-                return InkWell(
-                  onTap: () {
-                    Navigator.pushNamed(
-                      context,
-                      VideoMateriDetailPage.routeName,
+                      VideoSingkatDetailPage.routeName,
                       arguments: state.bookmarks[index],
                     );
                   },
@@ -82,109 +101,126 @@ class BookmarkContent extends StatelessWidget {
                     category: state.bookmarks[index].type,
                   ),
                 );
-              }
-              return InkWell(
+              },
+              staggeredTileBuilder: (int index) => const StaggeredTile.fit(2),
+              mainAxisSpacing: 15.0,
+              crossAxisSpacing: 8.0,
+            );
+          } else {
+            return Center(
+              child: Text(
+                'Belum ada bookmark',
+                style: kTextTheme.bodyText2!.copyWith(color: kRichBlack),
+              ),
+            );
+          }
+        } else if (state is GetVideoMateriBookmarkSuccess) {
+          if (state.videoMateriList.isNotEmpty) {
+            return StaggeredGridView.countBuilder(
+              crossAxisCount: 4,
+              itemCount: state.videoMateriList.length,
+              itemBuilder: (BuildContext itemContext, int index) => InkWell(
                 onTap: () {
                   Navigator.pushNamed(
                     context,
-                    VideoSingkatDetailPage.routeName,
-                    arguments: state.bookmarks[index],
+                    VideoMateriDetailPage.routeName,
+                    arguments: state.videoMateriList[index],
                   );
                 },
                 borderRadius: BorderRadius.circular(10),
                 child: PublicoStaggeredTile(
                   tileIndex: index,
-                  duration: state.bookmarks[index].duration,
-                  title: state.bookmarks[index].title,
-                  imageUrl: state.bookmarks[index].thumbnailUrl,
-                  category: state.bookmarks[index].type,
+                  duration: state.videoMateriList[index].duration,
+                  title: state.videoMateriList[index].title,
+                  imageUrl: state.videoMateriList[index].thumbnailUrl,
+                  category: state.videoMateriList[index].type,
                 ),
-              );
-            },
-            staggeredTileBuilder: (int index) => const StaggeredTile.fit(2),
-            mainAxisSpacing: 15.0,
-            crossAxisSpacing: 8.0,
-          );
-        } else if (state is GetVideoMateriBookmarkSuccess) {
-          return StaggeredGridView.countBuilder(
-            crossAxisCount: 4,
-            itemCount: state.videoMateriList.length,
-            itemBuilder: (BuildContext itemContext, int index) => InkWell(
-              onTap: () {
-                Navigator.pushNamed(
-                  context,
-                  VideoMateriDetailPage.routeName,
-                  arguments: state.videoMateriList[index],
-                );
-              },
-              borderRadius: BorderRadius.circular(10),
-              child: PublicoStaggeredTile(
-                tileIndex: index,
-                duration: state.videoMateriList[index].duration,
-                title: state.videoMateriList[index].title,
-                imageUrl: state.videoMateriList[index].thumbnailUrl,
-                category: state.videoMateriList[index].type,
               ),
-            ),
-            staggeredTileBuilder: (int index) => const StaggeredTile.fit(2),
-            mainAxisSpacing: 15.0,
-            crossAxisSpacing: 8.0,
-          );
+              staggeredTileBuilder: (int index) => const StaggeredTile.fit(2),
+              mainAxisSpacing: 15.0,
+              crossAxisSpacing: 8.0,
+            );
+          } else {
+            return Center(
+              child: Text(
+                'Belum ada bookmark video materi',
+                style: kTextTheme.bodyText2!.copyWith(color: kRichBlack),
+              ),
+            );
+          }
         } else if (state is GetVideoSingkatBookmarkSuccess) {
-          return StaggeredGridView.countBuilder(
-            crossAxisCount: 4,
-            itemCount: state.videoSingkatList.length,
-            itemBuilder: (BuildContext itemContext, int index) => InkWell(
-              onTap: () {
-                Navigator.pushNamed(
-                  context,
-                  VideoSingkatDetailPage.routeName,
-                  arguments: state.videoSingkatList[index],
-                );
-              },
-              borderRadius: BorderRadius.circular(10),
-              child: PublicoStaggeredTile(
-                tileIndex: index,
-                duration: state.videoSingkatList[index].duration,
-                title: state.videoSingkatList[index].title,
-                imageUrl: state.videoSingkatList[index].thumbnailUrl,
-                category: state.videoSingkatList[index].type,
+          if (state.videoSingkatList.isNotEmpty) {
+            return StaggeredGridView.countBuilder(
+              crossAxisCount: 4,
+              itemCount: state.videoSingkatList.length,
+              itemBuilder: (BuildContext itemContext, int index) => InkWell(
+                onTap: () {
+                  Navigator.pushNamed(
+                    context,
+                    VideoSingkatDetailPage.routeName,
+                    arguments: state.videoSingkatList[index],
+                  );
+                },
+                borderRadius: BorderRadius.circular(10),
+                child: PublicoStaggeredTile(
+                  tileIndex: index,
+                  duration: state.videoSingkatList[index].duration,
+                  title: state.videoSingkatList[index].title,
+                  imageUrl: state.videoSingkatList[index].thumbnailUrl,
+                  category: state.videoSingkatList[index].type,
+                ),
               ),
-            ),
-            staggeredTileBuilder: (int index) => const StaggeredTile.fit(2),
-            mainAxisSpacing: 15.0,
-            crossAxisSpacing: 8.0,
-          );
+              staggeredTileBuilder: (int index) => const StaggeredTile.fit(2),
+              mainAxisSpacing: 15.0,
+              crossAxisSpacing: 8.0,
+            );
+          } else {
+            return Center(
+              child: Text(
+                'Belum ada bookmark video singkat',
+                style: kTextTheme.bodyText2!.copyWith(color: kRichBlack),
+              ),
+            );
+          }
         } else if (state is GetInfographicBookmarkSuccess) {
-          return StaggeredGridView.countBuilder(
-            crossAxisCount: 4,
-            itemCount: state.infographicList.length,
-            itemBuilder: (BuildContext itemContext, int index) => InkWell(
-              onTap: () {
-                Navigator.pushNamed(
-                  context,
-                  InfographicsDetailPage.routeName,
-                  arguments: state.infographicList[index],
-                );
-              },
-              borderRadius: BorderRadius.circular(10),
-              child: PublicoStaggeredTile(
-                tileIndex: index,
-                sourcesCount: state.infographicList[index].sources.length,
-                title: state.infographicList[index].title,
-                imageUrl: state
-                    .infographicList[index].sources.first['illustrations'][0],
-                category: 'Infografis',
+          if (state.infographicList.isNotEmpty) {
+            return StaggeredGridView.countBuilder(
+              crossAxisCount: 4,
+              itemCount: state.infographicList.length,
+              itemBuilder: (BuildContext itemContext, int index) => InkWell(
+                onTap: () {
+                  Navigator.pushNamed(
+                    context,
+                    InfographicsDetailPage.routeName,
+                    arguments: state.infographicList[index],
+                  );
+                },
+                borderRadius: BorderRadius.circular(10),
+                child: PublicoStaggeredTile(
+                  tileIndex: index,
+                  sourcesCount: state.infographicList[index].sources.length,
+                  title: state.infographicList[index].title,
+                  imageUrl: state
+                      .infographicList[index].sources.first['illustrations'][0],
+                  category: 'Infografis',
+                ),
               ),
-            ),
-            staggeredTileBuilder: (int index) => const StaggeredTile.fit(2),
-            mainAxisSpacing: 15.0,
-            crossAxisSpacing: 8.0,
-          );
+              staggeredTileBuilder: (int index) => const StaggeredTile.fit(2),
+              mainAxisSpacing: 15.0,
+              crossAxisSpacing: 8.0,
+            );
+          } else {
+            return Center(
+              child: Text(
+                'Belum ada bookmark infografis',
+                style: kTextTheme.bodyText2!.copyWith(color: kRichBlack),
+              ),
+            );
+          }
         } else if (state is VideoMateriError) {
           return Center(
             child: Text(
-              'Belum ada bookmark yang tersedia',
+              'Bookmark Error :(',
               style: kTextTheme.bodyText2!.copyWith(color: kRichBlack),
             ),
           );
