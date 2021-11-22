@@ -6,6 +6,9 @@ import 'package:publico/domain/entities/infographic.dart';
 import 'package:publico/domain/entities/video_materi.dart';
 import 'package:publico/presentation/bloc/bookmark/cubit/bookmark_cubit.dart';
 import 'package:publico/presentation/bloc/video_materi/video_materi_cubit.dart';
+import 'package:publico/presentation/pages/detail/infographics_detail_page.dart';
+import 'package:publico/presentation/pages/detail/video_materi_detail_page.dart';
+import 'package:publico/presentation/pages/detail/video_singkat_detail_page.dart';
 import 'package:publico/presentation/widgets/publico_staggered_tile.dart';
 import 'package:publico/styles/colors.dart';
 import 'package:publico/styles/text_styles.dart';
@@ -44,20 +47,32 @@ class BookmarkContent extends StatelessWidget {
             itemBuilder: (BuildContext itemContext, int index) {
               if (state.bookmarks[index] is Infographic) {
                 return InkWell(
-                  onTap: () {},
+                  onTap: () {
+                    Navigator.pushNamed(
+                      context,
+                      InfographicsDetailPage.routeName,
+                      arguments: state.bookmarks[index],
+                    );
+                  },
                   borderRadius: BorderRadius.circular(10),
                   child: PublicoStaggeredTile(
                     tileIndex: index,
-                    duration: state.bookmarks[index].sources.length,
+                    sourcesCount: state.bookmarks[index].sources.length,
                     title: state.bookmarks[index].title,
                     imageUrl: state
                         .bookmarks[index].sources.first['illustrations'][0],
-                    category: 'Video Materi',
+                    category: 'Infografis',
                   ),
                 );
               } else if (state.bookmarks[index] is VideoMateri) {
                 return InkWell(
-                  onTap: () {},
+                  onTap: () {
+                    Navigator.pushNamed(
+                      context,
+                      VideoMateriDetailPage.routeName,
+                      arguments: state.bookmarks[index],
+                    );
+                  },
                   borderRadius: BorderRadius.circular(10),
                   child: PublicoStaggeredTile(
                     tileIndex: index,
@@ -69,7 +84,13 @@ class BookmarkContent extends StatelessWidget {
                 );
               }
               return InkWell(
-                onTap: () {},
+                onTap: () {
+                  Navigator.pushNamed(
+                    context,
+                    VideoSingkatDetailPage.routeName,
+                    arguments: state.bookmarks[index],
+                  );
+                },
                 borderRadius: BorderRadius.circular(10),
                 child: PublicoStaggeredTile(
                   tileIndex: index,
@@ -89,14 +110,20 @@ class BookmarkContent extends StatelessWidget {
             crossAxisCount: 4,
             itemCount: state.videoMateriList.length,
             itemBuilder: (BuildContext itemContext, int index) => InkWell(
-              onTap: () {},
+              onTap: () {
+                Navigator.pushNamed(
+                  context,
+                  VideoMateriDetailPage.routeName,
+                  arguments: state.videoMateriList[index],
+                );
+              },
               borderRadius: BorderRadius.circular(10),
               child: PublicoStaggeredTile(
                 tileIndex: index,
                 duration: state.videoMateriList[index].duration,
                 title: state.videoMateriList[index].title,
                 imageUrl: state.videoMateriList[index].thumbnailUrl,
-                category: 'Video Materi',
+                category: state.videoMateriList[index].type,
               ),
             ),
             staggeredTileBuilder: (int index) => const StaggeredTile.fit(2),
@@ -108,14 +135,20 @@ class BookmarkContent extends StatelessWidget {
             crossAxisCount: 4,
             itemCount: state.videoSingkatList.length,
             itemBuilder: (BuildContext itemContext, int index) => InkWell(
-              onTap: () {},
+              onTap: () {
+                Navigator.pushNamed(
+                  context,
+                  VideoSingkatDetailPage.routeName,
+                  arguments: state.videoSingkatList[index],
+                );
+              },
               borderRadius: BorderRadius.circular(10),
               child: PublicoStaggeredTile(
                 tileIndex: index,
                 duration: state.videoSingkatList[index].duration,
                 title: state.videoSingkatList[index].title,
                 imageUrl: state.videoSingkatList[index].thumbnailUrl,
-                category: 'Video Singkat',
+                category: state.videoSingkatList[index].type,
               ),
             ),
             staggeredTileBuilder: (int index) => const StaggeredTile.fit(2),
@@ -127,11 +160,17 @@ class BookmarkContent extends StatelessWidget {
             crossAxisCount: 4,
             itemCount: state.infographicList.length,
             itemBuilder: (BuildContext itemContext, int index) => InkWell(
-              onTap: () {},
+              onTap: () {
+                Navigator.pushNamed(
+                  context,
+                  InfographicsDetailPage.routeName,
+                  arguments: state.infographicList[index],
+                );
+              },
               borderRadius: BorderRadius.circular(10),
               child: PublicoStaggeredTile(
                 tileIndex: index,
-                duration: state.infographicList[index].sources.length,
+                sourcesCount: state.infographicList[index].sources.length,
                 title: state.infographicList[index].title,
                 imageUrl: state
                     .infographicList[index].sources.first['illustrations'][0],

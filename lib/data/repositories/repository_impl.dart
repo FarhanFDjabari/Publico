@@ -374,6 +374,18 @@ class RepositoryImpl extends Repository {
   }
 
   @override
+  Future<bool> isInfographicAddedToBookmark(String id) async {
+    final result = await localDataSources.getInfographicBookmarkById(id);
+    return result != null;
+  }
+
+  @override
+  Future<bool> isVideoSingkatAddedToWatchlist(String id) async {
+    final result = await localDataSources.getVideoSingkatBookmarkById(id);
+    return result != null;
+  }
+
+  @override
   Future<Either<Failure, String>> removeVideoMateriFromBookmark(
       VideoMateri video) async {
     try {
