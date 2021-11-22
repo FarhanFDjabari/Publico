@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:publico/presentation/pages/bookmark/bookmark_content.dart';
 import 'package:publico/presentation/widgets/chip_button.dart';
-import 'package:publico/styles/colors.dart';
-import 'package:publico/styles/text_styles.dart';
 
 class BookmarkPage extends StatefulWidget {
   static const routeName = '/bookmark';
@@ -90,15 +89,9 @@ class _BookmarkPageState extends State<BookmarkPage> {
             ),
             const SizedBox(height: 10),
             Expanded(
-              child: SizedBox(
-                child: Center(
-                  child: Text(
-                    'No Items Added...',
-                    style: kTextTheme.bodyText2!.copyWith(color: kRichBlack),
-                  ),
-                ),
-              ),
-            ),
+                child: BookmarkContent(
+              selectedBookmark: _selectedIndex,
+            )),
           ],
         ),
       ),

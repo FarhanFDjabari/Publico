@@ -3,12 +3,12 @@ import 'package:publico/domain/entities/video_singkat.dart';
 import 'package:publico/domain/repositories/repository.dart';
 import 'package:publico/util/failure.dart';
 
-class SaveVideoSingkat {
+class GetVideoSingkatBookmark {
   final Repository repository;
 
-  SaveVideoSingkat(this.repository);
+  GetVideoSingkatBookmark(this.repository);
 
-  Future<Either<Failure, String>> execute(VideoSingkat video) async {
-    return repository.saveVideoSingkatToBookmark(video);
+  Future<Either<Failure, List<VideoSingkat>>> execute() {
+    return repository.getVideoSingkatBookmark();
   }
 }

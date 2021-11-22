@@ -56,8 +56,15 @@ abstract class Repository {
 
   Future<Either<Failure, List<dynamic>>> getExplore();
   Future<Either<Failure, String>> saveVideoMateriToBookmark(VideoMateri video);
+  Future<Either<Failure, String>> saveVideoSingkatToBookmark(
+      VideoSingkat video);
+  Future<Either<Failure, String>> saveInfographicToBookmark(
+      Infographic infographic);
   Future<Either<Failure, String>> removeVideoMateriFromBookmark(
       VideoMateri video);
   Future<bool> isVideoMateriAddedToWatchlist(String id);
   Future<Either<Failure, List<VideoMateri>>> getVideoMateriBookmark();
+  Future<Either<Failure, List<VideoSingkat>>> getVideoSingkatBookmark();
+  Future<Either<Failure, List<Infographic>>> getInfographicBookmark();
+  Future<Either<Failure, List<dynamic>>> getAllBookmark();
 }

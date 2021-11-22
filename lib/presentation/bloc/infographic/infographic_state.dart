@@ -114,3 +114,11 @@ class GetInfographicsByQuerySuccess extends InfographicState {
   @override
   List<Object?> get props => [infographicList];
 }
+
+class InsertInfographicBookmarkSuccess extends InfographicState {
+  final String message;
+  const InsertInfographicBookmarkSuccess(this.message);
+
+  @override
+  List<Object?> get props => [message];
+}

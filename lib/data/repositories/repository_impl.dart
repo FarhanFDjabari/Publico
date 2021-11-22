@@ -6,7 +6,9 @@ import 'package:get_storage/get_storage.dart';
 import 'package:path/path.dart';
 import 'package:publico/data/datasources/local_datasources.dart';
 import 'package:publico/data/datasources/remote_datasources.dart';
+import 'package:publico/data/models/infographic_table.dart';
 import 'package:publico/data/models/video_materi_table.dart';
+import 'package:publico/data/models/video_singkat_table.dart';
 import 'package:publico/domain/entities/infographic.dart';
 import 'package:publico/domain/entities/theme.dart';
 import 'package:publico/domain/entities/user.dart';
@@ -365,6 +367,7 @@ class RepositoryImpl extends Repository {
     }
   }
 
+  @override
   Future<bool> isVideoMateriAddedToWatchlist(String id) async {
     final result = await localDataSources.getVideoMateriBookmarkById(id);
     return result != null;
@@ -398,6 +401,7 @@ class RepositoryImpl extends Repository {
     }
   }
 
+  @override
   Future<Either<Failure, String>> saveVideoMateriToBookmark(
       VideoMateri video) async {
     try {
@@ -412,8 +416,85 @@ class RepositoryImpl extends Repository {
   }
 
   @override
+  Future<Either<Failure, String>> saveInfographicToBookmark(
+      Infographic infographic) async {
+    try {
+      final result = await localDataSources.insertInfographicToBookmark(
+          InfographicTable.fromEntity(infographic));
+      return Right(result);
+    } on DatabaseException catch (e) {
+      return Left(DatabaseFailure(e.message));
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  @override
+  Future<Either<Failure, String>> saveVideoSingkatToBookmark(
+      VideoSingkat video) async {
+    try {
+      final result = await localDataSources
+          .insertVideoSingkatToBookmark(VideoSingkatTable.fromEntity(video));
+      return Right(result);
+    } on DatabaseException catch (e) {
+      return Left(DatabaseFailure(e.message));
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  @override
   Future<Either<Failure, List<VideoMateri>>> getVideoMateriBookmark() async {
-    final result = await localDataSources.getVideoMateriBookmark();
+    try {
+      final result = await localDataSources.getVideoMateriBookmark();
+      return Right(result.map((data) => data.toEntity()).toList());
+    } on DatabaseException catch (e) {
+      return Left(DatabaseFailure(e.message));
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  @override
+  Future<Either<Failure, List<Infographic>>> getInfographicBookmark() async {
+    final result = await localDataSources.getInfographicBookmark();
     return Right(result.map((data) => data.toEntity()).toList());
+  }
+
+  @override
+  Future<Either<Failure, List<VideoSingkat>>> getVideoSingkatBookmark() async {
+    try {
+      final result = await localDataSources.getVideoSingkatBookmark();
+      return Right(result.map((data) => data.toEntity()).toList());
+    } on DatabaseException catch (e) {
+      return Left(DatabaseFailure(e.message));
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  @override
+  Future<Either<Failure, List<dynamic>>> getAllBookmark() async {
+    try {
+      final videoSingkat = await localDataSources
+          .getInfographicBookmark()
+          .then((value) => value.map((e) => e.toEntity()).toList());
+      final videoMateri = await localDataSources
+          .getVideoMateriBookmark()
+          .then((value) => value.map((e) => e.toEntity()).toList());
+      final infographic = await localDataSources
+          .getInfographicBookmark()
+          .then((value) => value.map((e) => e.toEntity()).toList());
+
+      final entities = [videoSingkat, videoMateri, infographic];
+
+      final entitiesFlattened = entities.expand((element) => element).toList();
+      entitiesFlattened.shuffle();
+      return (Right(entitiesFlattened));
+    } on DatabaseException catch (e) {
+      return Left(DatabaseFailure(e.message));
+    } catch (e) {
+      rethrow;
+    }
   }
 }

@@ -3,12 +3,12 @@ import 'package:publico/domain/entities/infographic.dart';
 import 'package:publico/domain/repositories/repository.dart';
 import 'package:publico/util/failure.dart';
 
-class SaveInfographic {
+class GetInfographicBookmark {
   final Repository repository;
 
-  SaveInfographic(this.repository);
+  GetInfographicBookmark(this.repository);
 
-  Future<Either<Failure, String>> execute(Infographic infographic) async {
-    return repository.saveInfographicToBookmark(infographic);
+  Future<Either<Failure, List<Infographic>>> execute() {
+    return repository.getInfographicBookmark();
   }
 }

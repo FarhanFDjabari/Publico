@@ -62,8 +62,8 @@ class InfographicTable extends Equatable {
         'admin_id': adminId,
         'title': title,
         'type': type,
-        'themeId': themeId,
-        'themeName': themeName,
+        'theme_id': themeId,
+        'theme_name': themeName,
         'sources': json.encode(sources),
       };
 

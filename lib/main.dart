@@ -9,6 +9,7 @@ import 'package:publico/domain/entities/theme.dart' as theme_entity;
 import 'package:publico/domain/entities/video_materi.dart';
 import 'package:publico/domain/entities/video_singkat.dart';
 import 'package:publico/presentation/bloc/auth/auth_cubit.dart';
+import 'package:publico/presentation/bloc/bookmark/cubit/bookmark_cubit.dart';
 import 'package:publico/presentation/bloc/explore/cubit/explore_cubit.dart';
 import 'package:publico/presentation/bloc/infographic/infographic_cubit.dart';
 import 'package:publico/presentation/bloc/video_materi/video_materi_cubit.dart';
@@ -75,6 +76,9 @@ class MyApp extends StatelessWidget {
         ),
         BlocProvider<ExploreCubit>(
           create: (_) => di.locator<ExploreCubit>(),
+        ),
+        BlocProvider<BookmarkCubit>(
+          create: (_) => di.locator<BookmarkCubit>(),
         ),
       ],
       child: GetMaterialApp(

@@ -10,6 +10,7 @@ import 'package:publico/domain/usecases/admin/get_infographic_themes_by_uid.dart
 import 'package:publico/domain/usecases/admin/post_infographic.dart';
 import 'package:publico/domain/usecases/admin/post_infographic_theme.dart';
 import 'package:publico/domain/usecases/user/get_infographics_by_query.dart';
+import 'package:publico/domain/usecases/user/save_infographic.dart';
 
 part 'infographic_state.dart';
 
@@ -21,6 +22,7 @@ class InfographicCubit extends Cubit<InfographicState> {
     required this.getInfographicsByThemeId,
     required this.deleteInfographicPost,
     required this.getInfographicsByQuery,
+    required this.saveInfographic,
   }) : super(InfographicInitial());
 
   final PostInfographic postInfographic;
@@ -29,6 +31,7 @@ class InfographicCubit extends Cubit<InfographicState> {
   final GetInfographicsByThemeId getInfographicsByThemeId;
   final DeleteInfographicPost deleteInfographicPost;
   final GetInfographicsByQuery getInfographicsByQuery;
+  final SaveInfographic saveInfographic;
 
   void postNewInfographicTheme(
       String themeName, String destination, File themeImage) async {
@@ -90,6 +93,16 @@ class InfographicCubit extends Cubit<InfographicState> {
     result.fold(
       (l) => emit(InfographicError(l.message)),
       (r) => emit(GetInfographicsByQuerySuccess(r)),
+    );
+  }
+
+  void insertInfographicToBookmark(Infographic infographic) async {
+    emit(InfographicLoading());
+    final result = await saveInfographic.execute(infographic);
+    result.fold(
+      (l) => emit(InfographicError(l.message)),
+      (r) => emit(const InsertInfographicBookmarkSuccess(
+          'Infografis berhasil ditambahkan pada bookmark')),
     );
   }
 }
