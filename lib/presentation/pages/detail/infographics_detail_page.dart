@@ -44,7 +44,7 @@ class _InfographicsDetailPageState extends State<InfographicsDetailPage> {
           width: 50,
         ),
         actions: [
-          BlocListener<InfographicCubit, InfographicState>(
+          BlocConsumer<InfographicCubit, InfographicState>(
             listener: (context, state) {
               if (state is InsertInfographicBookmarkSuccess) {
                 Get.showSnackbar(
@@ -52,6 +52,10 @@ class _InfographicsDetailPageState extends State<InfographicsDetailPage> {
                     message: state.message,
                   ),
                 );
+              } else if (state is RemoveInfographicBookmarkSuccess) {
+                Get.showSnackbar(PublicoSnackbar(
+                  message: state.message,
+                ));
               } else if (state is InfographicError) {
                 Get.showSnackbar(
                   PublicoSnackbar(
@@ -60,17 +64,43 @@ class _InfographicsDetailPageState extends State<InfographicsDetailPage> {
                 );
               }
             },
-            child: IconButton(
-              onPressed: () {
-                context
-                    .read<InfographicCubit>()
-                    .insertInfographicToBookmark(widget.infographic);
-              },
-              icon: const Icon(
-                Icons.bookmark_outline_rounded,
-                color: kRichBlack,
-              ),
-            ),
+            builder: (context, state) {
+              context
+                  .read<InfographicCubit>()
+                  .checkIsBookmarked(widget.infographic.id);
+              if (state is InfographicBookmarked) {
+                return IconButton(
+                  onPressed: () {
+                    context
+                        .read<InfographicCubit>()
+                        .removeInfographicToBookmark(widget.infographic);
+                  },
+                  icon: const Icon(
+                    Icons.bookmark,
+                    color: kRichBlack,
+                  ),
+                );
+              } else if (state is InfographicNotBookmarked) {
+                return IconButton(
+                  onPressed: () {
+                    context
+                        .read<InfographicCubit>()
+                        .insertInfographicToBookmark(widget.infographic);
+                  },
+                  icon: const Icon(
+                    Icons.bookmark_outline_rounded,
+                    color: kRichBlack,
+                  ),
+                );
+              }
+              return IconButton(
+                onPressed: () {},
+                icon: const Icon(
+                  Icons.bookmark_outline_rounded,
+                  color: kRichBlack,
+                ),
+              );
+            },
           ),
         ],
         centerTitle: true,

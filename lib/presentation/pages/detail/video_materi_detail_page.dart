@@ -62,9 +62,15 @@ class _VideoMateriDetailPageState extends State<VideoMateriDetailPage> {
           width: 50,
         ),
         actions: [
-          BlocListener<VideoMateriCubit, VideoMateriState>(
+          BlocConsumer<VideoMateriCubit, VideoMateriState>(
             listener: (listenerContext, state) {
               if (state is InsertVideoMateriBookmarkSuccess) {
+                Get.showSnackbar(
+                  PublicoSnackbar(
+                    message: state.message,
+                  ),
+                );
+              } else if (state is RemoveVideoMateriBookmarkSuccess) {
                 Get.showSnackbar(
                   PublicoSnackbar(
                     message: state.message,
@@ -78,17 +84,43 @@ class _VideoMateriDetailPageState extends State<VideoMateriDetailPage> {
                 );
               }
             },
-            child: IconButton(
-              onPressed: () {
-                context
-                    .read<VideoMateriCubit>()
-                    .insertVideoMateriToBookmark(widget.videoMateri);
-              },
-              icon: const Icon(
-                Icons.bookmark_outline_rounded,
-                color: kRichBlack,
-              ),
-            ),
+            builder: (context, state) {
+              context
+                  .read<VideoMateriCubit>()
+                  .checkIsBookmarked(widget.videoMateri.id);
+              if (state is VideoMateriBookmarked) {
+                return IconButton(
+                  onPressed: () {
+                    context
+                        .read<VideoMateriCubit>()
+                        .removeVideoMateriToBookmark(widget.videoMateri);
+                  },
+                  icon: const Icon(
+                    Icons.bookmark,
+                    color: kRichBlack,
+                  ),
+                );
+              } else if (state is VideoMateriNotBookmarked) {
+                return IconButton(
+                  onPressed: () {
+                    context
+                        .read<VideoMateriCubit>()
+                        .insertVideoMateriToBookmark(widget.videoMateri);
+                  },
+                  icon: const Icon(
+                    Icons.bookmark_outline_rounded,
+                    color: kRichBlack,
+                  ),
+                );
+              }
+              return IconButton(
+                onPressed: () {},
+                icon: const Icon(
+                  Icons.bookmark_outline_rounded,
+                  color: kRichBlack,
+                ),
+              );
+            },
           ),
         ],
         centerTitle: true,

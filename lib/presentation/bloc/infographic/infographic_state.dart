@@ -130,3 +130,13 @@ class RemoveInfographicBookmarkSuccess extends InfographicState {
   @override
   List<Object?> get props => [message];
 }
+
+class InfographicBookmarked extends InfographicState {
+  @override
+  List<Object?> get props => [];
+}
+
+class InfographicNotBookmarked extends InfographicState {
+  @override
+  List<Object?> get props => [];
+}

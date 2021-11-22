@@ -63,7 +63,7 @@ class _VideoSingkatDetailPageState extends State<VideoSingkatDetailPage> {
           width: 50,
         ),
         actions: [
-          BlocListener<VideoSingkatCubit, VideoSingkatState>(
+          BlocConsumer<VideoSingkatCubit, VideoSingkatState>(
             listener: (context, state) {
               if (state is InsertVideoSingkatBookmarkSuccess) {
                 Get.showSnackbar(
@@ -71,6 +71,10 @@ class _VideoSingkatDetailPageState extends State<VideoSingkatDetailPage> {
                     message: state.message,
                   ),
                 );
+              } else if (state is RemoveVideoSingkatBookmarkSuccess) {
+                Get.showSnackbar(PublicoSnackbar(
+                  message: state.message,
+                ));
               } else if (state is VideoSingkatError) {
                 Get.showSnackbar(
                   PublicoSnackbar(
@@ -79,17 +83,43 @@ class _VideoSingkatDetailPageState extends State<VideoSingkatDetailPage> {
                 );
               }
             },
-            child: IconButton(
-              onPressed: () {
-                context
-                    .read<VideoSingkatCubit>()
-                    .insertVideoSingkatToBookmark(widget.videoSingkat);
-              },
-              icon: const Icon(
-                Icons.bookmark_outline_rounded,
-                color: kRichBlack,
-              ),
-            ),
+            builder: (context, state) {
+              context
+                  .read<VideoSingkatCubit>()
+                  .checkIsBookmarked(widget.videoSingkat.id);
+              if (state is VideoSingkatBookmarked) {
+                return IconButton(
+                  onPressed: () {
+                    context
+                        .read<VideoSingkatCubit>()
+                        .removeVideoSingkatToBookmark(widget.videoSingkat);
+                  },
+                  icon: const Icon(
+                    Icons.bookmark,
+                    color: kRichBlack,
+                  ),
+                );
+              } else if (state is VideoSingkatNotBookmarked) {
+                return IconButton(
+                  onPressed: () {
+                    context
+                        .read<VideoSingkatCubit>()
+                        .insertVideoSingkatToBookmark(widget.videoSingkat);
+                  },
+                  icon: const Icon(
+                    Icons.bookmark_outline_rounded,
+                    color: kRichBlack,
+                  ),
+                );
+              }
+              return IconButton(
+                onPressed: () {},
+                icon: const Icon(
+                  Icons.bookmark,
+                  color: kRichBlack,
+                ),
+              );
+            },
           ),
         ],
         centerTitle: true,
