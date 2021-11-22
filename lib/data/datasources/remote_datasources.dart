@@ -170,6 +170,21 @@ class RemoteDataSourcesImpl extends RemoteDataSources {
   }
 
   @override
+  Future<List<VideoSingkatModel>> getVideoSingkatPosts(String query) async {
+    try {
+      final ref = firebaseFirestore.collection('video_singkat');
+      final result =
+          await ref.where('query', isGreaterThanOrEqualTo: query).get();
+      final videoSingkatModels = result.docs
+          .map((doc) => VideoSingkatModel.fromSnapshot(doc))
+          .toList();
+      return videoSingkatModels;
+    } catch (error) {
+      throw ServerException(error.toString());
+    }
+  }
+
+  @override
   Future<List<VideoMateriModel>> getVideoMateriPostsByUid(String uid) async {
     try {
       final ref = firebaseFirestore.collection('video_materi');
@@ -193,21 +208,6 @@ class RemoteDataSourcesImpl extends RemoteDataSources {
       final videoMateriModels =
           result.docs.map((doc) => VideoMateriModel.fromSnapshot(doc)).toList();
       return videoMateriModels;
-    } catch (error) {
-      throw ServerException(error.toString());
-    }
-  }
-
-  @override
-  Future<List<VideoSingkatModel>> getVideoSingkatPosts(String query) async {
-    try {
-      final ref = firebaseFirestore.collection('video_materi');
-      final result =
-          await ref.where('query', isGreaterThanOrEqualTo: query).get();
-      final videoSingkatModels = result.docs
-          .map((doc) => VideoSingkatModel.fromSnapshot(doc))
-          .toList();
-      return videoSingkatModels;
     } catch (error) {
       throw ServerException(error.toString());
     }

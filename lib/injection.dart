@@ -36,6 +36,7 @@ import 'package:publico/presentation/bloc/auth/auth_cubit.dart';
 import 'package:publico/presentation/bloc/bookmark/cubit/bookmark_cubit.dart';
 import 'package:publico/presentation/bloc/explore/cubit/explore_cubit.dart';
 import 'package:publico/presentation/bloc/infographic/infographic_cubit.dart';
+import 'package:publico/presentation/bloc/search/search_cubit.dart';
 import 'package:publico/presentation/bloc/video_materi/video_materi_cubit.dart';
 import 'package:publico/presentation/bloc/video_singkat/video_singkat_cubit.dart';
 
@@ -84,12 +85,21 @@ void init() {
     ),
   );
   locator.registerFactory(() => ExploreCubit(getExplore: locator()));
-  locator.registerFactory(() => BookmarkCubit(
-        getVideoMateriBookmark: locator(),
-        getInfographicBookmark: locator(),
-        getVideoSingkatBookmark: locator(),
-        getAllBookmark: locator(),
-      ));
+  locator.registerFactory(
+    () => BookmarkCubit(
+      getVideoMateriBookmark: locator(),
+      getInfographicBookmark: locator(),
+      getVideoSingkatBookmark: locator(),
+      getAllBookmark: locator(),
+    ),
+  );
+  locator.registerFactory(
+    () => SearchCubit(
+      getVideoMateriByQuery: locator(),
+      getInfographicByQuery: locator(),
+      getVideoSingkatByQuery: locator(),
+    ),
+  );
 
   // usecases
   locator.registerLazySingleton(() => LoginWithEmailAndPassword(locator()));

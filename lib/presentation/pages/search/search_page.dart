@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:publico/presentation/bloc/infographic/infographic_cubit.dart';
+import 'package:publico/presentation/bloc/search/search_cubit.dart';
 import 'package:publico/presentation/widgets/chip_button.dart';
 import 'package:publico/presentation/widgets/publico_staggered_tile.dart';
 import 'package:publico/presentation/widgets/publico_staggered_tile_admin.dart';
@@ -124,7 +125,6 @@ class _SearchPageState extends State<SearchPage> {
               style: kTextTheme.bodyText2!.copyWith(
                 color: kRichBlack,
               ),
-              onChanged: (value) {},
               onSubmitted: (value) {
                 switch (_selectedIndex) {
                   case 0:
@@ -132,51 +132,131 @@ class _SearchPageState extends State<SearchPage> {
                     break;
                   case 1:
                     {
-                      context.read<InfographicCubit>().getInfographicPosts(
+                      context.read<SearchCubit>().getInfographicFromSearch(
                           _searchQueryController.text.toLowerCase());
                     }
                     break;
                   case 2:
-                    {}
+                    {
+                      context.read<SearchCubit>().getVideoMateriFromSearch(
+                          _searchQueryController.text.toLowerCase());
+                    }
                     break;
                   case 3:
-                    {}
-                    break;
-                  default:
-                    {}
+                    {
+                      context.read<SearchCubit>().getVideoSingkatFromSearch(
+                          _searchQueryController.text.toLowerCase());
+                    }
                     break;
                 }
               },
             ),
             const SizedBox(height: 10),
             Expanded(
-              child: BlocBuilder<InfographicCubit, InfographicState>(
+              child: BlocBuilder<SearchCubit, SearchState>(
                 builder: (context, state) {
-                  if (state is GetInfographicsByQuerySuccess) {
-                    return StaggeredGridView.countBuilder(
-                      crossAxisCount: 4,
-                      itemCount: state.infographicList.length,
-                      itemBuilder: (BuildContext itemContext, int index) {
-                        return InkWell(
-                          onTap: () {},
-                          borderRadius: BorderRadius.circular(10),
-                          child: PublicoStaggeredTile(
-                            tileIndex: index,
-                            duration: 2,
-                            title: state.infographicList[index].title,
-                            imageUrl: state.infographicList[index].sources
-                                .first['illustrations'][0],
-                            sourcesCount: 1,
-                            category: 'Infografis',
-                          ),
-                        );
-                      },
-                      staggeredTileBuilder: (int index) =>
-                          const StaggeredTile.fit(2),
-                      mainAxisSpacing: 15.0,
-                      crossAxisSpacing: 8.0,
+                  if (state is GetInfographicSearchSuccess) {
+                    if (state.infographicList.isNotEmpty) {
+                      return StaggeredGridView.countBuilder(
+                        crossAxisCount: 4,
+                        itemCount: state.infographicList.length,
+                        itemBuilder: (BuildContext itemContext, int index) {
+                          return InkWell(
+                            onTap: () {},
+                            borderRadius: BorderRadius.circular(10),
+                            child: PublicoStaggeredTile(
+                              tileIndex: index,
+                              duration: 2,
+                              title: state.infographicList[index].title,
+                              imageUrl: state.infographicList[index].sources
+                                  .first['illustrations'][0],
+                              sourcesCount: 1,
+                              category: 'Infografis',
+                            ),
+                          );
+                        },
+                        staggeredTileBuilder: (int index) =>
+                            const StaggeredTile.fit(2),
+                        mainAxisSpacing: 15.0,
+                        crossAxisSpacing: 8.0,
+                      );
+                    }
+                    return Center(
+                      child: Text(
+                        'Hasil pencarian tidak ditemukan',
+                        style:
+                            kTextTheme.bodyText1!.copyWith(color: kRichBlack),
+                      ),
                     );
-                  } else if (state is InfographicError) {
+                  } else if (state is GetVideoMateriSearchSuccess) {
+                    if (state.videoMateriList.isNotEmpty) {
+                      return StaggeredGridView.countBuilder(
+                        crossAxisCount: 4,
+                        itemCount: state.videoMateriList.length,
+                        itemBuilder: (BuildContext itemContext, int index) {
+                          return InkWell(
+                            onTap: () {},
+                            borderRadius: BorderRadius.circular(10),
+                            child: PublicoStaggeredTile(
+                              tileIndex: index,
+                              duration: 2,
+                              title: state.videoMateriList[index].title,
+                              imageUrl:
+                                  state.videoMateriList[index].thumbnailUrl,
+                              sourcesCount:
+                                  state.videoMateriList[index].duration,
+                              category: state.videoMateriList[index].type,
+                            ),
+                          );
+                        },
+                        staggeredTileBuilder: (int index) =>
+                            const StaggeredTile.fit(2),
+                        mainAxisSpacing: 15.0,
+                        crossAxisSpacing: 8.0,
+                      );
+                    }
+                    return Center(
+                      child: Text(
+                        'Hasil pencarian tidak ditemukan',
+                        style:
+                            kTextTheme.bodyText1!.copyWith(color: kRichBlack),
+                      ),
+                    );
+                  } else if (state is GetVideoSingkatSearchSuccess) {
+                    if (state.videoSingkatList.isNotEmpty) {
+                      return StaggeredGridView.countBuilder(
+                        crossAxisCount: 4,
+                        itemCount: state.videoSingkatList.length,
+                        itemBuilder: (BuildContext itemContext, int index) {
+                          return InkWell(
+                            onTap: () {},
+                            borderRadius: BorderRadius.circular(10),
+                            child: PublicoStaggeredTile(
+                              tileIndex: index,
+                              duration: 2,
+                              title: state.videoSingkatList[index].title,
+                              imageUrl:
+                                  state.videoSingkatList[index].thumbnailUrl,
+                              sourcesCount:
+                                  state.videoSingkatList[index].duration,
+                              category: state.videoSingkatList[index].type,
+                            ),
+                          );
+                        },
+                        staggeredTileBuilder: (int index) =>
+                            const StaggeredTile.fit(2),
+                        mainAxisSpacing: 15.0,
+                        crossAxisSpacing: 8.0,
+                      );
+                    }
+                    return Center(
+                      child: Text(
+                        'Hasil pencarian tidak ditemukan',
+                        style:
+                            kTextTheme.bodyText1!.copyWith(color: kRichBlack),
+                      ),
+                    );
+                  } else if (state is SearchError) {
                     return Center(
                       child: Text(
                         'Kesalahan Koneksi: ${state.message}',
