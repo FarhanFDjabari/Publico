@@ -12,6 +12,7 @@ import 'package:publico/presentation/bloc/auth/auth_cubit.dart';
 import 'package:publico/presentation/bloc/bookmark/cubit/bookmark_cubit.dart';
 import 'package:publico/presentation/bloc/explore/cubit/explore_cubit.dart';
 import 'package:publico/presentation/bloc/infographic/infographic_cubit.dart';
+import 'package:publico/presentation/bloc/search/search_cubit.dart';
 import 'package:publico/presentation/bloc/video_materi/video_materi_cubit.dart';
 import 'package:publico/presentation/bloc/video_singkat/video_singkat_cubit.dart';
 import 'package:publico/presentation/pages/admin/detail/admin_infographics_detail.dart';
@@ -79,6 +80,9 @@ class MyApp extends StatelessWidget {
         ),
         BlocProvider<BookmarkCubit>(
           create: (_) => di.locator<BookmarkCubit>(),
+        ),
+        BlocProvider<SearchCubit>(
+          create: (_) => di.locator<SearchCubit>(),
         ),
       ],
       child: GetMaterialApp(
