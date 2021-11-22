@@ -1,11 +1,11 @@
 import 'package:publico/domain/repositories/repository.dart';
 
-class GetMateriBookmarkStatus {
+class GetInfographicBookmarkStatus {
   final Repository repository;
 
-  GetMateriBookmarkStatus(this.repository);
+  GetInfographicBookmarkStatus(this.repository);
 
   Future<bool> execute(String id) async {
-    return repository.isVideoMateriAddedToBookmark(id);
+    return repository.isInfographicAddedToBookmark(id);
   }
 }

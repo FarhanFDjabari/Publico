@@ -23,12 +23,12 @@ import 'package:publico/domain/usecases/user/get_all_bookmark.dart';
 import 'package:publico/domain/usecases/user/get_explore.dart';
 import 'package:publico/domain/usecases/user/get_infographic_bookmark.dart';
 import 'package:publico/domain/usecases/user/get_infographics_by_query.dart';
+import 'package:publico/domain/usecases/user/get_materi_bookmark_status.dart';
 import 'package:publico/domain/usecases/user/get_video_materi_bookmark.dart';
 import 'package:publico/domain/usecases/user/get_video_materi_by_query.dart';
 import 'package:publico/domain/usecases/user/get_video_singkat_bookmark.dart';
 import 'package:publico/domain/usecases/user/get_video_singkat_by_query.dart';
-import 'package:publico/domain/usecases/user/get_materi_bookmark_status.dart';
-import 'package:publico/domain/usecases/user/get_video_materi_bookmark.dart';
+import 'package:publico/domain/usecases/user/remove_infographic_from_bookmark.dart';
 import 'package:publico/domain/usecases/user/save_infographic.dart';
 import 'package:publico/domain/usecases/user/save_video_materi.dart';
 import 'package:publico/domain/usecases/user/save_video_singkat.dart';
@@ -43,6 +43,7 @@ import 'package:publico/presentation/bloc/video_singkat/video_singkat_cubit.dart
 import 'data/datasources/db/database_helper.dart';
 import 'domain/usecases/admin/post_video_materi.dart';
 import 'domain/usecases/user/remove_materi_from_bookmark.dart';
+import 'domain/usecases/user/remove_singkat_from_bookmark.dart';
 
 final locator = GetIt.instance;
 
@@ -62,6 +63,8 @@ void init() {
       deleteVideoPost: locator(),
       getVideoSingkatByQuery: locator(),
       saveVideoSingkat: locator(),
+      getSingkatBookmarkStatus: locator(),
+      removeSingkatFromBookmark: locator(),
     ),
   );
   locator.registerFactory(
@@ -71,6 +74,8 @@ void init() {
       deleteVideoPost: locator(),
       getVideoMateriByQuery: locator(),
       saveVideoMateri: locator(),
+      getMateriBookmarkStatus: locator(),
+      removeMateriFromBookmark: locator(),
     ),
   );
   locator.registerFactory(
@@ -82,6 +87,8 @@ void init() {
       deleteInfographicPost: locator(),
       getInfographicsByQuery: locator(),
       saveInfographic: locator(),
+      getInfographicBookmarkStatus: locator(),
+      removeInfographicFromBookmark: locator(),
     ),
   );
   locator.registerFactory(() => ExploreCubit(getExplore: locator()));
@@ -129,9 +136,11 @@ void init() {
   locator.registerLazySingleton(() => GetMateriBookmarkStatus(locator()));
 
   locator.registerLazySingleton(() => SaveInfographic(locator()));
+  locator.registerLazySingleton(() => RemoveInfographicFromBookmark(locator()));
   locator.registerLazySingleton(() => GetInfographicBookmark(locator()));
 
   locator.registerLazySingleton(() => SaveVideoSingkat(locator()));
+  locator.registerLazySingleton(() => RemoveSingkatFromBookmark(locator()));
   locator.registerLazySingleton(() => GetVideoSingkatBookmark(locator()));
 
   locator.registerLazySingleton(() => GetAllBookmark(locator()));

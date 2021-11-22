@@ -62,7 +62,13 @@ abstract class Repository {
       Infographic infographic);
   Future<Either<Failure, String>> removeVideoMateriFromBookmark(
       VideoMateri video);
-  Future<bool> isVideoMateriAddedToWatchlist(String id);
+  Future<Either<Failure, String>> removeVideoSingkatFromBookmark(
+      VideoSingkat video);
+  Future<Either<Failure, String>> removeInfographicFromBookmark(
+      Infographic infographic);
+  Future<bool> isVideoMateriAddedToBookmark(String id);
+  Future<bool> isVideoSingkatAddedToBookmark(String id);
+  Future<bool> isInfographicAddedToBookmark(String id);
   Future<Either<Failure, List<VideoMateri>>> getVideoMateriBookmark();
   Future<Either<Failure, List<VideoSingkat>>> getVideoSingkatBookmark();
   Future<Either<Failure, List<Infographic>>> getInfographicBookmark();

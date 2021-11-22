@@ -9,7 +9,9 @@ import 'package:publico/domain/usecases/admin/get_infographic_by_theme_id.dart';
 import 'package:publico/domain/usecases/admin/get_infographic_themes_by_uid.dart';
 import 'package:publico/domain/usecases/admin/post_infographic.dart';
 import 'package:publico/domain/usecases/admin/post_infographic_theme.dart';
+import 'package:publico/domain/usecases/user/get_infographic_bookmark_status.dart';
 import 'package:publico/domain/usecases/user/get_infographics_by_query.dart';
+import 'package:publico/domain/usecases/user/remove_infographic_from_bookmark.dart';
 import 'package:publico/domain/usecases/user/save_infographic.dart';
 
 part 'infographic_state.dart';
@@ -23,6 +25,8 @@ class InfographicCubit extends Cubit<InfographicState> {
     required this.deleteInfographicPost,
     required this.getInfographicsByQuery,
     required this.saveInfographic,
+    required this.removeInfographicFromBookmark,
+    required this.getInfographicBookmarkStatus,
   }) : super(InfographicInitial());
 
   final PostInfographic postInfographic;
@@ -32,6 +36,8 @@ class InfographicCubit extends Cubit<InfographicState> {
   final DeleteInfographicPost deleteInfographicPost;
   final GetInfographicsByQuery getInfographicsByQuery;
   final SaveInfographic saveInfographic;
+  final RemoveInfographicFromBookmark removeInfographicFromBookmark;
+  final GetInfographicBookmarkStatus getInfographicBookmarkStatus;
 
   void postNewInfographicTheme(
       String themeName, String destination, File themeImage) async {
@@ -103,6 +109,16 @@ class InfographicCubit extends Cubit<InfographicState> {
       (l) => emit(InfographicError(l.message)),
       (r) => emit(const InsertInfographicBookmarkSuccess(
           'Infografis berhasil ditambahkan pada bookmark')),
+    );
+  }
+
+  void removeInfographicToBookmark(Infographic infographic) async {
+    emit(InfographicLoading());
+    final result = await removeInfographicFromBookmark.execute(infographic);
+    result.fold(
+      (l) => emit(InfographicError(l.message)),
+      (r) => emit(const RemoveInfographicBookmarkSuccess(
+          'Infografis berhasil dihapus dari bookmark')),
     );
   }
 }
