@@ -4,7 +4,9 @@ import 'package:dartz/dartz.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:path/path.dart';
+import 'package:publico/data/datasources/local_datasources.dart';
 import 'package:publico/data/datasources/remote_datasources.dart';
+import 'package:publico/data/models/video_materi_table.dart';
 import 'package:publico/domain/entities/infographic.dart';
 import 'package:publico/domain/entities/theme.dart';
 import 'package:publico/domain/entities/user.dart';
@@ -17,8 +19,10 @@ import 'package:uuid/uuid.dart';
 
 class RepositoryImpl extends Repository {
   final RemoteDataSources remoteDataSources;
+  final LocalDataSources localDataSources;
 
-  RepositoryImpl({required this.remoteDataSources});
+  RepositoryImpl(
+      {required this.remoteDataSources, required this.localDataSources});
 
   @override
   Future<Either<Failure, User>> loginWithEmailPassword(
@@ -374,6 +378,30 @@ class RepositoryImpl extends Repository {
       return Left(ServerFailure(e.toString()));
     } on ServerException catch (e) {
       return Left(ServerFailure(e.message));
+    }
+  }
+
+  @override
+  Future<Either<Failure, void>> insertVideoMateriBookmark(
+      VideoMateri videoMateri) async {
+    try {
+      final videoMateriTable = VideoMateriTable.fromEntity(videoMateri);
+      await localDataSources.insertVideoMateriToBookmark(videoMateriTable);
+      return const Right(null);
+    } on DatabaseException catch (e) {
+      return Left(DatabaseFailure(e.message));
+    }
+  }
+
+  @override
+  Future<Either<Failure, List<VideoMateri>>> getVideoMateriBookmark() async {
+    try {
+      final videoMateriTables = await localDataSources.getVideoMateriBookmark();
+      final videoMateriList =
+          videoMateriTables.map((table) => table.toEntity()).toList();
+      return Right(videoMateriList);
+    } on DatabaseException catch (e) {
+      return Left(DatabaseFailure(e.message));
     }
   }
 }

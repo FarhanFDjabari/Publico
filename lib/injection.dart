@@ -21,8 +21,10 @@ import 'package:publico/domain/usecases/send_forget_password.dart';
 import 'package:publico/domain/usecases/upload_file_to_storage.dart';
 import 'package:publico/domain/usecases/user/get_explore.dart';
 import 'package:publico/domain/usecases/user/get_infographics_by_query.dart';
+import 'package:publico/domain/usecases/user/get_video_materi_bookmark.dart';
 import 'package:publico/domain/usecases/user/get_video_materi_by_query.dart';
 import 'package:publico/domain/usecases/user/get_video_singkat_by_query.dart';
+import 'package:publico/domain/usecases/user/insert_video_materi_bookmark.dart';
 import 'package:publico/presentation/bloc/auth/auth_cubit.dart';
 import 'package:publico/presentation/bloc/explore/cubit/explore_cubit.dart';
 import 'package:publico/presentation/bloc/infographic/infographic_cubit.dart';
@@ -57,6 +59,8 @@ void init() {
       getVideoMateriPostsByUid: locator(),
       deleteVideoPost: locator(),
       getVideoMateriByQuery: locator(),
+      insertVideoMateriBookmark: locator(),
+      getVideoMateriBookmark: locator(),
     ),
   );
   locator.registerFactory(
@@ -93,10 +97,14 @@ void init() {
   locator.registerLazySingleton(() => GetVideoMateriByQuery(locator()));
   locator.registerLazySingleton(() => GetInfographicsByQuery(locator()));
 
+  locator.registerLazySingleton(() => InsertVideoMateriBookmark(locator()));
+  locator.registerLazySingleton(() => GetVideoMateriBookmark(locator()));
+
   // repository
   locator.registerLazySingleton<Repository>(
     () => RepositoryImpl(
       remoteDataSources: locator(),
+      localDataSources: locator(),
     ),
   );
 

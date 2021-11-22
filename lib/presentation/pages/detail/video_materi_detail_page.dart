@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:publico/domain/entities/video_materi.dart';
+import 'package:publico/presentation/bloc/video_materi/video_materi_cubit.dart';
 import 'package:publico/presentation/widgets/publico_snackbar.dart';
 import 'package:publico/styles/colors.dart';
 import 'package:publico/styles/text_styles.dart';
@@ -60,17 +62,32 @@ class _VideoMateriDetailPageState extends State<VideoMateriDetailPage> {
           width: 50,
         ),
         actions: [
-          IconButton(
-            onPressed: () {
-              Get.showSnackbar(
-                PublicoSnackbar(
-                  message: 'Ditambahkan ke bookmark',
-                ),
-              );
+          BlocListener<VideoMateriCubit, VideoMateriState>(
+            listener: (listenerContext, state) {
+              if (state is InsertVideoMateriBookmarkSuccess) {
+                Get.showSnackbar(
+                  PublicoSnackbar(
+                    message: state.message,
+                  ),
+                );
+              } else if (state is VideoMateriError) {
+                Get.showSnackbar(
+                  PublicoSnackbar(
+                    message: state.message,
+                  ),
+                );
+              }
             },
-            icon: const Icon(
-              Icons.bookmark_outline_rounded,
-              color: kRichBlack,
+            child: IconButton(
+              onPressed: () {
+                context
+                    .read<VideoMateriCubit>()
+                    .insertVideoMateriToBookmark(widget.videoMateri);
+              },
+              icon: const Icon(
+                Icons.bookmark_outline_rounded,
+                color: kRichBlack,
+              ),
             ),
           ),
         ],

@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+import 'package:publico/presentation/bloc/video_materi/video_materi_cubit.dart';
 import 'package:publico/presentation/widgets/chip_button.dart';
+import 'package:publico/presentation/widgets/publico_staggered_tile.dart';
 import 'package:publico/styles/colors.dart';
 import 'package:publico/styles/text_styles.dart';
 
@@ -90,13 +94,42 @@ class _BookmarkPageState extends State<BookmarkPage> {
             ),
             const SizedBox(height: 10),
             Expanded(
-              child: SizedBox(
-                child: Center(
-                  child: Text(
-                    'No Items Added...',
-                    style: kTextTheme.bodyText2!.copyWith(color: kRichBlack),
-                  ),
-                ),
+              child: BlocBuilder<VideoMateriCubit, VideoMateriState>(
+                builder: (context, state) {
+                  if (state is GetVideoMateriBookmarkSuccess) {
+                    return StaggeredGridView.countBuilder(
+                      crossAxisCount: 4,
+                      itemCount: state.videoMateriList.length,
+                      itemBuilder: (BuildContext itemContext, int index) =>
+                          InkWell(
+                        onTap: () {},
+                        borderRadius: BorderRadius.circular(10),
+                        child: PublicoStaggeredTile(
+                          tileIndex: index,
+                          duration: state.videoMateriList[index].duration,
+                          title: state.videoMateriList[index].title,
+                          imageUrl: state.videoMateriList[index].thumbnailUrl,
+                          category: 'Video Matery',
+                        ),
+                      ),
+                      staggeredTileBuilder: (int index) =>
+                          const StaggeredTile.fit(2),
+                      mainAxisSpacing: 15.0,
+                      crossAxisSpacing: 8.0,
+                    );
+                  } else if (state is VideoMateriError) {
+                    return Center(
+                      child: Text(
+                        'Belum ada video materi yang tersedia',
+                        style:
+                            kTextTheme.bodyText2!.copyWith(color: kRichBlack),
+                      ),
+                    );
+                  }
+                  return const Center(
+                    child: CircularProgressIndicator(),
+                  );
+                },
               ),
             ),
           ],

@@ -72,3 +72,19 @@ class GetVideoMateriByQuerySuccess extends VideoMateriState {
   @override
   List<Object?> get props => [videoMateriList];
 }
+
+class InsertVideoMateriBookmarkSuccess extends VideoMateriState {
+  final String message;
+  const InsertVideoMateriBookmarkSuccess(this.message);
+
+  @override
+  List<Object?> get props => [message];
+}
+
+class GetVideoMateriBookmarkSuccess extends VideoMateriState {
+  final List<VideoMateri> videoMateriList;
+  const GetVideoMateriBookmarkSuccess(this.videoMateriList);
+
+  @override
+  List<Object?> get props => [videoMateriList];
+}
