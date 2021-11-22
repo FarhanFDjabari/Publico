@@ -368,6 +368,24 @@ class RepositoryImpl extends Repository {
   }
 
   @override
+  Future<bool> isVideoMateriAddedToWatchlist(String id) async {
+    final result = await localDataSources.getVideoMateriBookmarkById(id);
+    return result != null;
+  }
+
+  @override
+  Future<bool> isInfographicAddedToBookmark(String id) async {
+    final result = await localDataSources.getInfographicBookmarkById(id);
+    return result != null;
+  }
+
+  @override
+  Future<bool> isVideoSingkatAddedToWatchlist(String id) async {
+    final result = await localDataSources.getVideoSingkatBookmarkById(id);
+    return result != null;
+  }
+
+  @override
   Future<Either<Failure, String>> removeVideoMateriFromBookmark(
       VideoMateri video) async {
     try {
@@ -514,23 +532,5 @@ class RepositoryImpl extends Repository {
     } on DatabaseException catch (e) {
       return Left(DatabaseFailure(e.message));
     }
-  }
-
-  @override
-  Future<bool> isInfographicAddedToBookmark(String id) async {
-    final result = await localDataSources.getInfographicBookmarkById(id);
-    return result != null;
-  }
-
-  @override
-  Future<bool> isVideoMateriAddedToBookmark(String id) async {
-    final result = await localDataSources.getVideoMateriBookmarkById(id);
-    return result != null;
-  }
-
-  @override
-  Future<bool> isVideoSingkatAddedToBookmark(String id) async {
-    final result = await localDataSources.getVideoSingkatBookmarkById(id);
-    return result != null;
   }
 }
