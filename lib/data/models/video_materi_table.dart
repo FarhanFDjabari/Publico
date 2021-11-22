@@ -64,11 +64,9 @@ class VideoMateriTable extends Equatable {
         'title': title,
         'description': description,
         'duration': duration,
-        'source_count': null,
         'type': type,
         'thumbnail_url': thumbnailUrl,
         'video_url': videoUrl,
-        'tiktok_url': null,
       };
 
   VideoMateri toEntity() => VideoMateri.bookmark(

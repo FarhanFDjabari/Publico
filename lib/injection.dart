@@ -7,11 +7,11 @@ import 'package:publico/data/datasources/remote_datasources.dart';
 import 'package:publico/data/repositories/repository_impl.dart';
 import 'package:publico/domain/repositories/repository.dart';
 import 'package:publico/domain/usecases/admin/delete_infographic_post.dart';
+import 'package:publico/domain/usecases/admin/delete_video_post.dart';
 import 'package:publico/domain/usecases/admin/get_infographic_by_theme_id.dart';
 import 'package:publico/domain/usecases/admin/get_infographic_themes_by_uid.dart';
 import 'package:publico/domain/usecases/admin/get_video_materi_posts_by_uid.dart';
 import 'package:publico/domain/usecases/admin/get_video_singkat_posts_by_uid.dart';
-import 'package:publico/domain/usecases/admin/delete_video_post.dart';
 import 'package:publico/domain/usecases/admin/post_infographic.dart';
 import 'package:publico/domain/usecases/admin/post_infographic_theme.dart';
 import 'package:publico/domain/usecases/admin/post_video_singkat.dart';
@@ -24,7 +24,9 @@ import 'package:publico/domain/usecases/user/get_infographics_by_query.dart';
 import 'package:publico/domain/usecases/user/get_video_materi_bookmark.dart';
 import 'package:publico/domain/usecases/user/get_video_materi_by_query.dart';
 import 'package:publico/domain/usecases/user/get_video_singkat_by_query.dart';
-import 'package:publico/domain/usecases/user/insert_video_materi_bookmark.dart';
+import 'package:publico/domain/usecases/user/get_materi_bookmark_status.dart';
+import 'package:publico/domain/usecases/user/get_video_materi_bookmark.dart';
+import 'package:publico/domain/usecases/user/save_video_materi.dart';
 import 'package:publico/presentation/bloc/auth/auth_cubit.dart';
 import 'package:publico/presentation/bloc/explore/cubit/explore_cubit.dart';
 import 'package:publico/presentation/bloc/infographic/infographic_cubit.dart';
@@ -33,6 +35,7 @@ import 'package:publico/presentation/bloc/video_singkat/video_singkat_cubit.dart
 
 import 'data/datasources/db/database_helper.dart';
 import 'domain/usecases/admin/post_video_materi.dart';
+import 'domain/usecases/user/remove_materi_from_bookmark.dart';
 
 final locator = GetIt.instance;
 
@@ -96,8 +99,11 @@ void init() {
   locator.registerLazySingleton(() => GetVideoSingkatByQuery(locator()));
   locator.registerLazySingleton(() => GetVideoMateriByQuery(locator()));
   locator.registerLazySingleton(() => GetInfographicsByQuery(locator()));
+  locator.registerLazySingleton(() => SaveVideoMateri(locator()));
+  locator.registerLazySingleton(() => RemoveMateriFromBookmark(locator()));
+  locator.registerLazySingleton(() => GetVideoMateriBookmark(locator()));
+  locator.registerLazySingleton(() => GetMateriBookmarkStatus(locator()));
 
-  locator.registerLazySingleton(() => InsertVideoMateriBookmark(locator()));
   locator.registerLazySingleton(() => GetVideoMateriBookmark(locator()));
 
   // repository

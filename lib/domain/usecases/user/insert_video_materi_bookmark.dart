@@ -8,6 +8,6 @@ class InsertVideoMateriBookmark {
   const InsertVideoMateriBookmark(this.repository);
 
   Future<Either<Failure, void>> execute(videoMateri) async {
-    return repository.insertVideoMateriBookmark(videoMateri);
+    return repository.saveVideoMateriToBookmark(videoMateri);
   }
 }

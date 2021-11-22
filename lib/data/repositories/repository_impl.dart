@@ -365,6 +365,23 @@ class RepositoryImpl extends Repository {
     }
   }
 
+  Future<bool> isVideoMateriAddedToWatchlist(String id) async {
+    final result = await localDataSources.getVideoMateriBookmarkById(id);
+    return result != null;
+  }
+
+  @override
+  Future<Either<Failure, String>> removeVideoMateriFromBookmark(
+      VideoMateri video) async {
+    try {
+      final result = await localDataSources
+          .removeVideoMateriFromBookmark(VideoMateriTable.fromEntity(video));
+      return Right(result);
+    } on DatabaseException catch (e) {
+      return Left(DatabaseFailure(e.message));
+    }
+  }
+
   @override
   Future<Either<Failure, List<VideoSingkat>>> getVideoSingkatPosts(
       String query) async {
@@ -381,27 +398,22 @@ class RepositoryImpl extends Repository {
     }
   }
 
-  @override
-  Future<Either<Failure, void>> insertVideoMateriBookmark(
-      VideoMateri videoMateri) async {
+  Future<Either<Failure, String>> saveVideoMateriToBookmark(
+      VideoMateri video) async {
     try {
-      final videoMateriTable = VideoMateriTable.fromEntity(videoMateri);
-      await localDataSources.insertVideoMateriToBookmark(videoMateriTable);
-      return const Right(null);
+      final result = await localDataSources
+          .insertVideoMateriToBookmark(VideoMateriTable.fromEntity(video));
+      return Right(result);
     } on DatabaseException catch (e) {
       return Left(DatabaseFailure(e.message));
+    } catch (e) {
+      rethrow;
     }
   }
 
   @override
   Future<Either<Failure, List<VideoMateri>>> getVideoMateriBookmark() async {
-    try {
-      final videoMateriTables = await localDataSources.getVideoMateriBookmark();
-      final videoMateriList =
-          videoMateriTables.map((table) => table.toEntity()).toList();
-      return Right(videoMateriList);
-    } on DatabaseException catch (e) {
-      return Left(DatabaseFailure(e.message));
-    }
+    final result = await localDataSources.getVideoMateriBookmark();
+    return Right(result.map((data) => data.toEntity()).toList());
   }
 }

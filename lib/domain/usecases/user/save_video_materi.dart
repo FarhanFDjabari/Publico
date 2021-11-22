@@ -3,12 +3,12 @@ import 'package:publico/domain/entities/video_materi.dart';
 import 'package:publico/domain/repositories/repository.dart';
 import 'package:publico/util/failure.dart';
 
-class GetVideoMateriBookmark {
+class SaveVideoMateri {
   final Repository repository;
 
-  GetVideoMateriBookmark(this.repository);
+  SaveVideoMateri(this.repository);
 
-  Future<Either<Failure, List<VideoMateri>>> execute() {
-    return repository.getVideoMateriBookmark();
+  Future<Either<Failure, String>> execute(VideoMateri video) async {
+    return repository.saveVideoMateriToBookmark(video);
   }
 }

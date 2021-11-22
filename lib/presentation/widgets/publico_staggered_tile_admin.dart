@@ -94,6 +94,7 @@ class PublicoStaggeredTileAdmin extends StatelessWidget {
                               color: kRichBlack,
                               size: 12,
                             ),
+                            const SizedBox(width: 5),
                             Text(
                               '$sourcesCount',
                               style: kTextTheme.overline!
