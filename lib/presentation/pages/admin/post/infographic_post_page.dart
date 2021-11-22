@@ -49,6 +49,7 @@ class _InfographicPostPageState extends State<InfographicPostPage> {
   @override
   void dispose() {
     super.dispose();
+    sources.clear();
     _titleController.dispose();
   }
 
@@ -251,15 +252,15 @@ class _InfographicPostPageState extends State<InfographicPostPage> {
                 },
                 builder: (builderContext, state) {
                   if (state is PostInfographicLoading) {
-                    return PrimaryButton(
-                        borderRadius: 10,
-                        child: const SizedBox(
-                            height: 45,
-                            child: Center(
-                                child: CircularProgressIndicator(
-                              color: kRichWhite,
-                            ))),
-                        onPressed: () {});
+                    return LoadingButton(
+                      borderRadius: 10,
+                      child: const SizedBox(
+                          height: 45,
+                          child: Center(
+                              child: CircularProgressIndicator(
+                            color: kRichWhite,
+                          ))),
+                    );
                   }
                   return PrimaryButton(
                     borderRadius: 10,

@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:publico/presentation/widgets/primary_button.dart';
 import 'package:publico/styles/colors.dart';
 import 'package:publico/styles/text_styles.dart';
@@ -40,9 +41,30 @@ class _AddSourcePageState extends State<AddSourcePage> {
     }
   }
 
+  Future<File?> compressFile(File file) async {
+    final filePath = file.absolute.path;
+
+    final lastIndex = filePath.lastIndexOf(RegExp(r'.jp'));
+    final splitted = filePath.substring(0, (lastIndex));
+    final outPath = "${splitted}_out${filePath.substring(lastIndex)}";
+    var result = await FlutterImageCompress.compressAndGetFile(
+      file.absolute.path,
+      outPath,
+      quality: 50,
+    );
+
+    if (result != null) {
+      return result;
+    }
+
+    return null;
+  }
+
   @override
   void dispose() {
     super.dispose();
+    FilePicker.platform.clearTemporaryFiles();
+    illustrations.clear();
     _sumberController.dispose();
     _deskripsiController.dispose();
   }
@@ -185,13 +207,19 @@ class _AddSourcePageState extends State<AddSourcePage> {
               ),
               OutlinedButton(
                 onPressed: () async {
-                  final result = await FilePicker.platform.pickFiles(
+                  await Future.delayed(const Duration(milliseconds: 500));
+                  await FilePicker.platform
+                      .pickFiles(
                     type: FileType.image,
-                  );
-                  if (result == null) return;
-                  File _imageFile = File(result.files.first.path!);
-                  setState(() {
-                    illustrations.add(_imageFile);
+                  )
+                      .then((value) async {
+                    if (value != null) {
+                      File? _imageFile =
+                          await compressFile(File(value.files.first.path!));
+                      setState(() {
+                        illustrations.add(_imageFile);
+                      });
+                    }
                   });
                 },
                 style: OutlinedButton.styleFrom(
