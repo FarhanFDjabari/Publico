@@ -27,6 +27,7 @@ dependencies:
   get_storage: ^2.0.3
   google_fonts: ^2.1.0
   sqflite_sqlcipher: ^2.1.0
+  upgrader: ^3.10.0
   uuid: ^3.0.5
   url_launcher: ^6.0.15
   video_player: ^2.2.7
@@ -47,7 +48,7 @@ flutter_icons:
   android: true
   ios: true
   remove_alpha_ios: true
-  image_path: "assets/images/splash-white.png"
+  image_path: "assets/images/logo-foreground.png"
   adaptive_icon_foreground: "assets/images/logo-foreground.png"
   adaptive_icon_background: "#DF4759"
 

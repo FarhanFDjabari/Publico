@@ -77,3 +77,11 @@ class InsertVideoSingkatBookmarkSuccess extends VideoSingkatState {
   @override
   List<Object> get props => [message];
 }
+
+class RemoveVideoSingkatBookmarkSuccess extends VideoSingkatState {
+  final String message;
+  const RemoveVideoSingkatBookmarkSuccess(this.message);
+
+  @override
+  List<Object> get props => [message];
+}

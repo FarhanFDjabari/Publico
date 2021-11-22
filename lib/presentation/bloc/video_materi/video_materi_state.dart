@@ -80,3 +80,11 @@ class InsertVideoMateriBookmarkSuccess extends VideoMateriState {
   @override
   List<Object?> get props => [message];
 }
+
+class RemoveVideoMateriBookmarkSuccess extends VideoMateriState {
+  final String message;
+  const RemoveVideoMateriBookmarkSuccess(this.message);
+
+  @override
+  List<Object?> get props => [message];
+}

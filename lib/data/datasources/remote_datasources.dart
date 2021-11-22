@@ -18,7 +18,11 @@ abstract class RemoteDataSources {
   Future<void> logout();
   Future<void> postVideoSingkat(String title, String description,
       String videoUrl, String thumbnailUrl, String tiktokUrl, int duration);
+  Future<void> updateVideoSingkat(String id, String title, String description,
+      String videoUrl, String thumbnailUrl, String tiktokUrl, int duration);
   Future<void> postVideoMateri(String title, String description,
+      String videoUrl, String thumbnailUrl, int duration);
+  Future<void> updateVideoMateri(String id, String title, String description,
       String videoUrl, String thumbnailUrl, int duration);
   Future<List<VideoSingkatModel>> getVideoSingkatPostsByUid(String uid);
   Future<List<VideoMateriModel>> getVideoMateriPostsByUid(String uid);
@@ -29,6 +33,8 @@ abstract class RemoteDataSources {
   Future<void> deletePost(String id, String collectionName);
   Future<void> postInfographic(
       String themeId, String themeName, String title, List sources);
+  Future<void> updateInfographic(
+      String id, String themeId, String themeName, String title, List sources);
 
   Future<Map<String, dynamic>> getExplore();
   Future<List<VideoMateriModel>> getVideoMateriPosts(String query);
@@ -326,6 +332,72 @@ class RemoteDataSourcesImpl extends RemoteDataSources {
         'video_materi_models': videoMateriModels,
         'video_singkat_models': videoSingkatModels,
       };
+    } catch (error) {
+      throw ServerException(error.toString());
+    }
+  }
+
+  @override
+  Future<void> updateInfographic(String id, String themeId, String themeName,
+      String title, List<dynamic> sources) async {
+    try {
+      final ref = firebaseFirestore.collection('infographics').doc(id);
+      await ref.update({
+        'theme_id': themeId,
+        'theme_name': themeName,
+        'title': title,
+        'query': title.toLowerCase(),
+        'sources': sources,
+        'admin_id': GetStorage().read('uid'),
+        'type': 'Infografis'
+      });
+    } catch (error) {
+      throw ServerException(error.toString());
+    }
+  }
+
+  @override
+  Future<void> updateVideoMateri(String id, String title, String description,
+      String videoUrl, String thumbnailUrl, int duration) async {
+    try {
+      final ref = firebaseFirestore.collection('video_materi').doc(id);
+      await ref.update({
+        'type': 'Video Materi',
+        'title': title,
+        'query': title.toLowerCase(),
+        'description': description,
+        'video_url': videoUrl,
+        'thumbnail_url': thumbnailUrl,
+        'duration': duration,
+        'admin_id': GetStorage().read('uid'),
+      });
+    } catch (error) {
+      throw ServerException(error.toString());
+    }
+  }
+
+  @override
+  Future<void> updateVideoSingkat(
+      String id,
+      String title,
+      String description,
+      String videoUrl,
+      String thumbnailUrl,
+      String tiktokUrl,
+      int duration) async {
+    try {
+      final ref = firebaseFirestore.collection('video_singkat').doc(id);
+      await ref.update({
+        'type': 'Video Singkat',
+        'title': title,
+        'query': title.toLowerCase(),
+        'description': description,
+        'video_url': videoUrl,
+        'thumbnail_url': thumbnailUrl,
+        'tiktok_url': tiktokUrl,
+        'duration': duration,
+        'admin_id': GetStorage().read('uid'),
+      });
     } catch (error) {
       throw ServerException(error.toString());
     }

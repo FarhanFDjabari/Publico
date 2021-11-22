@@ -509,4 +509,28 @@ class RepositoryImpl extends Repository {
       rethrow;
     }
   }
+
+  @override
+  Future<Either<Failure, String>> removeInfographicFromBookmark(
+      Infographic infographic) async {
+    try {
+      final result = await localDataSources.removeInfographicFromBookmark(
+          InfographicTable.fromEntity(infographic));
+      return Right(result);
+    } on DatabaseException catch (e) {
+      return Left(DatabaseFailure(e.message));
+    }
+  }
+
+  @override
+  Future<Either<Failure, String>> removeVideoSingkatFromBookmark(
+      VideoSingkat video) async {
+    try {
+      final result = await localDataSources
+          .removeVideoSingkatFromBookmark(VideoSingkatTable.fromEntity(video));
+      return Right(result);
+    } on DatabaseException catch (e) {
+      return Left(DatabaseFailure(e.message));
+    }
+  }
 }

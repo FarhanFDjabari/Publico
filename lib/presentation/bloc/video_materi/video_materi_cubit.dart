@@ -6,7 +6,9 @@ import 'package:publico/domain/entities/video_materi.dart';
 import 'package:publico/domain/usecases/admin/delete_video_post.dart';
 import 'package:publico/domain/usecases/admin/get_video_materi_posts_by_uid.dart';
 import 'package:publico/domain/usecases/admin/post_video_materi.dart';
+import 'package:publico/domain/usecases/user/get_materi_bookmark_status.dart';
 import 'package:publico/domain/usecases/user/get_video_materi_by_query.dart';
+import 'package:publico/domain/usecases/user/remove_materi_from_bookmark.dart';
 import 'package:publico/domain/usecases/user/save_video_materi.dart';
 
 part 'video_materi_state.dart';
@@ -18,6 +20,8 @@ class VideoMateriCubit extends Cubit<VideoMateriState> {
     required this.deleteVideoPost,
     required this.getVideoMateriByQuery,
     required this.saveVideoMateri,
+    required this.removeMateriFromBookmark,
+    required this.getMateriBookmarkStatus,
   }) : super(VideoMateriInitial());
 
   final PostVideoMateri postVideoMateri;
@@ -25,6 +29,8 @@ class VideoMateriCubit extends Cubit<VideoMateriState> {
   final DeleteVideoPost deleteVideoPost;
   final GetVideoMateriByQuery getVideoMateriByQuery;
   final SaveVideoMateri saveVideoMateri;
+  final RemoveMateriFromBookmark removeMateriFromBookmark;
+  final GetMateriBookmarkStatus getMateriBookmarkStatus;
 
   void postVideoMateriFirestore(
       String title,
@@ -91,6 +97,16 @@ class VideoMateriCubit extends Cubit<VideoMateriState> {
       (l) => emit(VideoMateriError(l.message)),
       (r) => emit(const InsertVideoMateriBookmarkSuccess(
           'Video materi berhasil ditambahkan pada bookmark')),
+    );
+  }
+
+  void removeVideoMateriToBookmark(VideoMateri videoMateri) async {
+    emit(VideoMateriLoading());
+    final result = await removeMateriFromBookmark.execute(videoMateri);
+    result.fold(
+      (l) => emit(VideoMateriError(l.message)),
+      (r) => emit(const RemoveVideoMateriBookmarkSuccess(
+          'Video materi berhasil dihapus dari bookmark')),
     );
   }
 }
