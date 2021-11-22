@@ -1,5 +1,12 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+import 'package:publico/presentation/bloc/infographic/infographic_cubit.dart';
 import 'package:publico/presentation/widgets/chip_button.dart';
+import 'package:publico/presentation/widgets/publico_staggered_tile.dart';
+import 'package:publico/presentation/widgets/publico_staggered_tile_admin.dart';
 import 'package:publico/styles/colors.dart';
 import 'package:publico/styles/text_styles.dart';
 
@@ -118,6 +125,71 @@ class _SearchPageState extends State<SearchPage> {
                 color: kRichBlack,
               ),
               onChanged: (value) {},
+              onSubmitted: (value) {
+                switch (_selectedIndex) {
+                  case 0:
+                    {}
+                    break;
+                  case 1:
+                    {
+                      context.read<InfographicCubit>().getInfographicPosts(
+                          _searchQueryController.text.toLowerCase());
+                    }
+                    break;
+                  case 2:
+                    {}
+                    break;
+                  case 3:
+                    {}
+                    break;
+                  default:
+                    {}
+                    break;
+                }
+              },
+            ),
+            const SizedBox(height: 10),
+            Expanded(
+              child: BlocBuilder<InfographicCubit, InfographicState>(
+                builder: (context, state) {
+                  if (state is GetInfographicsByQuerySuccess) {
+                    return StaggeredGridView.countBuilder(
+                      crossAxisCount: 4,
+                      itemCount: state.infographicList.length,
+                      itemBuilder: (BuildContext itemContext, int index) {
+                        return InkWell(
+                          onTap: () {},
+                          borderRadius: BorderRadius.circular(10),
+                          child: PublicoStaggeredTile(
+                            tileIndex: index,
+                            duration: 2,
+                            title: state.infographicList[index].title,
+                            imageUrl: state.infographicList[index].sources
+                                .first['illustrations'][0],
+                            sourcesCount: 1,
+                            category: 'Infografis',
+                          ),
+                        );
+                      },
+                      staggeredTileBuilder: (int index) =>
+                          const StaggeredTile.fit(2),
+                      mainAxisSpacing: 15.0,
+                      crossAxisSpacing: 8.0,
+                    );
+                  } else if (state is InfographicError) {
+                    return Center(
+                      child: Text(
+                        'Kesalahan Koneksi: ${state.message}',
+                        style:
+                            kTextTheme.bodyText2!.copyWith(color: kRichBlack),
+                      ),
+                    );
+                  }
+                  return const Center(
+                    child: CircularProgressIndicator(),
+                  );
+                },
+              ),
             ),
           ],
         ),

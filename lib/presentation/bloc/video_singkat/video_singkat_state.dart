@@ -9,6 +9,8 @@ abstract class VideoSingkatState extends Equatable {
 
 class VideoSingkatInitial extends VideoSingkatState {}
 
+class VideoSingkatLoading extends VideoSingkatState {}
+
 class PostVideoSingkatLoading extends VideoSingkatState {
   @override
   List<Object> get props => [];
@@ -58,4 +60,12 @@ class GetVideoSingkatPostsByUidError extends VideoSingkatState {
 
   @override
   List<Object> get props => [message];
+}
+
+class GetVideoSingkatByQuerySuccess extends VideoSingkatState {
+  final List<VideoSingkat> videoSingkatList;
+  const GetVideoSingkatByQuerySuccess(this.videoSingkatList);
+
+  @override
+  List<Object> get props => [videoSingkatList];
 }

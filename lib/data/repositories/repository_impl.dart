@@ -334,6 +334,37 @@ class RepositoryImpl extends Repository {
   }
 
   @override
+  Future<Either<Failure, List<Infographic>>> getInfographicPosts(
+      String query) async {
+    try {
+      final infographicModels =
+          await remoteDataSources.getInfographicPosts(query);
+      final infographicList =
+          infographicModels.map((model) => model.toEntity()).toList();
+      return Right(infographicList);
+    } on FirebaseException catch (e) {
+      return Left(ServerFailure(e.toString()));
+    } on ServerException catch (e) {
+      return Left(ServerFailure(e.message));
+    }
+  }
+
+  @override
+  Future<Either<Failure, List<VideoMateri>>> getVideoMateriPosts(
+      String query) async {
+    try {
+      final videoMateriModels =
+          await remoteDataSources.getVideoMateriPosts(query);
+      final videoMateriList =
+          videoMateriModels.map((model) => model.toEntity()).toList();
+      return Right(videoMateriList);
+    } on FirebaseException catch (e) {
+      return Left(ServerFailure(e.toString()));
+    } on ServerException catch (e) {
+      return Left(ServerFailure(e.message));
+    }
+  }
+
   Future<bool> isVideoMateriAddedToWatchlist(String id) async {
     final result = await localDataSources.getVideoMateriBookmarkById(id);
     return result != null;
@@ -352,6 +383,21 @@ class RepositoryImpl extends Repository {
   }
 
   @override
+  Future<Either<Failure, List<VideoSingkat>>> getVideoSingkatPosts(
+      String query) async {
+    try {
+      final videoSingkatModels =
+          await remoteDataSources.getVideoSingkatPosts(query);
+      final videoSingkatList =
+          videoSingkatModels.map((model) => model.toEntity()).toList();
+      return Right(videoSingkatList);
+    } on FirebaseException catch (e) {
+      return Left(ServerFailure(e.toString()));
+    } on ServerException catch (e) {
+      return Left(ServerFailure(e.message));
+    }
+  }
+
   Future<Either<Failure, String>> saveVideoMateriToBookmark(
       VideoMateri video) async {
     try {

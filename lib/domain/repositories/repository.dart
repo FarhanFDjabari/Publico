@@ -49,6 +49,11 @@ abstract class Repository {
   Future<Either<Failure, void>> deleteInfographicPost(
       String id, List<dynamic> illustrationsUrl, String collectionPath);
 
+  Future<Either<Failure, List<VideoSingkat>>> getVideoSingkatPosts(
+      String query);
+  Future<Either<Failure, List<VideoMateri>>> getVideoMateriPosts(String query);
+  Future<Either<Failure, List<Infographic>>> getInfographicPosts(String query);
+
   Future<Either<Failure, List<dynamic>>> getExplore();
   Future<Either<Failure, String>> saveVideoMateriToBookmark(VideoMateri video);
   Future<Either<Failure, String>> removeVideoMateriFromBookmark(
