@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:publico/domain/entities/video_singkat.dart';
+import 'package:publico/presentation/bloc/video_singkat/video_singkat_cubit.dart';
 import 'package:publico/presentation/widgets/publico_snackbar.dart';
 import 'package:publico/styles/colors.dart';
 import 'package:publico/styles/text_styles.dart';
@@ -61,17 +63,32 @@ class _VideoSingkatDetailPageState extends State<VideoSingkatDetailPage> {
           width: 50,
         ),
         actions: [
-          IconButton(
-            onPressed: () {
-              Get.showSnackbar(
-                PublicoSnackbar(
-                  message: 'Ditambahkan ke bookmark',
-                ),
-              );
+          BlocListener<VideoSingkatCubit, VideoSingkatState>(
+            listener: (context, state) {
+              if (state is InsertVideoSingkatBookmarkSuccess) {
+                Get.showSnackbar(
+                  PublicoSnackbar(
+                    message: state.message,
+                  ),
+                );
+              } else if (state is VideoSingkatError) {
+                Get.showSnackbar(
+                  PublicoSnackbar(
+                    message: state.message,
+                  ),
+                );
+              }
             },
-            icon: const Icon(
-              Icons.bookmark_outline_rounded,
-              color: kRichBlack,
+            child: IconButton(
+              onPressed: () {
+                context
+                    .read<VideoSingkatCubit>()
+                    .insertVideoSingkatToBookmark(widget.videoSingkat);
+              },
+              icon: const Icon(
+                Icons.bookmark_outline_rounded,
+                color: kRichBlack,
+              ),
             ),
           ),
         ],

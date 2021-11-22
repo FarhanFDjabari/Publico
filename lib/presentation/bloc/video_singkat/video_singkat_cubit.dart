@@ -7,6 +7,8 @@ import 'package:publico/domain/usecases/admin/get_video_singkat_posts_by_uid.dar
 import 'package:publico/domain/usecases/admin/delete_video_post.dart';
 import 'package:publico/domain/usecases/admin/post_video_singkat.dart';
 import 'package:publico/domain/usecases/user/get_video_singkat_by_query.dart';
+import 'package:publico/domain/usecases/user/save_video_singkat.dart';
+import 'package:publico/presentation/bloc/video_materi/video_materi_cubit.dart';
 
 part 'video_singkat_state.dart';
 
@@ -16,12 +18,14 @@ class VideoSingkatCubit extends Cubit<VideoSingkatState> {
     required this.getVideoSingkatPostsByUid,
     required this.deleteVideoPost,
     required this.getVideoSingkatByQuery,
+    required this.saveVideoSingkat,
   }) : super(VideoSingkatInitial());
 
   final PostVideoSingkat postVideoSingkat;
   final GetVideoSingkatPostsByUid getVideoSingkatPostsByUid;
   final DeleteVideoPost deleteVideoPost;
   final GetVideoSingkatByQuery getVideoSingkatByQuery;
+  final SaveVideoSingkat saveVideoSingkat;
 
   void postVideoSingkatFirestore(
       String title,
@@ -80,6 +84,16 @@ class VideoSingkatCubit extends Cubit<VideoSingkatState> {
     result.fold(
       (l) => emit(VideoSingkatError(l.message)),
       (r) => emit(GetVideoSingkatByQuerySuccess(r)),
+    );
+  }
+
+  void insertVideoSingkatToBookmark(VideoSingkat video) async {
+    emit(VideoSingkatLoading());
+    final result = await saveVideoSingkat.execute(video);
+    result.fold(
+      (l) => emit(VideoSingkatError(l.message)),
+      (r) => emit(const InsertVideoSingkatBookmarkSuccess(
+          'Video singkat berhasil ditambahkan pada bookmark')),
     );
   }
 }

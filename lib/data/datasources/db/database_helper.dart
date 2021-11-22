@@ -65,8 +65,8 @@ class DatabaseHelper {
         id TEXT PRIMARY KEY,
         admin_id TEXT NOT NULL,
         title TEXT NOT NULL,
-        themeId TEXT NOT NULL,
-        themeName TEXT NOT NULL,
+        theme_id TEXT NOT NULL,
+        theme_name TEXT NOT NULL,
         type TEXT NOT NULL,
         sources TEXT NOT NULL
       );

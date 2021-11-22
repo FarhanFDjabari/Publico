@@ -2,9 +2,11 @@ import 'dart:ui';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:publico/domain/entities/infographic.dart';
+import 'package:publico/presentation/bloc/infographic/infographic_cubit.dart';
 import 'package:publico/presentation/widgets/infographic_tile.dart';
 import 'package:publico/presentation/widgets/publico_snackbar.dart';
 import 'package:publico/styles/colors.dart';
@@ -42,17 +44,32 @@ class _InfographicsDetailPageState extends State<InfographicsDetailPage> {
           width: 50,
         ),
         actions: [
-          IconButton(
-            onPressed: () {
-              Get.showSnackbar(
-                PublicoSnackbar(
-                  message: 'Ditambahkan ke bookmark',
-                ),
-              );
+          BlocListener<InfographicCubit, InfographicState>(
+            listener: (context, state) {
+              if (state is InsertInfographicBookmarkSuccess) {
+                Get.showSnackbar(
+                  PublicoSnackbar(
+                    message: state.message,
+                  ),
+                );
+              } else if (state is InfographicError) {
+                Get.showSnackbar(
+                  PublicoSnackbar(
+                    message: state.message,
+                  ),
+                );
+              }
             },
-            icon: const Icon(
-              Icons.bookmark_outline_rounded,
-              color: kRichBlack,
+            child: IconButton(
+              onPressed: () {
+                context
+                    .read<InfographicCubit>()
+                    .insertInfographicToBookmark(widget.infographic);
+              },
+              icon: const Icon(
+                Icons.bookmark_outline_rounded,
+                color: kRichBlack,
+              ),
             ),
           ),
         ],
