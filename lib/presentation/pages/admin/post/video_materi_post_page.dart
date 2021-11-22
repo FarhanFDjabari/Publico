@@ -239,15 +239,16 @@ class _VideoMateriPostPageState extends State<VideoMateriPostPage> {
                                     const Duration(milliseconds: 500));
                                 await FilePicker.platform
                                     .pickFiles(
-                                        type: FileType.video,
-                                        withData: false,
-                                        allowMultiple: false,
-                                        allowCompression: true,
-                                        onFileLoading: (status) {
-                                          setState(() {
-                                            isLoadLocal = true;
-                                          });
-                                        })
+                                  type: FileType.video,
+                                  withData: false,
+                                  allowMultiple: false,
+                                  allowCompression: true,
+                                  onFileLoading: (status) {
+                                    setState(() {
+                                      isLoadLocal = true;
+                                    });
+                                  },
+                                )
                                     .then(
                                   (value) async {
                                     setState(() {

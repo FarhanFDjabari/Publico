@@ -3,8 +3,10 @@ import 'dart:io';
 
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:publico/domain/entities/video_singkat.dart';
 import 'package:publico/presentation/widgets/primary_button.dart';
+import 'package:publico/presentation/widgets/publico_snackbar.dart';
 import 'package:publico/styles/colors.dart';
 import 'package:publico/styles/text_styles.dart';
 import 'package:video_player/video_player.dart';
@@ -28,6 +30,7 @@ class _VideoSingkatEditPageState extends State<VideoSingkatEditPage> {
   File? videoFile;
   File? thumbnailImage;
   bool isValidate = false;
+  bool isLoadLocal = false;
 
   @override
   void initState() {
@@ -57,7 +60,7 @@ class _VideoSingkatEditPageState extends State<VideoSingkatEditPage> {
     }
   }
 
-  void videoPlayerInit(File videoFile) async {
+  Future<void> videoPlayerInit(File videoFile) async {
     _videoController = VideoPlayerController.file(videoFile)
       ..addListener(() => setState(() {}))
       ..setLooping(false)
@@ -76,6 +79,15 @@ class _VideoSingkatEditPageState extends State<VideoSingkatEditPage> {
       ..addListener(() => setState(() {}))
       ..setLooping(false)
       ..initialize();
+  }
+
+  Future<bool> videoProcessing(FilePickerResult value) async {
+    if (value.files.first.size < 4000000) {
+      videoFile = File(value.files.first.path!);
+      await videoPlayerInit(videoFile!);
+      return true;
+    }
+    return false;
   }
 
   @override
@@ -256,47 +268,71 @@ class _VideoSingkatEditPageState extends State<VideoSingkatEditPage> {
                             ),
                           )
                     : InkWell(
-                        onTap: () async {
-                          await Future.delayed(
-                              const Duration(milliseconds: 500));
-                          await FilePicker.platform
-                              .pickFiles(
-                            type: FileType.video,
-                            withData: false,
-                            allowMultiple: false,
-                          )
-                              .then(
-                            (value) {
-                              if (value != null) {
-                                videoFile = File(value.files.first.path!);
-                                videoPlayerInit(videoFile!);
-                                formCheck();
-                                value.files.clear();
-                              }
-                            },
-                          );
-                        },
+                        onTap: isLoadLocal
+                            ? null
+                            : () async {
+                                await Future.delayed(
+                                    const Duration(milliseconds: 500));
+                                await FilePicker.platform
+                                    .pickFiles(
+                                        type: FileType.video,
+                                        withData: false,
+                                        allowMultiple: false,
+                                        onFileLoading: (status) {
+                                          setState(() {
+                                            isLoadLocal = true;
+                                          });
+                                        })
+                                    .then(
+                                  (value) async {
+                                    setState(() {
+                                      isLoadLocal = false;
+                                    });
+                                    if (value != null) {
+                                      if (await videoProcessing(value)) {
+                                        formCheck();
+                                        value.files.clear();
+                                      } else {
+                                        videoFile = null;
+                                        Get.showSnackbar(PublicoSnackbar(
+                                          message:
+                                              'Ukuran file tidak boleh lebih dari 3 MB',
+                                        ));
+                                        await FilePicker.platform
+                                            .clearTemporaryFiles();
+                                        value.files.clear();
+                                      }
+                                    }
+                                  },
+                                );
+                              },
                         borderRadius: BorderRadius.circular(10),
                         child: SizedBox(
                           height: MediaQuery.of(context).size.height * 0.45,
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              const Icon(
-                                Icons.camera_alt_outlined,
-                                color: kLightGrey,
-                                size: 35,
-                              ),
-                              Text(
-                                'Unggah Video\nMaks. 60 detik',
-                                style: kTextTheme.bodyText2!.copyWith(
-                                  color: kLightGrey,
-                                  fontSize: 14,
+                          child: isLoadLocal
+                              ? const Center(
+                                  child: CircularProgressIndicator(
+                                    color: kMikadoOrange,
+                                  ),
+                                )
+                              : Column(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    const Icon(
+                                      Icons.camera_alt_outlined,
+                                      color: kLightGrey,
+                                      size: 35,
+                                    ),
+                                    Text(
+                                      'Unggah Video\nMaks. 60 detik',
+                                      style: kTextTheme.bodyText2!.copyWith(
+                                        color: kLightGrey,
+                                        fontSize: 14,
+                                      ),
+                                    ),
+                                  ],
                                 ),
-                              ),
-                            ],
-                          ),
                         ),
                       ),
               ),
