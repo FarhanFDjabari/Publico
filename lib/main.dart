@@ -90,6 +90,7 @@ class MyApp extends StatelessWidget {
         theme: ThemeData.light().copyWith(
           colorScheme: kColorScheme,
           textTheme: kTextTheme,
+          backgroundColor: kRichWhite,
         ),
         home: const SplashScreen(),
         onGenerateRoute: (settings) {
