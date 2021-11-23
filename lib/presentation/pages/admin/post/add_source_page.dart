@@ -24,7 +24,6 @@ class _AddSourcePageState extends State<AddSourcePage> {
   bool isValidate = false;
 
   void formCheck() {
-    print(illustrations);
     if (_sumberController.text.isNotEmpty &&
         _deskripsiController.text.isNotEmpty &&
         illustrations.isNotEmpty) {
