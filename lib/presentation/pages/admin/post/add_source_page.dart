@@ -63,8 +63,6 @@ class _AddSourcePageState extends State<AddSourcePage> {
   @override
   void dispose() {
     super.dispose();
-    FilePicker.platform.clearTemporaryFiles();
-    illustrations.clear();
     _sumberController.dispose();
     _deskripsiController.dispose();
   }
