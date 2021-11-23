@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -48,6 +49,9 @@ class _InfographicPostPageState extends State<InfographicPostPage> {
 
   @override
   void dispose() {
+    Future.delayed(Duration.zero, () async {
+      await FilePicker.platform.clearTemporaryFiles();
+    });
     super.dispose();
     sources.clear();
     _titleController.dispose();
@@ -208,11 +212,13 @@ class _InfographicPostPageState extends State<InfographicPostPage> {
               ),
               OutlinedButton(
                 onPressed: () async {
-                  final Map<String, dynamic> result = await Navigator.pushNamed(
+                  Navigator.pushNamed(
                     context,
                     AddSourcePage.routeName,
-                  ) as Map<String, dynamic>;
-                  setState(() => sources.add(result));
+                  ).then((value) {
+                    setState(() => sources.add(value));
+                    print(sources);
+                  });
                 },
                 style: OutlinedButton.styleFrom(
                   shape: RoundedRectangleBorder(

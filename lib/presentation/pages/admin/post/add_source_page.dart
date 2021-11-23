@@ -24,6 +24,7 @@ class _AddSourcePageState extends State<AddSourcePage> {
   bool isValidate = false;
 
   void formCheck() {
+    print(illustrations);
     if (_sumberController.text.isNotEmpty &&
         _deskripsiController.text.isNotEmpty &&
         illustrations.isNotEmpty) {
@@ -63,8 +64,6 @@ class _AddSourcePageState extends State<AddSourcePage> {
   @override
   void dispose() {
     super.dispose();
-    FilePicker.platform.clearTemporaryFiles();
-    illustrations.clear();
     _sumberController.dispose();
     _deskripsiController.dispose();
   }
