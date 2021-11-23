@@ -399,18 +399,34 @@ class _VideoSingkatPostPageState extends State<VideoSingkatPostPage> {
                     onPressed: !isValidate
                         ? null
                         : () {
-                            builderContext
-                                .read<VideoSingkatCubit>()
-                                .postVideoSingkatFirestore(
-                                  _titleController.text,
-                                  _descriptionController.text,
-                                  _tautanController.text,
-                                  'video_singkat',
-                                  'video_singkat_thumbnail',
-                                  videoFile!,
-                                  thumbnailImage!,
-                                  duration!,
-                                );
+                            if (!_tautanController.text
+                                .contains('https://www.')) {
+                              builderContext
+                                  .read<VideoSingkatCubit>()
+                                  .postVideoSingkatFirestore(
+                                    _titleController.text,
+                                    _descriptionController.text,
+                                    'https://www.${_tautanController.text}',
+                                    'video_singkat',
+                                    'video_singkat_thumbnail',
+                                    videoFile!,
+                                    thumbnailImage!,
+                                    duration!,
+                                  );
+                            } else {
+                              builderContext
+                                  .read<VideoSingkatCubit>()
+                                  .postVideoSingkatFirestore(
+                                    _titleController.text,
+                                    _descriptionController.text,
+                                    _tautanController.text,
+                                    'video_singkat',
+                                    'video_singkat_thumbnail',
+                                    videoFile!,
+                                    thumbnailImage!,
+                                    duration!,
+                                  );
+                            }
                           },
                   );
                 },
