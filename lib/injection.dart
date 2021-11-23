@@ -99,13 +99,23 @@ void init() {
       checkInfographicBookmark: locator(),
     ),
   );
-  locator.registerFactory(() => ExploreCubit(getExplore: locator()));
+  locator.registerFactory(
+    () => ExploreCubit(
+      getExplore: locator(),
+      checkInfographicBookmark: locator(),
+      checkVideoMateriBookmark: locator(),
+      checkVideoSingkatBookmark: locator(),
+    ),
+  );
   locator.registerFactory(
     () => BookmarkCubit(
       getVideoMateriBookmark: locator(),
       getInfographicBookmark: locator(),
       getVideoSingkatBookmark: locator(),
       getAllBookmark: locator(),
+      checkInfographicBookmark: locator(),
+      checkVideoMateriBookmark: locator(),
+      checkVideoSingkatBookmark: locator(),
     ),
   );
   locator.registerFactory(

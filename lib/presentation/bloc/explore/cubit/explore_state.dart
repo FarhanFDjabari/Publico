@@ -13,7 +13,8 @@ class ExploreLoading extends ExploreState {}
 
 class ExploreSuccess extends ExploreState {
   final List<dynamic> exploreList;
-  const ExploreSuccess(this.exploreList);
+  final List<bool> exploreLabel;
+  const ExploreSuccess(this.exploreList, this.exploreLabel);
 
   @override
   List<Object> get props => [exploreList];
