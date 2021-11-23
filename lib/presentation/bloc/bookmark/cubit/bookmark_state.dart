@@ -21,15 +21,19 @@ class BookmarkError extends BookmarkState {
 
 class GetVideoMateriBookmarkSuccess extends BookmarkState {
   final List<VideoMateri> videoMateriList;
-  const GetVideoMateriBookmarkSuccess(this.videoMateriList);
+  final List<bool> videoMateriLabels;
+  const GetVideoMateriBookmarkSuccess(
+      this.videoMateriList, this.videoMateriLabels);
 
   @override
-  List<Object> get props => [videoMateriList];
+  List<Object> get props => [videoMateriList, videoMateriLabels];
 }
 
 class GetInfographicBookmarkSuccess extends BookmarkState {
   final List<Infographic> infographicList;
-  const GetInfographicBookmarkSuccess(this.infographicList);
+  final List<bool> infographicLabels;
+  const GetInfographicBookmarkSuccess(
+      this.infographicList, this.infographicLabels);
 
   @override
   List<Object> get props => [infographicList];
@@ -37,16 +41,19 @@ class GetInfographicBookmarkSuccess extends BookmarkState {
 
 class GetVideoSingkatBookmarkSuccess extends BookmarkState {
   final List<VideoSingkat> videoSingkatList;
-  const GetVideoSingkatBookmarkSuccess(this.videoSingkatList);
+  final List<bool> videoSingkatLabels;
+  const GetVideoSingkatBookmarkSuccess(
+      this.videoSingkatList, this.videoSingkatLabels);
 
   @override
-  List<Object> get props => [videoSingkatList];
+  List<Object> get props => [videoSingkatList, videoSingkatLabels];
 }
 
 class GetAllBookmarkSuccess extends BookmarkState {
   final List<dynamic> bookmarks;
-  const GetAllBookmarkSuccess(this.bookmarks);
+  final List<bool> bookmarkLabels;
+  const GetAllBookmarkSuccess(this.bookmarks, this.bookmarkLabels);
 
   @override
-  List<Object> get props => [bookmarks];
+  List<Object> get props => [bookmarks, bookmarkLabels];
 }
