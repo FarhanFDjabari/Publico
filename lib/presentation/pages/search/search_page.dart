@@ -152,7 +152,15 @@ class _SearchPageState extends State<SearchPage> {
               child: BlocBuilder<SearchCubit, SearchState>(
                 builder: (context, state) {
                   if (state is GetInfographicSearchSuccess) {
-                    if (state.infographicList.isNotEmpty) {
+                    if (state.infographicList == []) {
+                      return Center(
+                        child: Text(
+                          'Hasil pencarian tidak ditemukan',
+                          style:
+                              kTextTheme.bodyText1!.copyWith(color: kRichBlack),
+                        ),
+                      );
+                    } else {
                       return StaggeredGridView.countBuilder(
                         crossAxisCount: 4,
                         itemCount: state.infographicList.length,
@@ -177,15 +185,16 @@ class _SearchPageState extends State<SearchPage> {
                         crossAxisSpacing: 8.0,
                       );
                     }
-                    return Center(
-                      child: Text(
-                        'Hasil pencarian tidak ditemukan',
-                        style:
-                            kTextTheme.bodyText1!.copyWith(color: kRichBlack),
-                      ),
-                    );
                   } else if (state is GetVideoMateriSearchSuccess) {
-                    if (state.videoMateriList.isNotEmpty) {
+                    if (state.videoMateriList == []) {
+                      return Center(
+                        child: Text(
+                          'Hasil pencarian tidak ditemukan',
+                          style:
+                              kTextTheme.bodyText1!.copyWith(color: kRichBlack),
+                        ),
+                      );
+                    } else {
                       return StaggeredGridView.countBuilder(
                         crossAxisCount: 4,
                         itemCount: state.videoMateriList.length,
@@ -211,15 +220,17 @@ class _SearchPageState extends State<SearchPage> {
                         crossAxisSpacing: 8.0,
                       );
                     }
-                    return Center(
-                      child: Text(
-                        'Hasil pencarian tidak ditemukan',
-                        style:
-                            kTextTheme.bodyText1!.copyWith(color: kRichBlack),
-                      ),
-                    );
                   } else if (state is GetVideoSingkatSearchSuccess) {
-                    if (state.videoSingkatList.isNotEmpty) {
+                    if (state.videoSingkatList == []) {
+                      return Center(
+                        child: Text(
+                          'Hasil pencarian tidak ditemukan',
+                          style:
+                              kTextTheme.bodyText1!.copyWith(color: kRichBlack),
+                        ),
+                      );
+                    } else {
+                      print('false');
                       return StaggeredGridView.countBuilder(
                         crossAxisCount: 4,
                         itemCount: state.videoSingkatList.length,
@@ -245,13 +256,6 @@ class _SearchPageState extends State<SearchPage> {
                         crossAxisSpacing: 8.0,
                       );
                     }
-                    return Center(
-                      child: Text(
-                        'Hasil pencarian tidak ditemukan',
-                        style:
-                            kTextTheme.bodyText1!.copyWith(color: kRichBlack),
-                      ),
-                    );
                   } else if (state is SearchError) {
                     return Center(
                       child: Text(

@@ -53,7 +53,9 @@ class BookmarkContent extends StatelessWidget {
                         context,
                         InfographicsDetailPage.routeName,
                         arguments: state.bookmarks[index],
-                      );
+                      ).then((value) {
+                        context.read<BookmarkCubit>().getAllFromBookmark();
+                      });
                     },
                     borderRadius: BorderRadius.circular(10),
                     child: PublicoStaggeredTile(
@@ -125,7 +127,9 @@ class BookmarkContent extends StatelessWidget {
                     context,
                     VideoMateriDetailPage.routeName,
                     arguments: state.videoMateriList[index],
-                  );
+                  ).then((value) {
+                    context.read<BookmarkCubit>().getVideoMateriFromBookmark();
+                  });
                 },
                 borderRadius: BorderRadius.circular(10),
                 child: PublicoStaggeredTile(
@@ -159,7 +163,9 @@ class BookmarkContent extends StatelessWidget {
                     context,
                     VideoSingkatDetailPage.routeName,
                     arguments: state.videoSingkatList[index],
-                  );
+                  ).then((value) {
+                    context.read<BookmarkCubit>().getVideoSingkatFromBookmark();
+                  });
                 },
                 borderRadius: BorderRadius.circular(10),
                 child: PublicoStaggeredTile(
@@ -193,7 +199,9 @@ class BookmarkContent extends StatelessWidget {
                     context,
                     InfographicsDetailPage.routeName,
                     arguments: state.infographicList[index],
-                  );
+                  ).then((value) {
+                    context.read<BookmarkCubit>().getInfographicFromBookmark();
+                  });
                 },
                 borderRadius: BorderRadius.circular(10),
                 child: PublicoStaggeredTile(
