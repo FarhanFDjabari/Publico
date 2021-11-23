@@ -109,7 +109,7 @@ class BookmarkContent extends StatelessWidget {
           } else {
             return Center(
               child: Text(
-                'Belum ada bookmark',
+                'Belum ada bookmark yang tersedia',
                 style: kTextTheme.bodyText2!.copyWith(color: kRichBlack),
               ),
             );
@@ -143,7 +143,7 @@ class BookmarkContent extends StatelessWidget {
           } else {
             return Center(
               child: Text(
-                'Belum ada bookmark video materi',
+                'Belum ada bookmark video materi yang tersedia',
                 style: kTextTheme.bodyText2!.copyWith(color: kRichBlack),
               ),
             );
@@ -177,7 +177,7 @@ class BookmarkContent extends StatelessWidget {
           } else {
             return Center(
               child: Text(
-                'Belum ada bookmark video singkat',
+                'Belum ada bookmark video singkat yang tersedia',
                 style: kTextTheme.bodyText2!.copyWith(color: kRichBlack),
               ),
             );
@@ -212,7 +212,7 @@ class BookmarkContent extends StatelessWidget {
           } else {
             return Center(
               child: Text(
-                'Belum ada bookmark infografis',
+                'Belum ada bookmark infografis yang tersedia',
                 style: kTextTheme.bodyText2!.copyWith(color: kRichBlack),
               ),
             );

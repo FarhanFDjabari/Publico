@@ -88,3 +88,13 @@ class RemoveVideoMateriBookmarkSuccess extends VideoMateriState {
   @override
   List<Object?> get props => [message];
 }
+
+class VideoMateriBookmarked extends VideoMateriState {
+  @override
+  List<Object?> get props => [];
+}
+
+class VideoMateriNotBookmarked extends VideoMateriState {
+  @override
+  List<Object?> get props => [];
+}

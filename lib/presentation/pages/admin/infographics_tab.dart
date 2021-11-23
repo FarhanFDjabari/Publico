@@ -9,7 +9,6 @@ import 'package:publico/presentation/bloc/infographic/infographic_cubit.dart';
 import 'package:publico/presentation/pages/admin/detail/admin_infographics_detail.dart';
 import 'package:publico/presentation/pages/admin/post/infographic_post_page.dart';
 import 'package:publico/presentation/pages/admin/post/post_theme_page.dart';
-import 'package:publico/presentation/pages/detail/infographics_detail_page.dart';
 import 'package:publico/presentation/widgets/publico_staggered_tile_admin.dart';
 import 'package:publico/styles/colors.dart';
 import 'package:publico/styles/text_styles.dart';
@@ -164,8 +163,8 @@ class _InfographicsTabState extends State<InfographicsTab> {
                               itemCount: state.themeList.length,
                               itemBuilder: (_, index) => InkWell(
                                 onTap: () {
-                                  setState(() { 
-                                    themeClicked = true; 
+                                  setState(() {
+                                    themeClicked = true;
                                     selectedTheme = state.themeList[index].id;
                                   });
                                 },
