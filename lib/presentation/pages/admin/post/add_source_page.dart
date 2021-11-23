@@ -216,6 +216,7 @@ class _AddSourcePageState extends State<AddSourcePage> {
                           await compressFile(File(value.files.first.path!));
                       setState(() {
                         illustrations.add(_imageFile);
+                        formCheck();
                       });
                     }
                   });
