@@ -100,8 +100,8 @@ class VideoSingkatCubit extends Cubit<VideoSingkatState> {
     final result = await saveVideoSingkat.execute(video);
     result.fold(
       (l) => emit(VideoSingkatError(l.message)),
-      (r) => emit(const InsertVideoSingkatBookmarkSuccess(
-          'Video singkat berhasil ditambahkan pada bookmark')),
+      (r) => emit(
+          const InsertVideoSingkatBookmarkSuccess('Ditambahkan ke bookmark')),
     );
   }
 
@@ -110,8 +110,8 @@ class VideoSingkatCubit extends Cubit<VideoSingkatState> {
     final result = await removeSingkatFromBookmark.execute(video);
     result.fold(
       (l) => emit(VideoSingkatError(l.message)),
-      (r) => emit(const RemoveVideoSingkatBookmarkSuccess(
-          'Video singkat berhasil dihapus dari bookmark')),
+      (r) => emit(
+          const RemoveVideoSingkatBookmarkSuccess('Dihapus dari bookmark')),
     );
   }
 

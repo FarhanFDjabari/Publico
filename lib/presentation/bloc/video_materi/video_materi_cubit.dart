@@ -11,7 +11,6 @@ import 'package:publico/domain/usecases/user/get_materi_bookmark_status.dart';
 import 'package:publico/domain/usecases/user/get_video_materi_by_query.dart';
 import 'package:publico/domain/usecases/user/remove_materi_from_bookmark.dart';
 import 'package:publico/domain/usecases/user/save_video_materi.dart';
-import 'package:publico/presentation/bloc/video_singkat/video_singkat_cubit.dart';
 
 part 'video_materi_state.dart';
 
@@ -99,8 +98,8 @@ class VideoMateriCubit extends Cubit<VideoMateriState> {
     final result = await saveVideoMateri.execute(videoMateri);
     result.fold(
       (l) => emit(VideoMateriError(l.message)),
-      (r) => emit(const InsertVideoMateriBookmarkSuccess(
-          'Video materi berhasil ditambahkan pada bookmark')),
+      (r) => emit(
+          const InsertVideoMateriBookmarkSuccess('Ditambahkan ke bookmark')),
     );
   }
 
@@ -109,8 +108,8 @@ class VideoMateriCubit extends Cubit<VideoMateriState> {
     final result = await removeMateriFromBookmark.execute(videoMateri);
     result.fold(
       (l) => emit(VideoMateriError(l.message)),
-      (r) => emit(const RemoveVideoMateriBookmarkSuccess(
-          'Video materi berhasil dihapus dari bookmark')),
+      (r) =>
+          emit(const RemoveVideoMateriBookmarkSuccess('Dihapus dari bookmark')),
     );
   }
 

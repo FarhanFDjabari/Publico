@@ -110,8 +110,8 @@ class InfographicCubit extends Cubit<InfographicState> {
     final result = await saveInfographic.execute(infographic);
     result.fold(
       (l) => emit(InfographicError(l.message)),
-      (r) => emit(const InsertInfographicBookmarkSuccess(
-          'Infografis berhasil ditambahkan pada bookmark')),
+      (r) => emit(
+          const InsertInfographicBookmarkSuccess('Ditambahkan ke bookmark')),
     );
   }
 
@@ -120,8 +120,8 @@ class InfographicCubit extends Cubit<InfographicState> {
     final result = await removeInfographicFromBookmark.execute(infographic);
     result.fold(
       (l) => emit(InfographicError(l.message)),
-      (r) => emit(const RemoveInfographicBookmarkSuccess(
-          'Infografis berhasil dihapus dari bookmark')),
+      (r) =>
+          emit(const RemoveInfographicBookmarkSuccess('Dihapus dari bookmark')),
     );
   }
 

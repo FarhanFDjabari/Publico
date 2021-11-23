@@ -52,11 +52,11 @@ class _HomePageUserState extends State<HomePageUser> {
       ),
       body: NotificationListener<UserScrollNotification>(
         onNotification: (notification) {
-          if (notification.direction == ScrollDirection.forward) {
+          if (notification.direction == ScrollDirection.idle) {
             if (!_visible) {
               setState(() => _visible = true);
             }
-          } else if (notification.direction == ScrollDirection.reverse) {
+          } else {
             if (_visible) {
               setState(() => _visible = false);
             }
