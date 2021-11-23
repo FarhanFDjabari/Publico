@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:publico/domain/entities/infographic.dart';
 import 'package:publico/domain/entities/video_materi.dart';
+import 'package:publico/domain/entities/video_singkat.dart';
 import 'package:publico/presentation/bloc/bookmark/cubit/bookmark_cubit.dart';
 import 'package:publico/presentation/bloc/video_materi/video_materi_cubit.dart';
 import 'package:publico/presentation/pages/detail/infographics_detail_page.dart';
@@ -65,6 +66,7 @@ class BookmarkContent extends StatelessWidget {
                       imageUrl: state
                           .bookmarks[index].sources.first['illustrations'][0],
                       category: 'Infografis',
+                      isBookmarked: state.bookmarkLabels[index],
                     ),
                   );
                 } else if (state.bookmarks[index] is VideoMateri) {
@@ -83,6 +85,27 @@ class BookmarkContent extends StatelessWidget {
                       title: state.bookmarks[index].title,
                       imageUrl: state.bookmarks[index].thumbnailUrl,
                       category: state.bookmarks[index].type,
+                      isBookmarked: state.bookmarkLabels[index],
+                    ),
+                  );
+                } else if (state.bookmarks[index] is VideoSingkat) {
+                  return InkWell(
+                    onTap: () {
+                      Navigator.pushNamed(
+                        context,
+                        VideoSingkatDetailPage.routeName,
+                        arguments: state.bookmarks[index],
+                      ).then((_) =>
+                          context.read<BookmarkCubit>().getAllFromBookmark());
+                    },
+                    borderRadius: BorderRadius.circular(10),
+                    child: PublicoStaggeredTile(
+                      tileIndex: index,
+                      duration: state.bookmarks[index].duration,
+                      title: state.bookmarks[index].title,
+                      imageUrl: state.bookmarks[index].thumbnailUrl,
+                      category: state.bookmarks[index].type,
+                      isBookmarked: state.bookmarkLabels[index],
                     ),
                   );
                 }
@@ -103,26 +126,6 @@ class BookmarkContent extends StatelessWidget {
                     imageUrl: state
                         .bookmarks[index].sources.first['illustrations'][0],
                     category: 'Infografis',
-                    isBookmarked: state.bookmarkLabels[index],
-                  ),
-                );
-              } else if (state.bookmarks[index] is VideoMateri) {
-                return InkWell(
-                  onTap: () {
-                    Navigator.pushNamed(
-                      context,
-                      VideoMateriDetailPage.routeName,
-                      arguments: state.bookmarks[index],
-                    ).then((_) =>
-                        context.read<BookmarkCubit>().getAllFromBookmark());
-                  },
-                  borderRadius: BorderRadius.circular(10),
-                  child: PublicoStaggeredTile(
-                    tileIndex: index,
-                    duration: state.bookmarks[index].duration,
-                    title: state.bookmarks[index].title,
-                    imageUrl: state.bookmarks[index].thumbnailUrl,
-                    category: state.bookmarks[index].type,
                     isBookmarked: state.bookmarkLabels[index],
                   ),
                 );
@@ -157,19 +160,18 @@ class BookmarkContent extends StatelessWidget {
                 borderRadius: BorderRadius.circular(10),
                 child: PublicoStaggeredTile(
                   tileIndex: index,
-                  duration: state.bookmarks[index].duration,
-                  title: state.bookmarks[index].title,
-                  imageUrl: state.bookmarks[index].thumbnailUrl,
-                  category: state.bookmarks[index].type,
-                  isBookmarked: state.bookmarkLabels[index],
+                  duration: state.videoMateriList[index].duration,
+                  title: state.videoMateriList[index].title,
+                  imageUrl: state.videoMateriList[index].thumbnailUrl,
+                  category: state.videoMateriList[index].type,
+                  isBookmarked: state.videoMateriLabels[index],
                 ),
-              );
-            
-            staggeredTileBuilder: (int index) => const StaggeredTile.fit(2),
-            mainAxisSpacing: 15.0,
-            crossAxisSpacing: 8.0,
-          );
-            } else {
+              ),
+              staggeredTileBuilder: (int index) => const StaggeredTile.fit(2),
+              mainAxisSpacing: 15.0,
+              crossAxisSpacing: 8.0,
+            );
+          } else {
             return Center(
               child: Text(
                 'Belum ada bookmark video materi yang tersedia',
@@ -178,26 +180,29 @@ class BookmarkContent extends StatelessWidget {
             );
           }
         } else if (state is GetVideoMateriBookmarkSuccess) {
-          return StaggeredGridView.countBuilder(
-            crossAxisCount: 4,
-            itemCount: state.videoMateriList.length,
-            itemBuilder: (BuildContext itemContext, int index) => InkWell(
-              onTap: () {
-                Navigator.pushNamed(
-                  context,
-                  VideoMateriDetailPage.routeName,
-                  arguments: state.videoMateriList[index],
-                ).then((_) =>
-                    context.read<BookmarkCubit>().getVideoMateriFromBookmark());
-              },
-              borderRadius: BorderRadius.circular(10),
-              child: PublicoStaggeredTile(
-                tileIndex: index,
-                duration: state.videoMateriList[index].duration,
-                title: state.videoMateriList[index].title,
-                imageUrl: state.videoMateriList[index].thumbnailUrl,
-                category: state.videoMateriList[index].type,
-                isBookmarked: state.videoMateriLabels[index],
+          if (state.videoMateriList.isNotEmpty) {
+            return StaggeredGridView.countBuilder(
+              crossAxisCount: 4,
+              itemCount: state.videoMateriList.length,
+              itemBuilder: (BuildContext itemContext, int index) => InkWell(
+                onTap: () {
+                  Navigator.pushNamed(
+                    context,
+                    VideoMateriDetailPage.routeName,
+                    arguments: state.videoMateriList[index],
+                  ).then((_) => context
+                      .read<BookmarkCubit>()
+                      .getVideoMateriFromBookmark());
+                },
+                borderRadius: BorderRadius.circular(10),
+                child: PublicoStaggeredTile(
+                  tileIndex: index,
+                  duration: state.videoMateriList[index].duration,
+                  title: state.videoMateriList[index].title,
+                  imageUrl: state.videoMateriList[index].thumbnailUrl,
+                  category: state.videoMateriList[index].type,
+                  isBookmarked: state.videoMateriLabels[index],
+                ),
               ),
               staggeredTileBuilder: (int index) => const StaggeredTile.fit(2),
               mainAxisSpacing: 15.0,
@@ -212,7 +217,6 @@ class BookmarkContent extends StatelessWidget {
             );
           }
         } else if (state is GetVideoSingkatBookmarkSuccess) {
-
           if (state.videoSingkatList.isNotEmpty) {
             return StaggeredGridView.countBuilder(
               crossAxisCount: 4,
@@ -250,7 +254,7 @@ class BookmarkContent extends StatelessWidget {
             );
           }
         } else if (state is GetInfographicBookmarkSuccess) {
-        if (state.infographicList.isNotEmpty) {
+          if (state.infographicList.isNotEmpty) {
             return StaggeredGridView.countBuilder(
               crossAxisCount: 4,
               itemCount: state.infographicList.length,
