@@ -20,7 +20,39 @@ class _SearchPageState extends State<SearchPage> {
   int _selectedIndex = 0;
 
   @override
+  void dispose() {
+    super.dispose();
+    _searchQueryController.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    switch (_selectedIndex) {
+      case 0:
+        {
+          context.read<SearchCubit>().getInfographicFromSearch(
+              _searchQueryController.text.toLowerCase());
+        }
+        break;
+      case 1:
+        {
+          context.read<SearchCubit>().getInfographicFromSearch(
+              _searchQueryController.text.toLowerCase());
+        }
+        break;
+      case 2:
+        {
+          context.read<SearchCubit>().getVideoMateriFromSearch(
+              _searchQueryController.text.toLowerCase());
+        }
+        break;
+      case 3:
+        {
+          context.read<SearchCubit>().getVideoSingkatFromSearch(
+              _searchQueryController.text.toLowerCase());
+        }
+        break;
+    }
     return SafeArea(
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 10.0),

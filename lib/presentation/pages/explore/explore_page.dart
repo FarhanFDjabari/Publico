@@ -51,6 +51,7 @@ class _ExplorePageState extends State<ExplorePage> {
                               .first['illustrations'][0],
                           sourcesCount: state.exploreList[index].sources.length,
                           category: 'Infografis',
+                          isBookmarked: state.exploreLabel[index],
                         ),
                       );
                     } else if (state.exploreList[index] is VideoMateri) {
@@ -69,6 +70,7 @@ class _ExplorePageState extends State<ExplorePage> {
                           title: state.exploreList[index].title,
                           imageUrl: state.exploreList[index].thumbnailUrl,
                           category: state.exploreList[index].type,
+                          isBookmarked: state.exploreLabel[index],
                         ),
                       );
                     }
@@ -87,6 +89,7 @@ class _ExplorePageState extends State<ExplorePage> {
                         title: state.exploreList[index].title,
                         imageUrl: state.exploreList[index].thumbnailUrl,
                         category: state.exploreList[index].type,
+                        isBookmarked: state.exploreLabel[index],
                       ),
                     );
                   },

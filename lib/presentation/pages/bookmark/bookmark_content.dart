@@ -63,6 +63,7 @@ class BookmarkContent extends StatelessWidget {
                     imageUrl: state
                         .bookmarks[index].sources.first['illustrations'][0],
                     category: 'Infografis',
+                    isBookmarked: state.bookmarkLabels[index],
                   ),
                 );
               } else if (state.bookmarks[index] is VideoMateri) {
@@ -82,6 +83,7 @@ class BookmarkContent extends StatelessWidget {
                     title: state.bookmarks[index].title,
                     imageUrl: state.bookmarks[index].thumbnailUrl,
                     category: state.bookmarks[index].type,
+                    isBookmarked: state.bookmarkLabels[index],
                   ),
                 );
               }
@@ -101,6 +103,7 @@ class BookmarkContent extends StatelessWidget {
                   title: state.bookmarks[index].title,
                   imageUrl: state.bookmarks[index].thumbnailUrl,
                   category: state.bookmarks[index].type,
+                  isBookmarked: state.bookmarkLabels[index],
                 ),
               );
             },
@@ -128,6 +131,7 @@ class BookmarkContent extends StatelessWidget {
                 title: state.videoMateriList[index].title,
                 imageUrl: state.videoMateriList[index].thumbnailUrl,
                 category: state.videoMateriList[index].type,
+                isBookmarked: state.videoMateriLabels[index],
               ),
             ),
             staggeredTileBuilder: (int index) => const StaggeredTile.fit(2),
@@ -155,6 +159,7 @@ class BookmarkContent extends StatelessWidget {
                 title: state.videoSingkatList[index].title,
                 imageUrl: state.videoSingkatList[index].thumbnailUrl,
                 category: state.videoSingkatList[index].type,
+                isBookmarked: state.videoSingkatLabels[index],
               ),
             ),
             staggeredTileBuilder: (int index) => const StaggeredTile.fit(2),
@@ -182,6 +187,7 @@ class BookmarkContent extends StatelessWidget {
                 imageUrl: state
                     .infographicList[index].sources.first['illustrations'][0],
                 category: 'Infografis',
+                isBookmarked: state.infographicLabels[index],
               ),
             ),
             staggeredTileBuilder: (int index) => const StaggeredTile.fit(2),
