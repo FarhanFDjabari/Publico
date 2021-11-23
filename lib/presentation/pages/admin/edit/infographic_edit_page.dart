@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:publico/domain/entities/infographic.dart';
 import 'package:publico/presentation/pages/admin/edit/edit_sources_page.dart';
 import 'package:publico/presentation/widgets/primary_button.dart';
 import 'package:publico/styles/colors.dart';
@@ -8,8 +9,9 @@ import 'package:publico/styles/text_styles.dart';
 
 class InfographicEditPage extends StatefulWidget {
   static const routeName = '/admin-infographic-edit';
-  final String postId;
-  const InfographicEditPage({Key? key, required this.postId}) : super(key: key);
+  final Infographic infographic;
+  const InfographicEditPage({Key? key, required this.infographic})
+      : super(key: key);
 
   @override
   _InfographicEditPageState createState() => _InfographicEditPageState();
@@ -20,6 +22,14 @@ class _InfographicEditPageState extends State<InfographicEditPage> {
   List sources = [];
   String? selectedTheme;
   bool isValidate = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _titleController.text = widget.infographic.title;
+    sources = widget.infographic.sources;
+    selectedTheme = widget.infographic.themeName;
+  }
 
   void formCheck() {
     if (_titleController.text.isNotEmpty &&

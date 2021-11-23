@@ -260,12 +260,21 @@ class _InfographicPostPageState extends State<InfographicPostPage> {
                   if (state is PostInfographicLoading) {
                     return LoadingButton(
                       borderRadius: 10,
+                      primaryColor: kLightGrey,
                       child: const SizedBox(
-                          height: 45,
-                          child: Center(
-                              child: CircularProgressIndicator(
-                            color: kRichWhite,
-                          ))),
+                        width: double.infinity,
+                        height: 45,
+                        child: Center(
+                          child: SizedBox(
+                            width: 20,
+                            height: 20,
+                            child: CircularProgressIndicator(
+                              color: kRichWhite,
+                              strokeWidth: 3,
+                            ),
+                          ),
+                        ),
+                      ),
                     );
                   }
                   return PrimaryButton(

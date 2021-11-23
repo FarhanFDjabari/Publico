@@ -181,9 +181,9 @@ class MyApp extends StatelessWidget {
                 settings: settings,
               );
             case InfographicEditPage.routeName:
-              final id = settings.arguments as String;
+              final id = settings.arguments as Infographic;
               return CupertinoPageRoute(
-                builder: (_) => InfographicEditPage(postId: id),
+                builder: (_) => InfographicEditPage(infographic: id),
                 settings: settings,
               );
             case VideoMateriEditPage.routeName:

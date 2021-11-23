@@ -2,11 +2,11 @@ import 'dart:ui';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:publico/domain/entities/infographic.dart';
 import 'package:publico/presentation/bloc/infographic/infographic_cubit.dart';
 import 'package:publico/presentation/pages/admin/edit/infographic_edit_page.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:publico/presentation/widgets/infographic_tile.dart';
 import 'package:publico/presentation/widgets/publico_info_edit_bottom_sheet.dart';
 import 'package:publico/styles/colors.dart';
@@ -67,7 +67,7 @@ class _AdminInfographicsDetailPageState
                     Navigator.pushNamed(
                       context,
                       InfographicEditPage.routeName,
-                      arguments: 'secret',
+                      arguments: widget.infographic,
                     );
                   },
                 ),
