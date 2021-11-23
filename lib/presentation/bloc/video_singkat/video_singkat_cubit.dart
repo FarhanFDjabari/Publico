@@ -6,6 +6,7 @@ import 'package:publico/domain/entities/video_singkat.dart';
 import 'package:publico/domain/usecases/admin/delete_video_post.dart';
 import 'package:publico/domain/usecases/admin/get_video_singkat_posts_by_uid.dart';
 import 'package:publico/domain/usecases/admin/post_video_singkat.dart';
+import 'package:publico/domain/usecases/user/check_video_singkat_bookmark.dart';
 import 'package:publico/domain/usecases/user/get_singkat_bookmark_status.dart';
 import 'package:publico/domain/usecases/user/get_video_singkat_by_query.dart';
 import 'package:publico/domain/usecases/user/remove_singkat_from_bookmark.dart';
@@ -22,6 +23,7 @@ class VideoSingkatCubit extends Cubit<VideoSingkatState> {
     required this.saveVideoSingkat,
     required this.removeSingkatFromBookmark,
     required this.getSingkatBookmarkStatus,
+    required this.checkVideoSingkatBookmark,
   }) : super(VideoSingkatInitial());
 
   final PostVideoSingkat postVideoSingkat;
@@ -31,6 +33,7 @@ class VideoSingkatCubit extends Cubit<VideoSingkatState> {
   final SaveVideoSingkat saveVideoSingkat;
   final RemoveSingkatFromBookmark removeSingkatFromBookmark;
   final GetSingkatBookmarkStatus getSingkatBookmarkStatus;
+  final CheckVideoSingkatBookmark checkVideoSingkatBookmark;
 
   void postVideoSingkatFirestore(
       String title,
@@ -110,5 +113,14 @@ class VideoSingkatCubit extends Cubit<VideoSingkatState> {
       (r) => emit(const RemoveVideoSingkatBookmarkSuccess(
           'Video singkat berhasil dihapus dari bookmark')),
     );
+  }
+
+  void checkIsBookmarked(String id) async {
+    final isBookmarked = await checkVideoSingkatBookmark.execute(id);
+    if (isBookmarked) {
+      emit(VideoSingkatBookmarked());
+    } else {
+      emit(VideoSingkatNotBookmarked());
+    }
   }
 }

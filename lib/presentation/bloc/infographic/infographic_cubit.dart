@@ -9,6 +9,7 @@ import 'package:publico/domain/usecases/admin/get_infographic_by_theme_id.dart';
 import 'package:publico/domain/usecases/admin/get_infographic_themes_by_uid.dart';
 import 'package:publico/domain/usecases/admin/post_infographic.dart';
 import 'package:publico/domain/usecases/admin/post_infographic_theme.dart';
+import 'package:publico/domain/usecases/user/check_infographic_bookmark.dart';
 import 'package:publico/domain/usecases/user/get_infographic_bookmark_status.dart';
 import 'package:publico/domain/usecases/user/get_infographics_by_query.dart';
 import 'package:publico/domain/usecases/user/remove_infographic_from_bookmark.dart';
@@ -27,6 +28,7 @@ class InfographicCubit extends Cubit<InfographicState> {
     required this.saveInfographic,
     required this.removeInfographicFromBookmark,
     required this.getInfographicBookmarkStatus,
+    required this.checkInfographicBookmark,
   }) : super(InfographicInitial());
 
   final PostInfographic postInfographic;
@@ -38,6 +40,7 @@ class InfographicCubit extends Cubit<InfographicState> {
   final SaveInfographic saveInfographic;
   final RemoveInfographicFromBookmark removeInfographicFromBookmark;
   final GetInfographicBookmarkStatus getInfographicBookmarkStatus;
+  final CheckInfographicBookmark checkInfographicBookmark;
 
   void postNewInfographicTheme(
       String themeName, String destination, File themeImage) async {
@@ -120,5 +123,14 @@ class InfographicCubit extends Cubit<InfographicState> {
       (r) => emit(const RemoveInfographicBookmarkSuccess(
           'Infografis berhasil dihapus dari bookmark')),
     );
+  }
+
+  void checkIsBookmarked(String id) async {
+    final isBookmarked = await checkInfographicBookmark.execute(id);
+    if (isBookmarked) {
+      emit(InfographicBookmarked());
+    } else {
+      emit(InfographicNotBookmarked());
+    }
   }
 }

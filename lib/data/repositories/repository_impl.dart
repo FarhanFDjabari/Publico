@@ -471,7 +471,7 @@ class RepositoryImpl extends Repository {
   Future<Either<Failure, List<dynamic>>> getAllBookmark() async {
     try {
       final videoSingkat = await localDataSources
-          .getInfographicBookmark()
+          .getVideoSingkatBookmark()
           .then((value) => value.map((e) => e.toEntity()).toList());
       final videoMateri = await localDataSources
           .getVideoMateriBookmark()

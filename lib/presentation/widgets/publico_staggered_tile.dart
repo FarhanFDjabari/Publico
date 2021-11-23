@@ -10,6 +10,7 @@ class PublicoStaggeredTile extends StatelessWidget {
   final String title;
   final int? duration;
   final int? sourcesCount;
+  final bool isBookmarked;
 
   const PublicoStaggeredTile({
     Key? key,
@@ -19,6 +20,7 @@ class PublicoStaggeredTile extends StatelessWidget {
     required this.title,
     this.duration,
     this.sourcesCount,
+    this.isBookmarked = false,
   }) : super(key: key);
 
   String formatedTime(int? secTime) {
@@ -118,8 +120,8 @@ class PublicoStaggeredTile extends StatelessWidget {
               style: kTextTheme.overline!
                   .copyWith(color: kMikadoOrange, fontSize: 13),
             ),
-            const Icon(
-              Icons.bookmark_outline_rounded,
+            Icon(
+              isBookmarked ? Icons.bookmark : Icons.bookmark_outline_rounded,
               color: kRichBlack,
             ),
           ],
