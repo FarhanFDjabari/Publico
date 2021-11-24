@@ -240,14 +240,10 @@ class _AddSourcePageState extends State<AddSourcePage> {
                           if (value != null) {
                             if (await imageProcessing(value)) {
                               setState(() {
-                                isLoadLocal = false;
                                 formCheck();
                                 value.files.clear();
                               });
                             } else {
-                              setState(() {
-                                isLoadLocal = false;
-                              });
                               Get.showSnackbar(PublicoSnackbar(
                                 message:
                                     'Ukuran file tidak boleh lebih dari 2.5 MB',
@@ -255,6 +251,9 @@ class _AddSourcePageState extends State<AddSourcePage> {
                               value.files.clear();
                             }
                           }
+                          setState(() {
+                            isLoadLocal = false;
+                          });
                         });
                       },
                 style: OutlinedButton.styleFrom(
@@ -274,6 +273,7 @@ class _AddSourcePageState extends State<AddSourcePage> {
                             height: 20,
                             child: CircularProgressIndicator(
                               color: kMikadoOrange,
+                              strokeWidth: 3,
                             ),
                           ),
                         )
