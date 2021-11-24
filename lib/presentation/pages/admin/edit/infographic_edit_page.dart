@@ -182,7 +182,19 @@ class _InfographicEditPageState extends State<InfographicEditPage> {
                               context,
                               EditSourcesPage.routeName,
                               arguments: source,
-                            );
+                            ).then((value) {
+                              if (value != null) {
+                                final valueMap = value as Map<String, dynamic>;
+                                setState(() {
+                                  source['source_name'] = valueMap['source'];
+                                  source['description'] =
+                                      valueMap['description'];
+                                  source['illustrations'] =
+                                      valueMap['illustration'];
+                                });
+                                formCheck();
+                              }
+                            });
                           },
                           controller: TextEditingController(
                             text: source['source_name'],
@@ -197,6 +209,10 @@ class _InfographicEditPageState extends State<InfographicEditPage> {
                               borderSide: const BorderSide(
                                 color: kMikadoOrange,
                               ),
+                            ),
+                            suffixIcon: const Icon(
+                              Icons.arrow_forward_ios,
+                              color: kMikadoOrange,
                             ),
                           ),
                           style: kTextTheme.bodyText2!.copyWith(

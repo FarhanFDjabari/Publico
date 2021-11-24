@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
@@ -29,6 +30,9 @@ class _EditSourcesPageState extends State<EditSourcesPage> {
   @override
   void initState() {
     super.initState();
+    _sumberController.text = widget.source['source_name'];
+    _deskripsiController.text = widget.source['description'];
+    illustrations = widget.source['illustrations'];
   }
 
   void formCheck() {
@@ -200,8 +204,20 @@ class _EditSourcesPageState extends State<EditSourcesPage> {
                             children: [
                               ClipRRect(
                                 borderRadius: BorderRadius.circular(10),
-                                child: Image.file(
-                                  illustration,
+                                child: CachedNetworkImage(
+                                  imageUrl: illustration,
+                                  progressIndicatorBuilder: (_, __, progress) {
+                                    return SizedBox(
+                                      height: 30,
+                                      child: Center(
+                                        child: CircularProgressIndicator(
+                                          backgroundColor: kMikadoOrange,
+                                          value: progress.progress,
+                                          strokeWidth: 3,
+                                        ),
+                                      ),
+                                    );
+                                  },
                                   fit: BoxFit.cover,
                                 ),
                               ),

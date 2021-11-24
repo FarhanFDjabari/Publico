@@ -201,6 +201,10 @@ class _InfographicPostPageState extends State<InfographicPostPage> {
                                 color: kMikadoOrange,
                               ),
                             ),
+                            suffixIcon: const Icon(
+                              Icons.arrow_forward_ios,
+                              color: kMikadoOrange,
+                            ),
                           ),
                           style: kTextTheme.bodyText2!.copyWith(
                             color: kRichBlack,
