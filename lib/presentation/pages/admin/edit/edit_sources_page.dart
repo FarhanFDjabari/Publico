@@ -12,8 +12,8 @@ import 'package:publico/styles/text_styles.dart';
 
 class EditSourcesPage extends StatefulWidget {
   static const routeName = '/admin-edit-sources';
-  final String sourceId;
-  const EditSourcesPage({Key? key, required this.sourceId}) : super(key: key);
+  final Map<String, dynamic> source;
+  const EditSourcesPage({Key? key, required this.source}) : super(key: key);
 
   @override
   _EditSourcesPageState createState() => _EditSourcesPageState();

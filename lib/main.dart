@@ -181,9 +181,9 @@ class MyApp extends StatelessWidget {
                 settings: settings,
               );
             case InfographicEditPage.routeName:
-              final id = settings.arguments as Infographic;
+              final info = settings.arguments as Infographic;
               return CupertinoPageRoute(
-                builder: (_) => InfographicEditPage(infographic: id),
+                builder: (_) => InfographicEditPage(infographic: info),
                 settings: settings,
               );
             case VideoMateriEditPage.routeName:
@@ -200,9 +200,9 @@ class MyApp extends StatelessWidget {
                 settings: settings,
               );
             case EditSourcesPage.routeName:
-              final id = settings.arguments as String;
+              final source = settings.arguments as Map<String, dynamic>;
               return CupertinoPageRoute(
-                builder: (_) => EditSourcesPage(sourceId: id),
+                builder: (_) => EditSourcesPage(source: source),
                 settings: settings,
               );
             default:

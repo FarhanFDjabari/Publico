@@ -216,8 +216,10 @@ class _InfographicPostPageState extends State<InfographicPostPage> {
                     context,
                     AddSourcePage.routeName,
                   ).then((value) {
-                    setState(() => sources.add(value));
-                    formCheck();
+                    if (value != null) {
+                      setState(() => sources.add(value));
+                      formCheck();
+                    }
                   });
                 },
                 style: OutlinedButton.styleFrom(
