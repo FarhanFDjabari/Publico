@@ -1,15 +1,18 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:publico/domain/entities/infographic.dart';
 import 'package:publico/presentation/pages/admin/edit/edit_sources_page.dart';
+import 'package:publico/presentation/pages/admin/post/add_source_page.dart';
 import 'package:publico/presentation/widgets/primary_button.dart';
 import 'package:publico/styles/colors.dart';
 import 'package:publico/styles/text_styles.dart';
 
 class InfographicEditPage extends StatefulWidget {
   static const routeName = '/admin-infographic-edit';
-  final String postId;
-  const InfographicEditPage({Key? key, required this.postId}) : super(key: key);
+  final Infographic infographic;
+  const InfographicEditPage({Key? key, required this.infographic})
+      : super(key: key);
 
   @override
   _InfographicEditPageState createState() => _InfographicEditPageState();
@@ -20,6 +23,14 @@ class _InfographicEditPageState extends State<InfographicEditPage> {
   List sources = [];
   String? selectedTheme;
   bool isValidate = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _titleController.text = widget.infographic.title;
+    sources = widget.infographic.sources;
+    selectedTheme = widget.infographic.themeName;
+  }
 
   void formCheck() {
     if (_titleController.text.isNotEmpty &&
@@ -79,24 +90,23 @@ class _InfographicEditPageState extends State<InfographicEditPage> {
               DropdownButtonFormField(
                 isExpanded: true,
                 icon: const Icon(Icons.keyboard_arrow_down_rounded),
-                items: List.generate(
-                  1,
-                  (dropdownData) => DropdownMenuItem(
+                items: [
+                  DropdownMenuItem(
                     child: Text(
-                      '$dropdownData',
+                      widget.infographic.themeName,
                       style: kTextTheme.bodyText2!.copyWith(
                         color: kMikadoOrange,
                       ),
                     ),
-                    value: dropdownData,
-                    onTap: () {
-                      selectedTheme = dropdownData.toString();
-                      formCheck();
-                    },
+                    value: widget.infographic.themeId,
+                    onTap: null,
+                    enabled: false,
                   ),
-                ).toList(),
+                ],
+                onTap: null,
                 isDense: true,
                 dropdownColor: kLightGrey2,
+                enableFeedback: false,
                 elevation: 0,
                 iconEnabledColor: kMikadoOrange,
                 autofocus: false,
@@ -109,11 +119,15 @@ class _InfographicEditPageState extends State<InfographicEditPage> {
                   ),
                   contentPadding: const EdgeInsets.symmetric(horizontal: 15),
                 ),
-                onChanged: (value) {},
+                onChanged: (value) {
+                  Timer(const Duration(milliseconds: 500), () {
+                    formCheck();
+                  });
+                },
                 hint: Text(
-                  'Pilih Tema',
+                  widget.infographic.themeName,
                   style: kTextTheme.bodyText2!.copyWith(
-                    color: kGrey,
+                    color: kMikadoOrange,
                   ),
                 ),
               ),
@@ -159,26 +173,51 @@ class _InfographicEditPageState extends State<InfographicEditPage> {
               Column(
                 children: sources
                     .map(
-                      (source) => TextField(
-                        readOnly: true,
-                        onTap: () {},
-                        controller: TextEditingController(
-                          text: source,
-                        ),
-                        decoration: InputDecoration(
-                          isDense: true,
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10),
+                      (source) => Container(
+                        margin: const EdgeInsets.only(bottom: 16),
+                        child: TextField(
+                          readOnly: true,
+                          onTap: () {
+                            Navigator.pushNamed(
+                              context,
+                              EditSourcesPage.routeName,
+                              arguments: source,
+                            ).then((value) {
+                              if (value != null) {
+                                final valueMap = value as Map<String, dynamic>;
+                                setState(() {
+                                  source['source_name'] = valueMap['source'];
+                                  source['description'] =
+                                      valueMap['description'];
+                                  source['illustrations'] =
+                                      valueMap['illustration'];
+                                });
+                                formCheck();
+                              }
+                            });
+                          },
+                          controller: TextEditingController(
+                            text: source['source_name'],
                           ),
-                          enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10),
-                            borderSide: const BorderSide(
+                          decoration: InputDecoration(
+                            isDense: true,
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(10),
+                              borderSide: const BorderSide(
+                                color: kMikadoOrange,
+                              ),
+                            ),
+                            suffixIcon: const Icon(
+                              Icons.arrow_forward_ios,
                               color: kMikadoOrange,
                             ),
                           ),
-                        ),
-                        style: kTextTheme.bodyText2!.copyWith(
-                          color: kRichBlack,
+                          style: kTextTheme.bodyText2!.copyWith(
+                            color: kRichBlack,
+                          ),
                         ),
                       ),
                     )
@@ -188,9 +227,13 @@ class _InfographicEditPageState extends State<InfographicEditPage> {
                 onPressed: () {
                   Navigator.pushNamed(
                     context,
-                    EditSourcesPage.routeName,
-                    arguments: 'secret',
-                  );
+                    AddSourcePage.routeName,
+                  ).then((value) {
+                    if (value != null) {
+                      setState(() => sources.add(value));
+                      formCheck();
+                    }
+                  });
                 },
                 style: OutlinedButton.styleFrom(
                   shape: RoundedRectangleBorder(

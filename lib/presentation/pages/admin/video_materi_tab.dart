@@ -58,7 +58,14 @@ class _VideoMateriTabState extends State<VideoMateriTab> {
               style: kTextTheme.bodyText2!.copyWith(
                 color: kRichBlack,
               ),
-              onChanged: (value) {},
+              onSubmitted: (value) {
+                context
+                    .read<VideoMateriCubit>()
+                    .getVideoMateriPostsByUidQueryFirestore(
+                      GetStorage().read('uid'),
+                      _searchQueryController.text.toLowerCase(),
+                    );
+              },
             ),
             const SizedBox(height: 10),
             Expanded(

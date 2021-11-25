@@ -5,6 +5,7 @@ import 'package:equatable/equatable.dart';
 import 'package:publico/domain/entities/video_singkat.dart';
 import 'package:publico/domain/usecases/admin/delete_video_post.dart';
 import 'package:publico/domain/usecases/admin/get_video_singkat_posts_by_uid.dart';
+import 'package:publico/domain/usecases/admin/get_video_singkat_posts_by_uid_query.dart';
 import 'package:publico/domain/usecases/admin/post_video_singkat.dart';
 import 'package:publico/domain/usecases/user/check_video_singkat_bookmark.dart';
 import 'package:publico/domain/usecases/user/get_singkat_bookmark_status.dart';
@@ -18,6 +19,7 @@ class VideoSingkatCubit extends Cubit<VideoSingkatState> {
   VideoSingkatCubit({
     required this.postVideoSingkat,
     required this.getVideoSingkatPostsByUid,
+    required this.getVideoSingkatPostsByUidQuery,
     required this.deleteVideoPost,
     required this.getVideoSingkatByQuery,
     required this.saveVideoSingkat,
@@ -28,6 +30,7 @@ class VideoSingkatCubit extends Cubit<VideoSingkatState> {
 
   final PostVideoSingkat postVideoSingkat;
   final GetVideoSingkatPostsByUid getVideoSingkatPostsByUid;
+  final GetVideoSingkatPostsByUidQuery getVideoSingkatPostsByUidQuery;
   final DeleteVideoPost deleteVideoPost;
   final GetVideoSingkatByQuery getVideoSingkatByQuery;
   final SaveVideoSingkat saveVideoSingkat;
@@ -84,6 +87,16 @@ class VideoSingkatCubit extends Cubit<VideoSingkatState> {
         (l) => emit(
             const GetVideoSingkatPostsByUidError("Tidak ada video singkat")),
         (r) => emit(GetVideoSingkatPostsByUidSuccess(r)));
+  }
+
+  void getVideoSingkatPostsByUidQueryFirestore(String uid, String query) async {
+    emit(GetVideoSingkatPostsByUidLoading());
+    final result = await getVideoSingkatPostsByUidQuery.execute(uid, query);
+    result.fold(
+      (l) =>
+          emit(const GetVideoSingkatPostsByUidError("Tidak ada video singkat")),
+      (r) => emit(GetVideoSingkatPostsByUidSuccess(r)),
+    );
   }
 
   void getVideoSingkatPosts(String query) async {

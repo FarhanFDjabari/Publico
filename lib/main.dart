@@ -90,6 +90,7 @@ class MyApp extends StatelessWidget {
         theme: ThemeData.light().copyWith(
           colorScheme: kColorScheme,
           textTheme: kTextTheme,
+          backgroundColor: kRichWhite,
         ),
         home: const SplashScreen(),
         onGenerateRoute: (settings) {
@@ -180,9 +181,9 @@ class MyApp extends StatelessWidget {
                 settings: settings,
               );
             case InfographicEditPage.routeName:
-              final id = settings.arguments as String;
+              final info = settings.arguments as Infographic;
               return CupertinoPageRoute(
-                builder: (_) => InfographicEditPage(postId: id),
+                builder: (_) => InfographicEditPage(infographic: info),
                 settings: settings,
               );
             case VideoMateriEditPage.routeName:
@@ -199,9 +200,9 @@ class MyApp extends StatelessWidget {
                 settings: settings,
               );
             case EditSourcesPage.routeName:
-              final id = settings.arguments as String;
+              final source = settings.arguments as Map<String, dynamic>;
               return CupertinoPageRoute(
-                builder: (_) => EditSourcesPage(sourceId: id),
+                builder: (_) => EditSourcesPage(source: source),
                 settings: settings,
               );
             default:

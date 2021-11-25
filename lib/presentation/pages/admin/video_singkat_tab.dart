@@ -59,7 +59,14 @@ class _VideoSingkatTabState extends State<VideoSingkatTab> {
                 style: kTextTheme.bodyText2!.copyWith(
                   color: kRichBlack,
                 ),
-                onChanged: (value) {},
+                onSubmitted: (value) {
+                  context
+                      .read<VideoSingkatCubit>()
+                      .getVideoSingkatPostsByUidQueryFirestore(
+                        GetStorage().read('uid'),
+                        _searchQueryController.text.toLowerCase(),
+                      );
+                },
               ),
               const SizedBox(height: 10),
               Expanded(

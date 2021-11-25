@@ -69,6 +69,7 @@ class _HomePageAdminState extends State<HomePageAdmin>
         }
       },
       child: Scaffold(
+        backgroundColor: kRichWhite,
         appBar: AppBar(
           backgroundColor: kRichWhite,
           elevation: 0,

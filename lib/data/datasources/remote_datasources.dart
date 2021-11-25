@@ -25,7 +25,11 @@ abstract class RemoteDataSources {
   Future<void> updateVideoMateri(String id, String title, String description,
       String videoUrl, String thumbnailUrl, int duration);
   Future<List<VideoSingkatModel>> getVideoSingkatPostsByUid(String uid);
+  Future<List<VideoSingkatModel>> getVideoSingkatPostsByUidQuery(
+      String uid, String query);
   Future<List<VideoMateriModel>> getVideoMateriPostsByUid(String uid);
+  Future<List<VideoMateriModel>> getVideoMateriPostsByUidQuery(
+      String uid, String query);
   Future<List<InfographicModel>> getInfographicsByThemeId(String themeId);
   Future<List<ThemeModel>> getInfographicThemesByUid(String uid);
   Future<void> postNewTheme(String themeName, String imagePath);
@@ -40,6 +44,8 @@ abstract class RemoteDataSources {
   Future<List<VideoMateriModel>> getVideoMateriPosts(String query);
   Future<List<VideoSingkatModel>> getVideoSingkatPosts(String query);
   Future<List<InfographicModel>> getInfographicPosts(String query);
+  Future<List<InfographicModel>> getInfographicPostsByUidQuery(
+      String uid, String query);
 }
 
 class RemoteDataSourcesImpl extends RemoteDataSources {
@@ -398,6 +404,58 @@ class RemoteDataSourcesImpl extends RemoteDataSources {
         'duration': duration,
         'admin_id': GetStorage().read('uid'),
       });
+    } catch (error) {
+      throw ServerException(error.toString());
+    }
+  }
+
+  @override
+  Future<List<VideoMateriModel>> getVideoMateriPostsByUidQuery(
+      String uid, String query) async {
+    try {
+      final ref = firebaseFirestore.collection('video_materi');
+      final result = await ref
+          .where('admin_id', isEqualTo: uid)
+          .where('query', isGreaterThanOrEqualTo: query)
+          .get();
+      final videoMateriModels =
+          result.docs.map((doc) => VideoMateriModel.fromSnapshot(doc)).toList();
+      return videoMateriModels;
+    } catch (error) {
+      throw ServerException(error.toString());
+    }
+  }
+
+  @override
+  Future<List<VideoSingkatModel>> getVideoSingkatPostsByUidQuery(
+      String uid, String query) async {
+    try {
+      final ref = firebaseFirestore.collection('video_singkat');
+      final result = await ref
+          .where('admin_id', isEqualTo: uid)
+          .where('query', isGreaterThanOrEqualTo: query)
+          .get();
+      final videoSingkatModels = result.docs
+          .map((doc) => VideoSingkatModel.fromSnapshot(doc))
+          .toList();
+      return videoSingkatModels;
+    } catch (error) {
+      throw ServerException(error.toString());
+    }
+  }
+
+  @override
+  Future<List<InfographicModel>> getInfographicPostsByUidQuery(
+      String uid, String query) async {
+    try {
+      final ref = firebaseFirestore.collection('infographics');
+      final result = await ref
+          .where('admin_id', isEqualTo: uid)
+          .where('query', isGreaterThanOrEqualTo: query)
+          .get();
+      final infographicModels =
+          result.docs.map((doc) => InfographicModel.fromSnapshot(doc)).toList();
+      return infographicModels;
     } catch (error) {
       throw ServerException(error.toString());
     }

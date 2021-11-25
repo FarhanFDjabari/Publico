@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:publico/presentation/bloc/search/search_cubit.dart';
+import 'package:publico/presentation/pages/detail/infographics_detail_page.dart';
+import 'package:publico/presentation/pages/detail/video_materi_detail_page.dart';
+import 'package:publico/presentation/pages/detail/video_singkat_detail_page.dart';
 import 'package:publico/presentation/widgets/chip_button.dart';
 import 'package:publico/presentation/widgets/publico_staggered_tile.dart';
 import 'package:publico/styles/colors.dart';
@@ -198,7 +201,13 @@ class _SearchPageState extends State<SearchPage> {
                         itemCount: state.infographicList.length,
                         itemBuilder: (BuildContext itemContext, int index) {
                           return InkWell(
-                            onTap: () {},
+                            onTap: () {
+                              Navigator.pushNamed(
+                                context,
+                                InfographicsDetailPage.routeName,
+                                arguments: state.infographicList[index],
+                              );
+                            },
                             borderRadius: BorderRadius.circular(10),
                             child: PublicoStaggeredTile(
                               tileIndex: index,
@@ -232,7 +241,13 @@ class _SearchPageState extends State<SearchPage> {
                         itemCount: state.videoMateriList.length,
                         itemBuilder: (BuildContext itemContext, int index) {
                           return InkWell(
-                            onTap: () {},
+                            onTap: () {
+                              Navigator.pushNamed(
+                                context,
+                                VideoMateriDetailPage.routeName,
+                                arguments: state.videoMateriList[index],
+                              );
+                            },
                             borderRadius: BorderRadius.circular(10),
                             child: PublicoStaggeredTile(
                               tileIndex: index,
@@ -268,7 +283,13 @@ class _SearchPageState extends State<SearchPage> {
                         itemCount: state.videoSingkatList.length,
                         itemBuilder: (BuildContext itemContext, int index) {
                           return InkWell(
-                            onTap: () {},
+                            onTap: () {
+                              Navigator.pushNamed(
+                                context,
+                                VideoSingkatDetailPage.routeName,
+                                arguments: state.videoSingkatList[index],
+                              );
+                            },
                             borderRadius: BorderRadius.circular(10),
                             child: PublicoStaggeredTile(
                               tileIndex: index,

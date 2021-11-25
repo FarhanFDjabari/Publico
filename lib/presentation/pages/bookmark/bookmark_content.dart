@@ -76,7 +76,9 @@ class BookmarkContent extends StatelessWidget {
                         context,
                         VideoMateriDetailPage.routeName,
                         arguments: state.bookmarks[index],
-                      );
+                      ).then((value) {
+                        context.read<BookmarkCubit>().getAllFromBookmark();
+                      });
                     },
                     borderRadius: BorderRadius.circular(10),
                     child: PublicoStaggeredTile(
@@ -156,43 +158,6 @@ class BookmarkContent extends StatelessWidget {
                   ).then((value) {
                     context.read<BookmarkCubit>().getVideoMateriFromBookmark();
                   });
-                },
-                borderRadius: BorderRadius.circular(10),
-                child: PublicoStaggeredTile(
-                  tileIndex: index,
-                  duration: state.videoMateriList[index].duration,
-                  title: state.videoMateriList[index].title,
-                  imageUrl: state.videoMateriList[index].thumbnailUrl,
-                  category: state.videoMateriList[index].type,
-                  isBookmarked: state.videoMateriLabels[index],
-                ),
-              ),
-              staggeredTileBuilder: (int index) => const StaggeredTile.fit(2),
-              mainAxisSpacing: 15.0,
-              crossAxisSpacing: 8.0,
-            );
-          } else {
-            return Center(
-              child: Text(
-                'Belum ada bookmark video materi yang tersedia',
-                style: kTextTheme.bodyText2!.copyWith(color: kRichBlack),
-              ),
-            );
-          }
-        } else if (state is GetVideoMateriBookmarkSuccess) {
-          if (state.videoMateriList.isNotEmpty) {
-            return StaggeredGridView.countBuilder(
-              crossAxisCount: 4,
-              itemCount: state.videoMateriList.length,
-              itemBuilder: (BuildContext itemContext, int index) => InkWell(
-                onTap: () {
-                  Navigator.pushNamed(
-                    context,
-                    VideoMateriDetailPage.routeName,
-                    arguments: state.videoMateriList[index],
-                  ).then((_) => context
-                      .read<BookmarkCubit>()
-                      .getVideoMateriFromBookmark());
                 },
                 borderRadius: BorderRadius.circular(10),
                 child: PublicoStaggeredTile(

@@ -5,7 +5,9 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
+import 'package:get/get.dart';
 import 'package:publico/presentation/widgets/primary_button.dart';
+import 'package:publico/presentation/widgets/publico_snackbar.dart';
 import 'package:publico/styles/colors.dart';
 import 'package:publico/styles/text_styles.dart';
 
@@ -22,6 +24,7 @@ class _AddSourcePageState extends State<AddSourcePage> {
   final _deskripsiController = TextEditingController();
   List illustrations = [];
   bool isValidate = false;
+  bool isLoadLocal = false;
 
   void formCheck() {
     if (_sumberController.text.isNotEmpty &&
@@ -58,6 +61,20 @@ class _AddSourcePageState extends State<AddSourcePage> {
     }
 
     return null;
+  }
+
+  Future<bool> imageProcessing(FilePickerResult? file) async {
+    if (file != null) {
+      if (file.files.first.size < 2500000) {
+        File? _imageFile = await compressFile(File(file.files.first.path!));
+        illustrations.add(_imageFile);
+        return true;
+      } else {
+        return false;
+      }
+    } else {
+      return false;
+    }
   }
 
   @override
@@ -204,23 +221,41 @@ class _AddSourcePageState extends State<AddSourcePage> {
                     .toList(),
               ),
               OutlinedButton(
-                onPressed: () async {
-                  await Future.delayed(const Duration(milliseconds: 500));
-                  await FilePicker.platform
-                      .pickFiles(
-                    type: FileType.image,
-                  )
-                      .then((value) async {
-                    if (value != null) {
-                      File? _imageFile =
-                          await compressFile(File(value.files.first.path!));
-                      setState(() {
-                        illustrations.add(_imageFile);
-                        formCheck();
-                      });
-                    }
-                  });
-                },
+                onPressed: isLoadLocal
+                    ? null
+                    : () async {
+                        await Future.delayed(const Duration(milliseconds: 500));
+                        await FilePicker.platform
+                            .pickFiles(
+                          type: FileType.image,
+                          withData: false,
+                          allowMultiple: false,
+                          onFileLoading: (status) {
+                            setState(() {
+                              isLoadLocal = true;
+                            });
+                          },
+                        )
+                            .then((value) async {
+                          if (value != null) {
+                            if (await imageProcessing(value)) {
+                              setState(() {
+                                formCheck();
+                                value.files.clear();
+                              });
+                            } else {
+                              Get.showSnackbar(PublicoSnackbar(
+                                message:
+                                    'Ukuran file tidak boleh lebih dari 2.5 MB',
+                              ));
+                              value.files.clear();
+                            }
+                          }
+                          setState(() {
+                            isLoadLocal = false;
+                          });
+                        });
+                      },
                 style: OutlinedButton.styleFrom(
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10),
@@ -231,16 +266,28 @@ class _AddSourcePageState extends State<AddSourcePage> {
                 ),
                 child: SizedBox(
                   height: 45,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      const Icon(Icons.add, color: kMikadoOrange, size: 16),
-                      Text(
-                        ' Tambah Ilustrasi',
-                        style: kTextTheme.button!,
-                      ),
-                    ],
-                  ),
+                  child: isLoadLocal
+                      ? const Center(
+                          child: SizedBox(
+                            width: 20,
+                            height: 20,
+                            child: CircularProgressIndicator(
+                              color: kMikadoOrange,
+                              strokeWidth: 3,
+                            ),
+                          ),
+                        )
+                      : Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            const Icon(Icons.add,
+                                color: kMikadoOrange, size: 16),
+                            Text(
+                              ' Tambah Ilustrasi',
+                              style: kTextTheme.button!,
+                            ),
+                          ],
+                        ),
                 ),
               ),
               const SizedBox(height: 15),

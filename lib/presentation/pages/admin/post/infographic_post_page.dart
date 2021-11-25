@@ -201,6 +201,10 @@ class _InfographicPostPageState extends State<InfographicPostPage> {
                                 color: kMikadoOrange,
                               ),
                             ),
+                            suffixIcon: const Icon(
+                              Icons.arrow_forward_ios,
+                              color: kMikadoOrange,
+                            ),
                           ),
                           style: kTextTheme.bodyText2!.copyWith(
                             color: kRichBlack,
@@ -216,8 +220,10 @@ class _InfographicPostPageState extends State<InfographicPostPage> {
                     context,
                     AddSourcePage.routeName,
                   ).then((value) {
-                    setState(() => sources.add(value));
-                    formCheck();
+                    if (value != null) {
+                      setState(() => sources.add(value));
+                      formCheck();
+                    }
                   });
                 },
                 style: OutlinedButton.styleFrom(
@@ -260,12 +266,21 @@ class _InfographicPostPageState extends State<InfographicPostPage> {
                   if (state is PostInfographicLoading) {
                     return LoadingButton(
                       borderRadius: 10,
+                      primaryColor: kLightGrey,
                       child: const SizedBox(
-                          height: 45,
-                          child: Center(
-                              child: CircularProgressIndicator(
-                            color: kRichWhite,
-                          ))),
+                        width: double.infinity,
+                        height: 45,
+                        child: Center(
+                          child: SizedBox(
+                            width: 20,
+                            height: 20,
+                            child: CircularProgressIndicator(
+                              color: kRichWhite,
+                              strokeWidth: 3,
+                            ),
+                          ),
+                        ),
+                      ),
                     );
                   }
                   return PrimaryButton(
