@@ -37,6 +37,10 @@ abstract class Repository {
       String uid);
   Future<Either<Failure, List<VideoMateri>>> getVideoMateriPostsByUid(
       String uid);
+  Future<Either<Failure, List<VideoSingkat>>> getVideoSingkatPostsByUidQuery(
+      String uid, String query);
+  Future<Either<Failure, List<VideoMateri>>> getVideoMateriPostsByUidQuery(
+      String uid, String query);
   Future<Either<Failure, List<Theme>>> getInfographicThemesByUid(String uid);
   Future<Either<Failure, void>> postInfographicTheme(
       String themeName, File themeImage, String destination);
@@ -53,6 +57,8 @@ abstract class Repository {
       String query);
   Future<Either<Failure, List<VideoMateri>>> getVideoMateriPosts(String query);
   Future<Either<Failure, List<Infographic>>> getInfographicPosts(String query);
+  Future<Either<Failure, List<Infographic>>> getInfographicPostsByUidQuery(
+      String uid, String query);
 
   Future<Either<Failure, List<dynamic>>> getExplore();
   Future<Either<Failure, String>> saveVideoMateriToBookmark(VideoMateri video);

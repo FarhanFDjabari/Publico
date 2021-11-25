@@ -9,6 +9,7 @@ import 'package:publico/domain/repositories/repository.dart';
 import 'package:publico/domain/usecases/admin/delete_infographic_post.dart';
 import 'package:publico/domain/usecases/admin/delete_video_post.dart';
 import 'package:publico/domain/usecases/admin/get_infographic_by_theme_id.dart';
+import 'package:publico/domain/usecases/admin/get_infographic_posts_by_uid_query.dart';
 import 'package:publico/domain/usecases/admin/get_infographic_themes_by_uid.dart';
 import 'package:publico/domain/usecases/admin/get_video_materi_posts_by_uid.dart';
 import 'package:publico/domain/usecases/admin/get_video_singkat_posts_by_uid.dart';
@@ -46,6 +47,8 @@ import 'package:publico/presentation/bloc/video_materi/video_materi_cubit.dart';
 import 'package:publico/presentation/bloc/video_singkat/video_singkat_cubit.dart';
 
 import 'data/datasources/db/database_helper.dart';
+import 'domain/usecases/admin/get_video_materi_posts_by_uid_query.dart';
+import 'domain/usecases/admin/get_video_singkat_posts_by_uid_query.dart';
 import 'domain/usecases/admin/post_video_materi.dart';
 import 'domain/usecases/user/remove_materi_from_bookmark.dart';
 import 'domain/usecases/user/remove_singkat_from_bookmark.dart';
@@ -65,6 +68,7 @@ void init() {
     () => VideoSingkatCubit(
       postVideoSingkat: locator(),
       getVideoSingkatPostsByUid: locator(),
+      getVideoSingkatPostsByUidQuery: locator(),
       deleteVideoPost: locator(),
       getVideoSingkatByQuery: locator(),
       saveVideoSingkat: locator(),
@@ -77,6 +81,7 @@ void init() {
     () => VideoMateriCubit(
       postVideoMateri: locator(),
       getVideoMateriPostsByUid: locator(),
+      getVideoMateriPostsByUidQuery: locator(),
       deleteVideoPost: locator(),
       getVideoMateriByQuery: locator(),
       saveVideoMateri: locator(),
@@ -93,6 +98,7 @@ void init() {
       getInfographicsByThemeId: locator(),
       deleteInfographicPost: locator(),
       getInfographicsByQuery: locator(),
+      getInfographicPostsByUidQuery: locator(),
       saveInfographic: locator(),
       getInfographicBookmarkStatus: locator(),
       removeInfographicFromBookmark: locator(),
@@ -146,6 +152,7 @@ void init() {
   locator.registerLazySingleton(() => GetExplore(locator()));
   locator.registerLazySingleton(() => GetVideoSingkatByQuery(locator()));
   locator.registerLazySingleton(() => GetVideoMateriByQuery(locator()));
+  locator.registerLazySingleton(() => GetVideoMateriPostsByUidQuery(locator()));
   locator.registerLazySingleton(() => GetInfographicsByQuery(locator()));
 
   locator.registerLazySingleton(() => SaveVideoMateri(locator()));
@@ -158,11 +165,14 @@ void init() {
   locator.registerLazySingleton(() => RemoveInfographicFromBookmark(locator()));
   locator.registerLazySingleton(() => GetInfographicBookmark(locator()));
   locator.registerLazySingleton(() => GetInfographicBookmarkStatus(locator()));
+  locator.registerLazySingleton(() => GetInfographicPostsByUidQuery(locator()));
   locator.registerLazySingleton(() => CheckInfographicBookmark(locator()));
 
   locator.registerLazySingleton(() => SaveVideoSingkat(locator()));
   locator.registerLazySingleton(() => RemoveSingkatFromBookmark(locator()));
   locator.registerLazySingleton(() => GetVideoSingkatBookmark(locator()));
+  locator
+      .registerLazySingleton(() => GetVideoSingkatPostsByUidQuery(locator()));
   locator.registerLazySingleton(() => GetSingkatBookmarkStatus(locator()));
   locator.registerLazySingleton(() => CheckVideoSingkatBookmark(locator()));
 

@@ -5,6 +5,7 @@ import 'package:equatable/equatable.dart';
 import 'package:publico/domain/entities/video_materi.dart';
 import 'package:publico/domain/usecases/admin/delete_video_post.dart';
 import 'package:publico/domain/usecases/admin/get_video_materi_posts_by_uid.dart';
+import 'package:publico/domain/usecases/admin/get_video_materi_posts_by_uid_query.dart';
 import 'package:publico/domain/usecases/admin/post_video_materi.dart';
 import 'package:publico/domain/usecases/user/check_video_materi_bookmark.dart';
 import 'package:publico/domain/usecases/user/get_materi_bookmark_status.dart';
@@ -18,6 +19,7 @@ class VideoMateriCubit extends Cubit<VideoMateriState> {
   VideoMateriCubit({
     required this.postVideoMateri,
     required this.getVideoMateriPostsByUid,
+    required this.getVideoMateriPostsByUidQuery,
     required this.deleteVideoPost,
     required this.getVideoMateriByQuery,
     required this.saveVideoMateri,
@@ -28,6 +30,7 @@ class VideoMateriCubit extends Cubit<VideoMateriState> {
 
   final PostVideoMateri postVideoMateri;
   final GetVideoMateriPostsByUid getVideoMateriPostsByUid;
+  final GetVideoMateriPostsByUidQuery getVideoMateriPostsByUidQuery;
   final DeleteVideoPost deleteVideoPost;
   final GetVideoMateriByQuery getVideoMateriByQuery;
   final SaveVideoMateri saveVideoMateri;
@@ -62,6 +65,15 @@ class VideoMateriCubit extends Cubit<VideoMateriState> {
   void getVideoMateriPostsByUidFirestore(String uid) async {
     emit(GetVideoMateriPostsByUidLoading());
     final result = await getVideoMateriPostsByUid.execute(uid);
+    result.fold(
+      (l) => emit(GetVideoMateriPostsByUidError(l.message)),
+      (r) => emit(GetVideoMateriPostsByUidSuccess(r)),
+    );
+  }
+
+  void getVideoMateriPostsByUidQueryFirestore(String uid, String query) async {
+    emit(GetVideoMateriPostsByUidLoading());
+    final result = await getVideoMateriPostsByUidQuery.execute(uid, query);
     result.fold(
       (l) => emit(GetVideoMateriPostsByUidError(l.message)),
       (r) => emit(GetVideoMateriPostsByUidSuccess(r)),

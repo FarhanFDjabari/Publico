@@ -6,6 +6,7 @@ import 'package:publico/domain/entities/infographic.dart';
 import 'package:publico/domain/entities/theme.dart';
 import 'package:publico/domain/usecases/admin/delete_infographic_post.dart';
 import 'package:publico/domain/usecases/admin/get_infographic_by_theme_id.dart';
+import 'package:publico/domain/usecases/admin/get_infographic_posts_by_uid_query.dart';
 import 'package:publico/domain/usecases/admin/get_infographic_themes_by_uid.dart';
 import 'package:publico/domain/usecases/admin/post_infographic.dart';
 import 'package:publico/domain/usecases/admin/post_infographic_theme.dart';
@@ -25,6 +26,7 @@ class InfographicCubit extends Cubit<InfographicState> {
     required this.getInfographicsByThemeId,
     required this.deleteInfographicPost,
     required this.getInfographicsByQuery,
+    required this.getInfographicPostsByUidQuery,
     required this.saveInfographic,
     required this.removeInfographicFromBookmark,
     required this.getInfographicBookmarkStatus,
@@ -37,6 +39,7 @@ class InfographicCubit extends Cubit<InfographicState> {
   final GetInfographicsByThemeId getInfographicsByThemeId;
   final DeleteInfographicPost deleteInfographicPost;
   final GetInfographicsByQuery getInfographicsByQuery;
+  final GetInfographicPostsByUidQuery getInfographicPostsByUidQuery;
   final SaveInfographic saveInfographic;
   final RemoveInfographicFromBookmark removeInfographicFromBookmark;
   final GetInfographicBookmarkStatus getInfographicBookmarkStatus;
@@ -99,6 +102,15 @@ class InfographicCubit extends Cubit<InfographicState> {
   void getInfographicPosts(String query) async {
     emit(InfographicLoading());
     final result = await getInfographicsByQuery.execute(query);
+    result.fold(
+      (l) => emit(InfographicError(l.message)),
+      (r) => emit(GetInfographicsByQuerySuccess(r)),
+    );
+  }
+
+  void getAdminInfographicPostsByQuery(String uid, String query) async {
+    emit(InfographicLoading());
+    final result = await getInfographicPostsByUidQuery.execute(uid, query);
     result.fold(
       (l) => emit(InfographicError(l.message)),
       (r) => emit(GetInfographicsByQuerySuccess(r)),

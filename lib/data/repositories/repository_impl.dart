@@ -533,4 +533,52 @@ class RepositoryImpl extends Repository {
     final result = await localDataSources.getVideoSingkatBookmarkById(id);
     return result != null;
   }
+
+  @override
+  Future<Either<Failure, List<VideoMateri>>> getVideoMateriPostsByUidQuery(
+      String uid, String query) async {
+    try {
+      final videoMateriModels =
+          await remoteDataSources.getVideoMateriPostsByUidQuery(uid, query);
+      final videoMateriList =
+          videoMateriModels.map((model) => model.toEntity()).toList();
+      return Right(videoMateriList);
+    } on FirebaseException catch (e) {
+      return Left(ServerFailure(e.toString()));
+    } on ServerException catch (e) {
+      return Left(ServerFailure(e.message));
+    }
+  }
+
+  @override
+  Future<Either<Failure, List<VideoSingkat>>> getVideoSingkatPostsByUidQuery(
+      String uid, String query) async {
+    try {
+      final videoSingkatModels =
+          await remoteDataSources.getVideoSingkatPostsByUidQuery(uid, query);
+      final videoSingkatList =
+          videoSingkatModels.map((model) => model.toEntity()).toList();
+      return Right(videoSingkatList);
+    } on FirebaseException catch (e) {
+      return Left(ServerFailure(e.toString()));
+    } on ServerException catch (e) {
+      return Left(ServerFailure(e.message));
+    }
+  }
+
+  @override
+  Future<Either<Failure, List<Infographic>>> getInfographicPostsByUidQuery(
+      String uid, String query) async {
+    try {
+      final infographicModels =
+          await remoteDataSources.getInfographicPostsByUidQuery(uid, query);
+      final infographicList =
+          infographicModels.map((model) => model.toEntity()).toList();
+      return Right(infographicList);
+    } on FirebaseException catch (e) {
+      return Left(ServerFailure(e.toString()));
+    } on ServerException catch (e) {
+      return Left(ServerFailure(e.message));
+    }
+  }
 }
