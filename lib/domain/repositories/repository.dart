@@ -60,6 +60,28 @@ abstract class Repository {
   Future<Either<Failure, List<Infographic>>> getInfographicPostsByUidQuery(
       String uid, String query);
 
+  Future<Either<Failure, void>> editInfographic(String id, String themeId,
+      String themeName, String title, List<dynamic> sources);
+  Future<Either<Failure, void>> editVideoMateri(
+      String id,
+      String title,
+      String description,
+      String oldVideoUrl,
+      String oldThumbnailUrl,
+      File newVideoFile,
+      File newThumbnailFile,
+      int duration);
+  Future<Either<Failure, void>> editVideoSingkat(
+      String id,
+      String title,
+      String description,
+      String oldVideoUrl,
+      String oldThumbnailUrl,
+      File newVideoFile,
+      File newThumbnailFile,
+      String tiktokUrl,
+      int duration);
+
   Future<Either<Failure, List<dynamic>>> getExplore();
   Future<Either<Failure, String>> saveVideoMateriToBookmark(VideoMateri video);
   Future<Either<Failure, String>> saveVideoSingkatToBookmark(

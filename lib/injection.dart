@@ -8,6 +8,7 @@ import 'package:publico/data/repositories/repository_impl.dart';
 import 'package:publico/domain/repositories/repository.dart';
 import 'package:publico/domain/usecases/admin/delete_infographic_post.dart';
 import 'package:publico/domain/usecases/admin/delete_video_post.dart';
+import 'package:publico/domain/usecases/admin/edit_video_materi_post.dart';
 import 'package:publico/domain/usecases/admin/get_infographic_by_theme_id.dart';
 import 'package:publico/domain/usecases/admin/get_infographic_posts_by_uid_query.dart';
 import 'package:publico/domain/usecases/admin/get_infographic_themes_by_uid.dart';
@@ -88,6 +89,7 @@ void init() {
       getMateriBookmarkStatus: locator(),
       removeMateriFromBookmark: locator(),
       checkVideoMateriBookmark: locator(),
+      editVideoMateriPost: locator(),
     ),
   );
   locator.registerFactory(
@@ -140,6 +142,8 @@ void init() {
 
   locator.registerLazySingleton(() => PostVideoSingkat(locator()));
   locator.registerLazySingleton(() => PostVideoMateri(locator()));
+  locator.registerLazySingleton(() => EditVideoMateriPost(locator()));
+
   locator.registerLazySingleton(() => GetVideoSingkatPostsByUid(locator()));
   locator.registerLazySingleton(() => GetVideoMateriPostsByUid(locator()));
   locator.registerLazySingleton(() => GetInfographicsByThemeId(locator()));

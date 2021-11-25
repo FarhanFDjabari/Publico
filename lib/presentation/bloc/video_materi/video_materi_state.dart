@@ -38,6 +38,14 @@ class DeleteVideoMateriSuccess extends VideoMateriState {
   List<Object> get props => [message];
 }
 
+class EditVideoMateriSuccess extends VideoMateriState {
+  final String message;
+  const EditVideoMateriSuccess(this.message);
+
+  @override
+  List<Object?> get props => [];
+}
+
 class VideoMateriError extends VideoMateriState {
   final String message;
   const VideoMateriError(this.message);

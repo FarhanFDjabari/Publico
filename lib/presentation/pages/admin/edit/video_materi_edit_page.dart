@@ -3,8 +3,11 @@ import 'dart:io';
 
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 import 'package:publico/domain/entities/video_materi.dart';
+import 'package:publico/presentation/bloc/video_materi/video_materi_cubit.dart';
+import 'package:publico/presentation/widgets/loading_button.dart';
 import 'package:publico/presentation/widgets/primary_button.dart';
 import 'package:publico/presentation/widgets/publico_snackbar.dart';
 import 'package:publico/styles/colors.dart';
@@ -28,6 +31,7 @@ class _VideoMateriEditPageState extends State<VideoMateriEditPage> {
   VideoPlayerController? _videoController;
   File? videoFile;
   File? thumbnailImage;
+  int? duration;
   bool isValidate = false;
   bool isLoadLocal = false;
 
@@ -65,7 +69,9 @@ class _VideoMateriEditPageState extends State<VideoMateriEditPage> {
         }
       })
       ..setLooping(false)
-      ..initialize();
+      ..initialize().then((value) {
+        duration = _videoController?.value.duration.inSeconds;
+      });
     String? thumbnailPath = await VideoThumbnail.thumbnailFile(
       video: videoFile.path,
       timeMs: 2000,
@@ -235,6 +241,23 @@ class _VideoMateriEditPageState extends State<VideoMateriEditPage> {
                                             ),
                                     ),
                                   ),
+                                  Positioned(
+                                    top: 0,
+                                    right: 0,
+                                    child: IconButton(
+                                      onPressed: () async {
+                                        await FilePicker.platform
+                                            .clearTemporaryFiles();
+                                        setState(() {
+                                          _videoController = null;
+                                        });
+                                      },
+                                      icon: const Icon(
+                                        Icons.cancel_rounded,
+                                        color: kGrey,
+                                      ),
+                                    ),
+                                  ),
                                 ],
                               ),
                             ),
@@ -318,20 +341,75 @@ class _VideoMateriEditPageState extends State<VideoMateriEditPage> {
                       ),
               ),
               const SizedBox(height: 15),
-              PrimaryButton(
-                borderRadius: 10,
-                child: SizedBox(
-                  height: 45,
-                  child: Center(
-                    child: Text(
-                      'Simpan',
-                      style: kTextTheme.button!.copyWith(
-                        color: kRichWhite,
+              BlocConsumer<VideoMateriCubit, VideoMateriState>(
+                listener: (listenerContext, state) {
+                  if (state is VideoMateriError) {
+                    Get.showSnackbar(
+                      PublicoSnackbar(
+                        message: state.message,
+                      ),
+                    );
+                  } else if (state is EditVideoMateriSuccess) {
+                    Navigator.pop(context);
+                    Navigator.pop(context);
+                    Get.showSnackbar(
+                      PublicoSnackbar(
+                        message: state.message,
+                      ),
+                    );
+                  }
+                },
+                builder: (builderContext, state) {
+                  if (state is VideoMateriLoading) {
+                    return LoadingButton(
+                      borderRadius: 10,
+                      primaryColor: kLightGrey,
+                      child: const SizedBox(
+                        width: double.infinity,
+                        height: 45,
+                        child: Center(
+                          child: SizedBox(
+                            width: 20,
+                            height: 20,
+                            child: CircularProgressIndicator(
+                              color: kRichWhite,
+                              strokeWidth: 3,
+                            ),
+                          ),
+                        ),
+                      ),
+                    );
+                  }
+                  return PrimaryButton(
+                    borderRadius: 10,
+                    child: SizedBox(
+                      height: 45,
+                      child: Center(
+                        child: Text(
+                          'Simpan',
+                          style: kTextTheme.button!.copyWith(
+                            color: kRichWhite,
+                          ),
+                        ),
                       ),
                     ),
-                  ),
-                ),
-                onPressed: !isValidate ? null : () {},
+                    onPressed: !isValidate
+                        ? null
+                        : () {
+                            builderContext
+                                .read<VideoMateriCubit>()
+                                .editVideoMateriFirestore(
+                                    widget.videoMateri.id,
+                                    _titleController.text,
+                                    _descriptionController.text,
+                                    widget.videoMateri.videoUrl,
+                                    widget.videoMateri.thumbnailUrl,
+                                    videoFile!,
+                                    thumbnailImage!,
+                                    duration!);
+                          },
+                  );
+                },
               ),
             ],
           ),

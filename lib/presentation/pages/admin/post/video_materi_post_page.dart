@@ -307,27 +307,9 @@ class _VideoMateriPostPageState extends State<VideoMateriPostPage> {
               BlocConsumer<VideoMateriCubit, VideoMateriState>(
                 listener: (listenerContext, state) {
                   if (state is VideoMateriError) {
-                    ScaffoldMessenger.of(context).showMaterialBanner(
-                      MaterialBanner(
-                        content:
-                            Text('Upload video materi error: ${state.message}'),
-                        actions: [
-                          TextButton(
-                            onPressed: () {
-                              ScaffoldMessenger.of(context)
-                                  .hideCurrentMaterialBanner();
-                            },
-                            child: const Text('Oke'),
-                          ),
-                        ],
-                        padding: const EdgeInsets.only(top: 20),
-                        leadingPadding:
-                            const EdgeInsets.symmetric(horizontal: 10),
-                        leading: const Icon(
-                          Icons.error,
-                          color: Colors.red,
-                        ),
-                        backgroundColor: kRichBlack.withOpacity(0.75),
+                    Get.showSnackbar(
+                      PublicoSnackbar(
+                        message: state.message,
                       ),
                     );
                   } else if (state is PostVideoMateriSuccess) {
