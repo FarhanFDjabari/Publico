@@ -115,6 +115,14 @@ class GetInfographicsByQuerySuccess extends InfographicState {
   List<Object?> get props => [infographicList];
 }
 
+class GetInfographicsByUidQuerySuccess extends InfographicState {
+  final List<Infographic> infographicList;
+  const GetInfographicsByUidQuerySuccess(this.infographicList);
+
+  @override
+  List<Object?> get props => [infographicList];
+}
+
 class InsertInfographicBookmarkSuccess extends InfographicState {
   final String message;
   const InsertInfographicBookmarkSuccess(this.message);
