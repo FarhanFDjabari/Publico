@@ -9,6 +9,7 @@ import 'package:publico/domain/repositories/repository.dart';
 import 'package:publico/domain/usecases/admin/delete_infographic_post.dart';
 import 'package:publico/domain/usecases/admin/delete_video_post.dart';
 import 'package:publico/domain/usecases/admin/edit_video_materi_post.dart';
+import 'package:publico/domain/usecases/admin/edit_video_singkat_post.dart';
 import 'package:publico/domain/usecases/admin/get_infographic_by_theme_id.dart';
 import 'package:publico/domain/usecases/admin/get_infographic_posts_by_uid_query.dart';
 import 'package:publico/domain/usecases/admin/get_infographic_themes_by_uid.dart';
@@ -72,6 +73,7 @@ void init() {
       getVideoSingkatPostsByUidQuery: locator(),
       deleteVideoPost: locator(),
       getVideoSingkatByQuery: locator(),
+      editVideoSingkatPost: locator(),
       saveVideoSingkat: locator(),
       getSingkatBookmarkStatus: locator(),
       removeSingkatFromBookmark: locator(),
@@ -175,6 +177,7 @@ void init() {
   locator.registerLazySingleton(() => SaveVideoSingkat(locator()));
   locator.registerLazySingleton(() => RemoveSingkatFromBookmark(locator()));
   locator.registerLazySingleton(() => GetVideoSingkatBookmark(locator()));
+  locator.registerLazySingleton(() => EditVideoSingkatPost(locator()));
   locator
       .registerLazySingleton(() => GetVideoSingkatPostsByUidQuery(locator()));
   locator.registerLazySingleton(() => GetSingkatBookmarkStatus(locator()));
