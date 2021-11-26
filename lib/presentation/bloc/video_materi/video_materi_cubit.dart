@@ -4,6 +4,7 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:publico/domain/entities/video_materi.dart';
 import 'package:publico/domain/usecases/admin/delete_video_post.dart';
+import 'package:publico/domain/usecases/admin/edit_video_materi_post.dart';
 import 'package:publico/domain/usecases/admin/get_video_materi_posts_by_uid.dart';
 import 'package:publico/domain/usecases/admin/get_video_materi_posts_by_uid_query.dart';
 import 'package:publico/domain/usecases/admin/post_video_materi.dart';
@@ -26,6 +27,7 @@ class VideoMateriCubit extends Cubit<VideoMateriState> {
     required this.removeMateriFromBookmark,
     required this.getMateriBookmarkStatus,
     required this.checkVideoMateriBookmark,
+    required this.editVideoMateriPost,
   }) : super(VideoMateriInitial());
 
   final PostVideoMateri postVideoMateri;
@@ -37,6 +39,7 @@ class VideoMateriCubit extends Cubit<VideoMateriState> {
   final RemoveMateriFromBookmark removeMateriFromBookmark;
   final GetMateriBookmarkStatus getMateriBookmarkStatus;
   final CheckVideoMateriBookmark checkVideoMateriBookmark;
+  final EditVideoMateriPost editVideoMateriPost;
 
   void postVideoMateriFirestore(
       String title,
@@ -93,6 +96,24 @@ class VideoMateriCubit extends Cubit<VideoMateriState> {
       (l) => emit(VideoMateriError(l.message)),
       (r) => emit(
           const DeleteVideoMateriSuccess('Berhasil menghapus video materi')),
+    );
+  }
+
+  void editVideoMateriFirestore(
+      String id,
+      String title,
+      String description,
+      String oldVideoUrl,
+      String oldThumbnailUrl,
+      File newVideoFile,
+      File newThumbnailFile,
+      int duration) async {
+    emit(VideoMateriLoading());
+    final result = await editVideoMateriPost.execute(id, title, description,
+        oldVideoUrl, oldThumbnailUrl, newVideoFile, newThumbnailFile, duration);
+    result.fold(
+      (l) => emit(VideoMateriError(l.message)),
+      (r) => emit(const EditVideoMateriSuccess("Video materi berhasil diedit")),
     );
   }
 

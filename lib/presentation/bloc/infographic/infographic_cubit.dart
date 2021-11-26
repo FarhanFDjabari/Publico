@@ -76,6 +76,15 @@ class InfographicCubit extends Cubit<InfographicState> {
     );
   }
 
+  void getInfographicPostsByUidQueryFirestore(String uid, String query) async {
+    emit(InfographicLoading());
+    final result = await getInfographicPostsByUidQuery.execute(uid, query);
+    result.fold(
+      (l) => emit(InfographicError(l.message)),
+      (r) => emit(GetInfographicsByUidQuerySuccess(r)),
+    );
+  }
+
   void deleteInfographicPostFirestore(
       String id, List<dynamic> illustrationsUrl, String collectionPath) async {
     emit(InfographicLoading());

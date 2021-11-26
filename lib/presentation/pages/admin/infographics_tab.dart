@@ -71,14 +71,75 @@ class _InfographicsTabState extends State<InfographicsTab> {
               style: kTextTheme.bodyText2!.copyWith(
                 color: kRichBlack,
               ),
-              onChanged: (value) {},
+              onSubmitted: (value) {
+                context
+                    .read<InfographicCubit>()
+                    .getInfographicPostsByUidQueryFirestore(
+                      GetStorage().read('uid'),
+                      _searchQueryController.text.toLowerCase(),
+                    );
+              },
             ),
             const SizedBox(height: 10),
             Expanded(
               child: themeClicked
                   ? BlocBuilder<InfographicCubit, InfographicState>(
                       builder: (context, state) {
-                        if (state is GetInfographicsByThemeIdSuccess) {
+                        if (state is GetInfographicsByUidQuerySuccess) {
+                          if (state.infographicList.isNotEmpty) {
+                            return StaggeredGridView.countBuilder(
+                              crossAxisCount: 4,
+                              itemCount: state.infographicList.length,
+                              itemBuilder:
+                                  (BuildContext itemContext, int index) {
+                                return InkWell(
+                                  onTap: () {
+                                    Navigator.pushNamed(
+                                      context,
+                                      AdminInfographicsDetailPage.routeName,
+                                      arguments: state.infographicList[index],
+                                    ).then((_) {
+                                      if (themeClicked) {
+                                        context
+                                            .read<InfographicCubit>()
+                                            .getInfographicsByThemeIdFirestore(
+                                                selectedTheme);
+                                      } else {
+                                        context
+                                            .read<InfographicCubit>()
+                                            .getInfographicThemesByUidFirestore(
+                                                GetStorage().read('uid'));
+                                      }
+                                    });
+                                  },
+                                  borderRadius: BorderRadius.circular(10),
+                                  child: PublicoStaggeredTileAdmin(
+                                    tileIndex: index,
+                                    duration: 2,
+                                    title: state.infographicList[index].title,
+                                    imageUrl: state.infographicList[index]
+                                        .sources.first['illustrations'][0],
+                                    sourcesCount: state
+                                        .infographicList[index].sources.length,
+                                    category: 'Infografis',
+                                  ),
+                                );
+                              },
+                              staggeredTileBuilder: (int index) =>
+                                  const StaggeredTile.fit(2),
+                              mainAxisSpacing: 15.0,
+                              crossAxisSpacing: 8.0,
+                            );
+                          } else {
+                            return Center(
+                              child: Text(
+                                'Infografis tidak ditemukan',
+                                style: kTextTheme.bodyText2!
+                                    .copyWith(color: kRichBlack),
+                              ),
+                            );
+                          }
+                        } else if (state is GetInfographicsByThemeIdSuccess) {
                           if (state.infographicList.isNotEmpty) {
                             return StaggeredGridView.countBuilder(
                               crossAxisCount: 4,

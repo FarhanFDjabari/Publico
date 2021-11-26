@@ -310,6 +310,99 @@ class RepositoryImpl extends Repository {
   }
 
   @override
+  Future<Either<Failure, void>> editInfographic(
+      String id, String themeId, String themeName, String title, List sources) {
+    // TODO: implement editInfographic
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<Either<Failure, void>> editVideoMateri(
+    String id,
+    String title,
+    String description,
+    String oldVideoUrl,
+    String oldThumbnailUrl,
+    File newVideoFile,
+    File newThumbnailFile,
+    int duration,
+  ) async {
+    try {
+      await remoteDataSources.deleteFromStorage(oldVideoUrl);
+      await remoteDataSources.deleteFromStorage(oldThumbnailUrl);
+      final videoFilename = basename(newVideoFile.path);
+      final thumbnailFilename = basename(newThumbnailFile.path);
+      final videoPath =
+          "video_materi/${DateTime.now().microsecondsSinceEpoch}-${const Uuid().v4()}-${videoFilename.toLowerCase().replaceAll(" ", "_")}";
+      final thumbnailPath =
+          "video_materi_thumbnail/${DateTime.now().microsecondsSinceEpoch}-${const Uuid().v4()}-${thumbnailFilename.toLowerCase().replaceAll(" ", "_")}";
+      final videoUploadTask =
+          await remoteDataSources.uploadFiletoStorage(videoPath, newVideoFile);
+      final thumbnailUploadTask = await remoteDataSources.uploadFiletoStorage(
+          thumbnailPath, newThumbnailFile);
+      String videoUrl = '';
+      String thumbnailUrl = '';
+      await videoUploadTask.whenComplete(() async {
+        videoUrl = await videoUploadTask.snapshot.ref.getDownloadURL();
+      });
+      await thumbnailUploadTask.whenComplete(() async {
+        thumbnailUrl = await thumbnailUploadTask.snapshot.ref.getDownloadURL();
+      });
+
+      remoteDataSources.updateVideoMateri(
+          id, title, description, videoUrl, thumbnailUrl, duration);
+      return const Right(null);
+    } on FirebaseException catch (e) {
+      return Left(ServerFailure(e.toString()));
+    } on ServerException catch (e) {
+      return Left(ServerFailure(e.message));
+    }
+  }
+
+  @override
+  Future<Either<Failure, void>> editVideoSingkat(
+      String id,
+      String title,
+      String description,
+      String oldVideoUrl,
+      String oldThumbnailUrl,
+      File newVideoFile,
+      File newThumbnailFile,
+      String tiktokUrl,
+      int duration) async {
+    try {
+      await remoteDataSources.deleteFromStorage(oldVideoUrl);
+      await remoteDataSources.deleteFromStorage(oldThumbnailUrl);
+      final videoFilename = basename(newVideoFile.path);
+      final thumbnailFilename = basename(newThumbnailFile.path);
+      final videoPath =
+          "video_materi/${DateTime.now().microsecondsSinceEpoch}-${const Uuid().v4()}-${videoFilename.toLowerCase().replaceAll(" ", "_")}";
+      final thumbnailPath =
+          "video_materi_thumbnail/${DateTime.now().microsecondsSinceEpoch}-${const Uuid().v4()}-${thumbnailFilename.toLowerCase().replaceAll(" ", "_")}";
+      final videoUploadTask =
+          await remoteDataSources.uploadFiletoStorage(videoPath, newVideoFile);
+      final thumbnailUploadTask = await remoteDataSources.uploadFiletoStorage(
+          thumbnailPath, newThumbnailFile);
+      String videoUrl = '';
+      String thumbnailUrl = '';
+      await videoUploadTask.whenComplete(() async {
+        videoUrl = await videoUploadTask.snapshot.ref.getDownloadURL();
+      });
+      await thumbnailUploadTask.whenComplete(() async {
+        thumbnailUrl = await thumbnailUploadTask.snapshot.ref.getDownloadURL();
+      });
+
+      remoteDataSources.updateVideoSingkat(
+          id, title, description, videoUrl, thumbnailUrl, tiktokUrl, duration);
+      return const Right(null);
+    } on FirebaseException catch (e) {
+      return Left(ServerFailure(e.toString()));
+    } on ServerException catch (e) {
+      return Left(ServerFailure(e.message));
+    }
+  }
+
+  @override
   Future<Either<Failure, List<dynamic>>> getExplore() async {
     try {
       final models = await remoteDataSources.getExplore();
