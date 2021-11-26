@@ -55,7 +55,11 @@ class _VideoSingkatPostPageState extends State<VideoSingkatPostPage> {
   Future<void> videoPlayerInit(File? videoFile) async {
     if (videoFile != null) {
       _videoController = VideoPlayerController.file(videoFile)
-        ..addListener(() => setState(() {}))
+        ..addListener(() {
+          if (mounted) {
+            setState(() {});
+          }
+        })
         ..setLooping(false)
         ..initialize().then(
           (value) => duration = _videoController?.value.duration.inSeconds,
@@ -213,12 +217,6 @@ class _VideoSingkatPostPageState extends State<VideoSingkatPostPage> {
                                     ? _videoController!.pause()
                                     : _videoController!.play();
                               },
-                              onLongPress: () async {
-                                await FilePicker.platform.clearTemporaryFiles();
-                                setState(() {
-                                  _videoController = null;
-                                });
-                              },
                               child: Stack(
                                 fit: StackFit.loose,
                                 children: [
@@ -242,6 +240,23 @@ class _VideoSingkatPostPageState extends State<VideoSingkatPostPage> {
                                                 size: 80,
                                               ),
                                             ),
+                                    ),
+                                  ),
+                                  Positioned(
+                                    top: 0,
+                                    right: 0,
+                                    child: IconButton(
+                                      onPressed: () async {
+                                        setState(() {
+                                          _videoController = null;
+                                        });
+                                        await FilePicker.platform
+                                            .clearTemporaryFiles();
+                                      },
+                                      icon: const Icon(
+                                        Icons.cancel_rounded,
+                                        color: kGrey,
+                                      ),
                                     ),
                                   ),
                                 ],

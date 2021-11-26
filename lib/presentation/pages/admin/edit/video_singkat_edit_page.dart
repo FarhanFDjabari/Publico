@@ -3,8 +3,11 @@ import 'dart:io';
 
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 import 'package:publico/domain/entities/video_singkat.dart';
+import 'package:publico/presentation/bloc/video_singkat/video_singkat_cubit.dart';
+import 'package:publico/presentation/widgets/loading_button.dart';
 import 'package:publico/presentation/widgets/primary_button.dart';
 import 'package:publico/presentation/widgets/publico_snackbar.dart';
 import 'package:publico/styles/colors.dart';
@@ -29,6 +32,7 @@ class _VideoSingkatEditPageState extends State<VideoSingkatEditPage> {
   VideoPlayerController? _videoController;
   File? videoFile;
   File? thumbnailImage;
+  int? duration;
   bool isValidate = false;
   bool isLoadLocal = false;
 
@@ -62,9 +66,15 @@ class _VideoSingkatEditPageState extends State<VideoSingkatEditPage> {
 
   Future<void> videoPlayerInit(File videoFile) async {
     _videoController = VideoPlayerController.file(videoFile)
-      ..addListener(() => setState(() {}))
+      ..addListener(() {
+        if (mounted) {
+          setState(() {});
+        }
+      })
       ..setLooping(false)
-      ..initialize();
+      ..initialize().then((value) {
+        duration = _videoController?.value.duration.inSeconds;
+      });
     String? thumbnailPath = await VideoThumbnail.thumbnailFile(
       video: videoFile.path,
       timeMs: 2000,
@@ -76,7 +86,11 @@ class _VideoSingkatEditPageState extends State<VideoSingkatEditPage> {
 
   void videoPlayerNetworkInit(String url) {
     _videoController = VideoPlayerController.network(url)
-      ..addListener(() => setState(() {}))
+      ..addListener(() {
+        if (mounted) {
+          setState(() {});
+        }
+      })
       ..setLooping(false)
       ..initialize();
   }
@@ -224,12 +238,6 @@ class _VideoSingkatEditPageState extends State<VideoSingkatEditPage> {
                                     ? _videoController!.pause()
                                     : _videoController!.play();
                               },
-                              onLongPress: () async {
-                                await FilePicker.platform.clearTemporaryFiles();
-                                setState(() {
-                                  _videoController = null;
-                                });
-                              },
                               child: Stack(
                                 fit: StackFit.loose,
                                 children: [
@@ -253,6 +261,23 @@ class _VideoSingkatEditPageState extends State<VideoSingkatEditPage> {
                                                 size: 80,
                                               ),
                                             ),
+                                    ),
+                                  ),
+                                  Positioned(
+                                    top: 0,
+                                    right: 0,
+                                    child: IconButton(
+                                      onPressed: () async {
+                                        setState(() {
+                                          _videoController = null;
+                                        });
+                                        await FilePicker.platform
+                                            .clearTemporaryFiles();
+                                      },
+                                      icon: const Icon(
+                                        Icons.cancel_rounded,
+                                        color: kGrey,
+                                      ),
                                     ),
                                   ),
                                 ],
@@ -326,6 +351,7 @@ class _VideoSingkatEditPageState extends State<VideoSingkatEditPage> {
                                     ),
                                     Text(
                                       'Unggah Video\nMaks. 60 detik',
+                                      textAlign: TextAlign.center,
                                       style: kTextTheme.bodyText2!.copyWith(
                                         color: kLightGrey,
                                         fontSize: 14,
@@ -337,20 +363,92 @@ class _VideoSingkatEditPageState extends State<VideoSingkatEditPage> {
                       ),
               ),
               const SizedBox(height: 15),
-              PrimaryButton(
-                borderRadius: 10,
-                child: SizedBox(
-                  height: 45,
-                  child: Center(
-                    child: Text(
-                      'Simpan',
-                      style: kTextTheme.button!.copyWith(
-                        color: kRichWhite,
+              BlocConsumer<VideoSingkatCubit, VideoSingkatState>(
+                listener: (listenerContext, state) {
+                  if (state is VideoSingkatError) {
+                    Get.showSnackbar(
+                      PublicoSnackbar(
+                        message: state.message,
+                      ),
+                    );
+                  } else if (state is EditVideoSingkatSuccess) {
+                    Navigator.pop(context);
+                    Navigator.pop(context);
+                    Get.showSnackbar(
+                      PublicoSnackbar(
+                        message: state.message,
+                      ),
+                    );
+                  }
+                },
+                builder: (builderContext, state) {
+                  if (state is VideoSingkatLoading) {
+                    return LoadingButton(
+                      borderRadius: 10,
+                      primaryColor: kLightGrey,
+                      child: const SizedBox(
+                        width: double.infinity,
+                        height: 45,
+                        child: Center(
+                          child: SizedBox(
+                            width: 20,
+                            height: 20,
+                            child: CircularProgressIndicator(
+                              color: kRichWhite,
+                              strokeWidth: 3,
+                            ),
+                          ),
+                        ),
+                      ),
+                    );
+                  }
+                  return PrimaryButton(
+                    borderRadius: 10,
+                    child: SizedBox(
+                      height: 45,
+                      child: Center(
+                        child: Text(
+                          'Simpan',
+                          style: kTextTheme.button!.copyWith(
+                            color: kRichWhite,
+                          ),
+                        ),
                       ),
                     ),
-                  ),
-                ),
-                onPressed: !isValidate ? null : () {},
+                    onPressed: !isValidate
+                        ? null
+                        : () {
+                            if (!_tautanController.text
+                                .contains('https://www.')) {
+                              builderContext
+                                  .read<VideoSingkatCubit>()
+                                  .editVideoSingkatFirestore(
+                                      widget.videoSingkat.id,
+                                      _titleController.text,
+                                      _descriptionController.text,
+                                      widget.videoSingkat.videoUrl,
+                                      widget.videoSingkat.thumbnailUrl,
+                                      videoFile!,
+                                      thumbnailImage!,
+                                      'https://www.${_tautanController.text}',
+                                      duration!);
+                            } else {
+                              builderContext
+                                  .read<VideoSingkatCubit>()
+                                  .editVideoSingkatFirestore(
+                                      widget.videoSingkat.id,
+                                      _titleController.text,
+                                      _descriptionController.text,
+                                      widget.videoSingkat.videoUrl,
+                                      widget.videoSingkat.thumbnailUrl,
+                                      videoFile!,
+                                      thumbnailImage!,
+                                      _tautanController.text,
+                                      duration!);
+                            }
+                          },
+                  );
+                },
               ),
             ],
           ),

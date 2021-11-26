@@ -188,12 +188,6 @@ class _VideoMateriPostPageState extends State<VideoMateriPostPage> {
                                     ? _videoController!.pause()
                                     : _videoController!.play();
                               },
-                              onLongPress: () async {
-                                await FilePicker.platform.clearTemporaryFiles();
-                                setState(() {
-                                  _videoController = null;
-                                });
-                              },
                               child: Stack(
                                 fit: StackFit.loose,
                                 children: [
@@ -217,6 +211,23 @@ class _VideoMateriPostPageState extends State<VideoMateriPostPage> {
                                                 size: 80,
                                               ),
                                             ),
+                                    ),
+                                  ),
+                                  Positioned(
+                                    top: 0,
+                                    right: 0,
+                                    child: IconButton(
+                                      onPressed: () async {
+                                        setState(() {
+                                          _videoController = null;
+                                        });
+                                        await FilePicker.platform
+                                            .clearTemporaryFiles();
+                                      },
+                                      icon: const Icon(
+                                        Icons.cancel_rounded,
+                                        color: kGrey,
+                                      ),
                                     ),
                                   ),
                                 ],

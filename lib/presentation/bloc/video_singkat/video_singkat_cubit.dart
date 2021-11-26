@@ -4,6 +4,7 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:publico/domain/entities/video_singkat.dart';
 import 'package:publico/domain/usecases/admin/delete_video_post.dart';
+import 'package:publico/domain/usecases/admin/edit_video_singkat_post.dart';
 import 'package:publico/domain/usecases/admin/get_video_singkat_posts_by_uid.dart';
 import 'package:publico/domain/usecases/admin/get_video_singkat_posts_by_uid_query.dart';
 import 'package:publico/domain/usecases/admin/post_video_singkat.dart';
@@ -22,6 +23,7 @@ class VideoSingkatCubit extends Cubit<VideoSingkatState> {
     required this.getVideoSingkatPostsByUidQuery,
     required this.deleteVideoPost,
     required this.getVideoSingkatByQuery,
+    required this.editVideoSingkatPost,
     required this.saveVideoSingkat,
     required this.removeSingkatFromBookmark,
     required this.getSingkatBookmarkStatus,
@@ -33,6 +35,7 @@ class VideoSingkatCubit extends Cubit<VideoSingkatState> {
   final GetVideoSingkatPostsByUidQuery getVideoSingkatPostsByUidQuery;
   final DeleteVideoPost deleteVideoPost;
   final GetVideoSingkatByQuery getVideoSingkatByQuery;
+  final EditVideoSingkatPost editVideoSingkatPost;
   final SaveVideoSingkat saveVideoSingkat;
   final RemoveSingkatFromBookmark removeSingkatFromBookmark;
   final GetSingkatBookmarkStatus getSingkatBookmarkStatus;
@@ -61,6 +64,34 @@ class VideoSingkatCubit extends Cubit<VideoSingkatState> {
       (l) => emit(VideoSingkatError(l.message)),
       (r) => emit(
           const PostVideoSingkatSuccess("Video singkat berhasil diposting")),
+    );
+  }
+
+  void editVideoSingkatFirestore(
+      String id,
+      String title,
+      String description,
+      String oldVideoUrl,
+      String oldThumbnailUrl,
+      File newVideoFile,
+      File newThumbnailFile,
+      String tiktokUrl,
+      int duration) async {
+    emit(VideoSingkatLoading());
+    final result = await editVideoSingkatPost.execute(
+        id,
+        title,
+        description,
+        oldVideoUrl,
+        oldThumbnailUrl,
+        newVideoFile,
+        newThumbnailFile,
+        tiktokUrl,
+        duration);
+    result.fold(
+      (l) => emit(VideoSingkatError(l.message)),
+      (r) =>
+          emit(const EditVideoSingkatSuccess("Video singkat berhasil diedit")),
     );
   }
 

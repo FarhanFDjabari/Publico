@@ -210,12 +210,6 @@ class _VideoMateriEditPageState extends State<VideoMateriEditPage> {
                                     ? _videoController!.pause()
                                     : _videoController!.play();
                               },
-                              onLongPress: () async {
-                                await FilePicker.platform.clearTemporaryFiles();
-                                setState(() {
-                                  _videoController = null;
-                                });
-                              },
                               child: Stack(
                                 fit: StackFit.loose,
                                 children: [
@@ -246,11 +240,11 @@ class _VideoMateriEditPageState extends State<VideoMateriEditPage> {
                                     right: 0,
                                     child: IconButton(
                                       onPressed: () async {
-                                        await FilePicker.platform
-                                            .clearTemporaryFiles();
                                         setState(() {
                                           _videoController = null;
                                         });
+                                        await FilePicker.platform
+                                            .clearTemporaryFiles();
                                       },
                                       icon: const Icon(
                                         Icons.cancel_rounded,
@@ -278,15 +272,14 @@ class _VideoMateriEditPageState extends State<VideoMateriEditPage> {
                                     const Duration(milliseconds: 500));
                                 await FilePicker.platform
                                     .pickFiles(
-                                  type: FileType.video,
-                                  withData: false,
-                                  allowMultiple: false,
-                                  onFileLoading: (status) {
-                                    setState(() {
-                                      isLoadLocal = true;
-                                    });
-                                  },
-                                )
+                                        type: FileType.video,
+                                        withData: false,
+                                        allowMultiple: false,
+                                        onFileLoading: (status) {
+                                          setState(() {
+                                            isLoadLocal = true;
+                                          });
+                                        })
                                     .then(
                                   (value) async {
                                     setState(() {
@@ -329,7 +322,8 @@ class _VideoMateriEditPageState extends State<VideoMateriEditPage> {
                                       size: 35,
                                     ),
                                     Text(
-                                      'Unggah Video',
+                                      'Unggah Video\nMaks. 7 Menit',
+                                      textAlign: TextAlign.center,
                                       style: kTextTheme.bodyText2!.copyWith(
                                         color: kLightGrey,
                                         fontSize: 14,

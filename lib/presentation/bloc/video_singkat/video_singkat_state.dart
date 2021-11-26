@@ -28,6 +28,14 @@ class PostVideoSingkatSuccess extends VideoSingkatState {
   List<Object> get props => [message];
 }
 
+class EditVideoSingkatSuccess extends VideoSingkatState {
+  final String message;
+  const EditVideoSingkatSuccess(this.message);
+
+  @override
+  List<Object> get props => [message];
+}
+
 class DeleteVideoSingkatSuccess extends VideoSingkatState {
   final String message;
   const DeleteVideoSingkatSuccess(this.message);

@@ -376,9 +376,9 @@ class RepositoryImpl extends Repository {
       final videoFilename = basename(newVideoFile.path);
       final thumbnailFilename = basename(newThumbnailFile.path);
       final videoPath =
-          "video_materi/${DateTime.now().microsecondsSinceEpoch}-${const Uuid().v4()}-${videoFilename.toLowerCase().replaceAll(" ", "_")}";
+          "video_singkat/${DateTime.now().microsecondsSinceEpoch}-${const Uuid().v4()}-${videoFilename.toLowerCase().replaceAll(" ", "_")}";
       final thumbnailPath =
-          "video_materi_thumbnail/${DateTime.now().microsecondsSinceEpoch}-${const Uuid().v4()}-${thumbnailFilename.toLowerCase().replaceAll(" ", "_")}";
+          "video_singkat_thumbnail/${DateTime.now().microsecondsSinceEpoch}-${const Uuid().v4()}-${thumbnailFilename.toLowerCase().replaceAll(" ", "_")}";
       final videoUploadTask =
           await remoteDataSources.uploadFiletoStorage(videoPath, newVideoFile);
       final thumbnailUploadTask = await remoteDataSources.uploadFiletoStorage(
