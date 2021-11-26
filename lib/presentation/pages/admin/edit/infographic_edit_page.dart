@@ -1,10 +1,15 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get/get.dart';
 import 'package:publico/domain/entities/infographic.dart';
+import 'package:publico/presentation/bloc/infographic/infographic_cubit.dart';
 import 'package:publico/presentation/pages/admin/edit/edit_sources_page.dart';
 import 'package:publico/presentation/pages/admin/post/add_source_page.dart';
+import 'package:publico/presentation/widgets/loading_button.dart';
 import 'package:publico/presentation/widgets/primary_button.dart';
+import 'package:publico/presentation/widgets/publico_snackbar.dart';
 import 'package:publico/styles/colors.dart';
 import 'package:publico/styles/text_styles.dart';
 
@@ -258,20 +263,74 @@ class _InfographicEditPageState extends State<InfographicEditPage> {
                 ),
               ),
               const SizedBox(height: 15),
-              PrimaryButton(
-                borderRadius: 10,
-                child: SizedBox(
-                  height: 45,
-                  child: Center(
-                    child: Text(
-                      'Simpan',
-                      style: kTextTheme.button!.copyWith(
-                        color: kRichWhite,
+              BlocConsumer<InfographicCubit, InfographicState>(
+                listener: (listenerContext, state) {
+                  if (state is InfographicError) {
+                    Get.showSnackbar(
+                      PublicoSnackbar(
+                        message: state.message,
+                      ),
+                    );
+                  } else if (state is EditInfographicPostSuccess) {
+                    Navigator.pop(context);
+                    Navigator.pop(context);
+                    Get.showSnackbar(
+                      PublicoSnackbar(
+                        message: state.message,
+                      ),
+                    );
+                  }
+                },
+                builder: (builderContext, state) {
+                  if (state is InfographicLoading) {
+                    return LoadingButton(
+                      borderRadius: 10,
+                      primaryColor: kLightGrey,
+                      child: const SizedBox(
+                        width: double.infinity,
+                        height: 45,
+                        child: Center(
+                          child: SizedBox(
+                            width: 20,
+                            height: 20,
+                            child: CircularProgressIndicator(
+                              color: kRichWhite,
+                              strokeWidth: 3,
+                            ),
+                          ),
+                        ),
+                      ),
+                    );
+                  }
+                  return PrimaryButton(
+                    borderRadius: 10,
+                    child: SizedBox(
+                      height: 45,
+                      child: Center(
+                        child: Text(
+                          'Simpan',
+                          style: kTextTheme.button!.copyWith(
+                            color: kRichWhite,
+                          ),
+                        ),
                       ),
                     ),
-                  ),
-                ),
-                onPressed: !isValidate ? null : () {},
+                    onPressed: !isValidate
+                        ? null
+                        : () {
+                            builderContext
+                                .read<InfographicCubit>()
+                                .editInfographicFirestore(
+                                  widget.infographic.id,
+                                  widget.infographic.themeId,
+                                  widget.infographic.themeName,
+                                  _titleController.text,
+                                  widget.infographic.sources,
+                                  sources,
+                                );
+                          },
+                  );
+                },
               ),
             ],
           ),

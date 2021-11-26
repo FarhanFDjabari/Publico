@@ -310,10 +310,46 @@ class RepositoryImpl extends Repository {
   }
 
   @override
-  Future<Either<Failure, void>> editInfographic(
-      String id, String themeId, String themeName, String title, List sources) {
-    // TODO: implement editInfographic
-    throw UnimplementedError();
+  Future<Either<Failure, void>> editInfographic(String id, String themeId,
+      String themeName, String title, List oldSources, List newSources) async {
+    try {
+      List<Map<String, dynamic>> _sources = [];
+      for (var source in oldSources) {
+        for (var illustrationUrl in source['illustrations']) {
+          await remoteDataSources.deleteFromStorage(illustrationUrl);
+        }
+      }
+      for (var source in newSources) {
+        if (source['illustration'] != null) {
+          List<String> illustrationList = [];
+          for (var illustrationFile in source['illustration']) {
+            String filename = basename(illustrationFile.path);
+            String filePath =
+                "illustrations/${DateTime.now().microsecondsSinceEpoch}-${const Uuid().v4()}-${filename.toLowerCase().replaceAll(" ", "_")}";
+            final uploadTask = await remoteDataSources.uploadFiletoStorage(
+                filePath, illustrationFile);
+            await uploadTask.whenComplete(() async {
+              String illustrationUrl =
+                  await uploadTask.snapshot.ref.getDownloadURL();
+              illustrationList.add(illustrationUrl);
+            });
+          }
+          _sources.add({
+            "source_name": source['source'],
+            "description": source['description'],
+            "illustrations": illustrationList
+          });
+        }
+      }
+
+      await remoteDataSources.updateInfographic(
+          id, themeId, themeName, title, _sources);
+      return const Right(null);
+    } on FirebaseException catch (e) {
+      return Left(ServerFailure(e.toString()));
+    } on ServerException catch (e) {
+      return Left(ServerFailure(e.message));
+    }
   }
 
   @override

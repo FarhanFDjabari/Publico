@@ -60,8 +60,15 @@ abstract class Repository {
   Future<Either<Failure, List<Infographic>>> getInfographicPostsByUidQuery(
       String uid, String query);
 
-  Future<Either<Failure, void>> editInfographic(String id, String themeId,
-      String themeName, String title, List<dynamic> sources);
+  Future<Either<Failure, void>> editInfographic(
+    String id,
+    String themeId,
+    String themeName,
+    String title,
+    List<dynamic> oldSources,
+    List<dynamic> newSources,
+  );
+
   Future<Either<Failure, void>> editVideoMateri(
       String id,
       String title,

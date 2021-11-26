@@ -131,6 +131,14 @@ class InsertInfographicBookmarkSuccess extends InfographicState {
   List<Object?> get props => [message];
 }
 
+class EditInfographicPostSuccess extends InfographicState {
+  final String message;
+  const EditInfographicPostSuccess(this.message);
+
+  @override
+  List<Object?> get props => [message];
+}
+
 class RemoveInfographicBookmarkSuccess extends InfographicState {
   final String message;
   const RemoveInfographicBookmarkSuccess(this.message);

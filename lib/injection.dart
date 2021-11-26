@@ -8,6 +8,7 @@ import 'package:publico/data/repositories/repository_impl.dart';
 import 'package:publico/domain/repositories/repository.dart';
 import 'package:publico/domain/usecases/admin/delete_infographic_post.dart';
 import 'package:publico/domain/usecases/admin/delete_video_post.dart';
+import 'package:publico/domain/usecases/admin/edit_infographic_post.dart';
 import 'package:publico/domain/usecases/admin/edit_video_materi_post.dart';
 import 'package:publico/domain/usecases/admin/edit_video_singkat_post.dart';
 import 'package:publico/domain/usecases/admin/get_infographic_by_theme_id.dart';
@@ -107,6 +108,7 @@ void init() {
       getInfographicBookmarkStatus: locator(),
       removeInfographicFromBookmark: locator(),
       checkInfographicBookmark: locator(),
+      editInfographicPost: locator(),
     ),
   );
   locator.registerFactory(
@@ -173,6 +175,7 @@ void init() {
   locator.registerLazySingleton(() => GetInfographicBookmarkStatus(locator()));
   locator.registerLazySingleton(() => GetInfographicPostsByUidQuery(locator()));
   locator.registerLazySingleton(() => CheckInfographicBookmark(locator()));
+  locator.registerLazySingleton(() => EditInfographicPost(locator()));
 
   locator.registerLazySingleton(() => SaveVideoSingkat(locator()));
   locator.registerLazySingleton(() => RemoveSingkatFromBookmark(locator()));
