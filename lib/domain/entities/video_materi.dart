@@ -6,6 +6,7 @@ class VideoMateri extends Equatable {
   final String type;
   final String title;
   final int duration;
+  final int bookmarkCount;
   final String description;
   final String videoUrl;
   final String thumbnailUrl;
@@ -16,6 +17,7 @@ class VideoMateri extends Equatable {
     required this.type,
     required this.title,
     required this.duration,
+    required this.bookmarkCount,
     required this.description,
     required this.videoUrl,
     required this.thumbnailUrl,
@@ -27,6 +29,7 @@ class VideoMateri extends Equatable {
     required this.type,
     required this.title,
     required this.duration,
+    required this.bookmarkCount,
     required this.description,
     required this.videoUrl,
     required this.thumbnailUrl,
@@ -39,6 +42,7 @@ class VideoMateri extends Equatable {
         type,
         title,
         duration,
+        bookmarkCount,
         description,
         videoUrl,
         thumbnailUrl,

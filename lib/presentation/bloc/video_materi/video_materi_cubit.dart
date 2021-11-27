@@ -126,9 +126,9 @@ class VideoMateriCubit extends Cubit<VideoMateriState> {
     );
   }
 
-  void insertVideoMateriToBookmark(VideoMateri videoMateri) async {
+  void insertVideoMateriToBookmark(VideoMateri videoMateri, String id) async {
     emit(VideoMateriLoading());
-    final result = await saveVideoMateri.execute(videoMateri);
+    final result = await saveVideoMateri.execute(videoMateri, id);
     result.fold(
       (l) => emit(VideoMateriError(l.message)),
       (r) => emit(
@@ -136,9 +136,9 @@ class VideoMateriCubit extends Cubit<VideoMateriState> {
     );
   }
 
-  void removeVideoMateriToBookmark(VideoMateri videoMateri) async {
+  void removeVideoMateriToBookmark(VideoMateri videoMateri, String id) async {
     emit(VideoMateriLoading());
-    final result = await removeMateriFromBookmark.execute(videoMateri);
+    final result = await removeMateriFromBookmark.execute(videoMateri, id);
     result.fold(
       (l) => emit(VideoMateriError(l.message)),
       (r) =>

@@ -8,7 +8,7 @@ class RemoveInfographicFromBookmark {
 
   RemoveInfographicFromBookmark(this.repository);
 
-  Future<Either<Failure, String>> execute(Infographic info) async {
-    return repository.removeInfographicFromBookmark(info);
+  Future<Either<Failure, String>> execute(Infographic info, String id) async {
+    return repository.removeInfographicFromBookmark(info, id);
   }
 }

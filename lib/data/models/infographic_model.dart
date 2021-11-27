@@ -9,6 +9,7 @@ class InfographicModel extends Equatable {
   final String themeId;
   final String themeName;
   final String type;
+  final int bookmarkCount;
   final List<dynamic> sources;
 
   const InfographicModel({
@@ -18,6 +19,7 @@ class InfographicModel extends Equatable {
     required this.themeId,
     required this.themeName,
     required this.type,
+    required this.bookmarkCount,
     required this.sources,
   });
 
@@ -30,6 +32,7 @@ class InfographicModel extends Equatable {
       themeId: snapshot.data()!['theme_id'],
       themeName: snapshot.data()!['theme_name'],
       type: snapshot.data()!['type'],
+      bookmarkCount: snapshot.data()!['bookmark_count'],
       sources: snapshot.data()!['sources'],
     );
   }
@@ -42,9 +45,11 @@ class InfographicModel extends Equatable {
         themeId: themeId,
         themeName: themeName,
         type: type,
+        bookmarkCount: bookmarkCount,
         sources: sources);
   }
 
   @override
-  List<Object?> get props => [id, adminId, themeId, type, sources];
+  List<Object?> get props =>
+      [id, adminId, themeId, type, bookmarkCount, sources];
 }

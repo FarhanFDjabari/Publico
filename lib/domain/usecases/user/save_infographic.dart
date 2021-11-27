@@ -8,7 +8,8 @@ class SaveInfographic {
 
   SaveInfographic(this.repository);
 
-  Future<Either<Failure, String>> execute(Infographic infographic) async {
-    return repository.saveInfographicToBookmark(infographic);
+  Future<Either<Failure, String>> execute(
+      Infographic infographic, String id) async {
+    return repository.saveInfographicToBookmark(infographic, id);
   }
 }

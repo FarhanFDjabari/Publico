@@ -92,7 +92,10 @@ class _VideoSingkatDetailPageState extends State<VideoSingkatDetailPage> {
                   onPressed: () {
                     context
                         .read<VideoSingkatCubit>()
-                        .removeVideoSingkatToBookmark(widget.videoSingkat);
+                        .removeVideoSingkatToBookmark(
+                          widget.videoSingkat,
+                          widget.videoSingkat.id,
+                        );
                   },
                   icon: const Icon(
                     Icons.bookmark,
@@ -104,7 +107,10 @@ class _VideoSingkatDetailPageState extends State<VideoSingkatDetailPage> {
                   onPressed: () {
                     context
                         .read<VideoSingkatCubit>()
-                        .insertVideoSingkatToBookmark(widget.videoSingkat);
+                        .insertVideoSingkatToBookmark(
+                          widget.videoSingkat,
+                          widget.videoSingkat.id,
+                        );
                   },
                   icon: const Icon(
                     Icons.bookmark_outline_rounded,

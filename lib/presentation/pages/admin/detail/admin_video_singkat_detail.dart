@@ -75,6 +75,7 @@ class _AdminVideoSingkatDetailPageState
                 isDismissible: true,
                 builder: (_) => PublicoSingkatEditBottomSheet(
                   parentContext: context,
+                  bookmarkCount: widget.videoSingkat.bookmarkCount,
                   onDeletePressed: () {
                     context
                         .read<VideoSingkatCubit>()

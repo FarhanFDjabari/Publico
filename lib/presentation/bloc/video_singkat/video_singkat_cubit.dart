@@ -139,9 +139,9 @@ class VideoSingkatCubit extends Cubit<VideoSingkatState> {
     );
   }
 
-  void insertVideoSingkatToBookmark(VideoSingkat video) async {
+  void insertVideoSingkatToBookmark(VideoSingkat video, String id) async {
     emit(VideoSingkatLoading());
-    final result = await saveVideoSingkat.execute(video);
+    final result = await saveVideoSingkat.execute(video, id);
     result.fold(
       (l) => emit(VideoSingkatError(l.message)),
       (r) => emit(
@@ -149,9 +149,9 @@ class VideoSingkatCubit extends Cubit<VideoSingkatState> {
     );
   }
 
-  void removeVideoSingkatToBookmark(VideoSingkat video) async {
+  void removeVideoSingkatToBookmark(VideoSingkat video, String id) async {
     emit(VideoSingkatLoading());
-    final result = await removeSingkatFromBookmark.execute(video);
+    final result = await removeSingkatFromBookmark.execute(video, id);
     result.fold(
       (l) => emit(VideoSingkatError(l.message)),
       (r) => emit(
