@@ -5,6 +5,7 @@ import 'package:equatable/equatable.dart';
 import 'package:publico/domain/entities/infographic.dart';
 import 'package:publico/domain/entities/theme.dart';
 import 'package:publico/domain/usecases/admin/delete_infographic_post.dart';
+import 'package:publico/domain/usecases/admin/edit_infographic_post.dart';
 import 'package:publico/domain/usecases/admin/get_infographic_by_theme_id.dart';
 import 'package:publico/domain/usecases/admin/get_infographic_posts_by_uid_query.dart';
 import 'package:publico/domain/usecases/admin/get_infographic_themes_by_uid.dart';
@@ -31,6 +32,7 @@ class InfographicCubit extends Cubit<InfographicState> {
     required this.removeInfographicFromBookmark,
     required this.getInfographicBookmarkStatus,
     required this.checkInfographicBookmark,
+    required this.editInfographicPost,
   }) : super(InfographicInitial());
 
   final PostInfographic postInfographic;
@@ -44,6 +46,7 @@ class InfographicCubit extends Cubit<InfographicState> {
   final RemoveInfographicFromBookmark removeInfographicFromBookmark;
   final GetInfographicBookmarkStatus getInfographicBookmarkStatus;
   final CheckInfographicBookmark checkInfographicBookmark;
+  final EditInfographicPost editInfographicPost;
 
   void postNewInfographicTheme(
       String themeName, String destination, File themeImage) async {
@@ -105,6 +108,18 @@ class InfographicCubit extends Cubit<InfographicState> {
       (l) => emit(PostInfographicError(l.message)),
       (r) =>
           emit(const PostInfographicSuccess('Infografis berhasil ditambahkan')),
+    );
+  }
+
+  void editInfographicFirestore(String id, String themeId, String themeName,
+      String title, List oldSources, List newSources) async {
+    emit(InfographicLoading());
+    final result = await editInfographicPost.execute(
+        id, themeId, themeName, title, oldSources, newSources);
+    result.fold(
+      (l) => emit(InfographicError(l.message)),
+      (r) =>
+          emit(const EditInfographicPostSuccess('Infografis berhasil diedit')),
     );
   }
 
