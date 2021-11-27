@@ -81,6 +81,7 @@ class VideoSingkatTable extends Equatable {
         type: type,
         title: title,
         duration: duration,
+        bookmarkCount: 0,
         description: description,
         videoUrl: videoUrl,
         thumbnailUrl: thumbnailUrl,

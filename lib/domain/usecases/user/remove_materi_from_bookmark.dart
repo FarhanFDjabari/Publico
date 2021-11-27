@@ -8,7 +8,7 @@ class RemoveMateriFromBookmark {
 
   RemoveMateriFromBookmark(this.repository);
 
-  Future<Either<Failure, String>> execute(VideoMateri video) async {
-    return repository.removeVideoMateriFromBookmark(video);
+  Future<Either<Failure, String>> execute(VideoMateri video, String id) async {
+    return repository.removeVideoMateriFromBookmark(video, id);
   }
 }

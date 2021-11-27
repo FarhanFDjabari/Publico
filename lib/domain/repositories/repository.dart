@@ -68,7 +68,6 @@ abstract class Repository {
     List<dynamic> oldSources,
     List<dynamic> newSources,
   );
-
   Future<Either<Failure, void>> editVideoMateri(
       String id,
       String title,
@@ -90,18 +89,19 @@ abstract class Repository {
       int duration);
 
   Future<Either<Failure, List<dynamic>>> getExplore();
-  Future<Either<Failure, String>> saveVideoMateriToBookmark(VideoMateri video);
+  Future<Either<Failure, String>> saveVideoMateriToBookmark(
+      VideoMateri video, String id);
   Future<Either<Failure, String>> saveVideoSingkatToBookmark(
-      VideoSingkat video);
+      VideoSingkat video, String id);
   Future<Either<Failure, String>> saveInfographicToBookmark(
-      Infographic infographic);
+      Infographic infographic, String id);
   Future<Either<Failure, String>> removeVideoMateriFromBookmark(
-      VideoMateri video);
+      VideoMateri video, String id);
 
   Future<Either<Failure, String>> removeVideoSingkatFromBookmark(
-      VideoSingkat video);
+      VideoSingkat video, String id);
   Future<Either<Failure, String>> removeInfographicFromBookmark(
-      Infographic infographic);
+      Infographic infographic, String id);
   Future<bool> isVideoMateriAddedToBookmark(String id);
   Future<bool> isVideoSingkatAddedToBookmark(String id);
   Future<bool> isInfographicAddedToBookmark(String id);

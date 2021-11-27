@@ -54,6 +54,7 @@ class _AdminInfographicsDetailPageState
                 isDismissible: true,
                 builder: (_) => PublicoInfoEditBottomSheet(
                   parentContext: context,
+                  bookmarkCount: widget.infographic.bookmarkCount,
                   onDeletePressed: () {
                     final illustrationsUrl = widget.infographic.sources
                         .expand((element) => element['illustrations'])

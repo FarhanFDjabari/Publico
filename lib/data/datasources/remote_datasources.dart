@@ -39,6 +39,9 @@ abstract class RemoteDataSources {
       String themeId, String themeName, String title, List sources);
   Future<void> updateInfographic(
       String id, String themeId, String themeName, String title, List sources);
+  Future<void> addToBookmarkCountFirebase(String collectionName, String id);
+  Future<void> removeFromBookmarkCountFirebase(
+      String collectionName, String id);
 
   Future<Map<String, dynamic>> getExplore();
   Future<List<VideoMateriModel>> getVideoMateriPosts(String query);
@@ -139,6 +142,7 @@ class RemoteDataSourcesImpl extends RemoteDataSources {
         'tiktok_url': tiktokUrl,
         'duration': duration,
         'admin_id': GetStorage().read('uid'),
+        'bookmark_count': 0
       });
     } catch (error) {
       throw ServerException(error.toString());
@@ -159,6 +163,7 @@ class RemoteDataSourcesImpl extends RemoteDataSources {
         'thumbnail_url': thumbnailUrl,
         'duration': duration,
         'admin_id': GetStorage().read('uid'),
+        'bookmark_count': 0
       });
     } catch (error) {
       throw ServerException(error.toString());
@@ -307,7 +312,8 @@ class RemoteDataSourcesImpl extends RemoteDataSources {
         'query': title.toLowerCase(),
         'sources': sources,
         'admin_id': GetStorage().read('uid'),
-        'type': 'Infografis'
+        'type': 'Infografis',
+        'bookmark_count': 0
       });
     } catch (error) {
       throw ServerException(error.toString());
@@ -456,6 +462,32 @@ class RemoteDataSourcesImpl extends RemoteDataSources {
       final infographicModels =
           result.docs.map((doc) => InfographicModel.fromSnapshot(doc)).toList();
       return infographicModels;
+    } catch (error) {
+      throw ServerException(error.toString());
+    }
+  }
+
+  @override
+  Future<void> addToBookmarkCountFirebase(
+      String collectionName, String id) async {
+    try {
+      final ref = firebaseFirestore.collection(collectionName).doc(id);
+      final result = await ref.get();
+      await ref
+          .update({'bookmark_count': result.data()!['bookmark_count'] + 1});
+    } catch (error) {
+      throw ServerException(error.toString());
+    }
+  }
+
+  @override
+  Future<void> removeFromBookmarkCountFirebase(
+      String collectionName, String id) async {
+    try {
+      final ref = firebaseFirestore.collection(collectionName).doc(id);
+      final result = await ref.get();
+      await ref
+          .update({'bookmark_count': result.data()!['bookmark_count'] - 1});
     } catch (error) {
       throw ServerException(error.toString());
     }

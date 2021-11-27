@@ -93,7 +93,10 @@ class _VideoMateriDetailPageState extends State<VideoMateriDetailPage> {
                   onPressed: () {
                     context
                         .read<VideoMateriCubit>()
-                        .removeVideoMateriToBookmark(widget.videoMateri);
+                        .removeVideoMateriToBookmark(
+                          widget.videoMateri,
+                          widget.videoMateri.id,
+                        );
                   },
                   icon: const Icon(
                     Icons.bookmark,
@@ -105,7 +108,10 @@ class _VideoMateriDetailPageState extends State<VideoMateriDetailPage> {
                   onPressed: () {
                     context
                         .read<VideoMateriCubit>()
-                        .insertVideoMateriToBookmark(widget.videoMateri);
+                        .insertVideoMateriToBookmark(
+                          widget.videoMateri,
+                          widget.videoMateri.id,
+                        );
                   },
                   icon: const Icon(
                     Icons.bookmark_outline_rounded,

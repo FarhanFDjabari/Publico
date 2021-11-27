@@ -8,11 +8,13 @@ import 'package:publico/styles/text_styles.dart';
 
 class PublicoMateriEditBottomSheet extends StatelessWidget {
   final BuildContext parentContext;
+  final int bookmarkCount;
   final Function()? onEditPressed;
   final Function()? onDeletePressed;
   const PublicoMateriEditBottomSheet({
     Key? key,
     required this.parentContext,
+    required this.bookmarkCount,
     this.onEditPressed,
     this.onDeletePressed,
   }) : super(key: key);
@@ -40,7 +42,7 @@ class PublicoMateriEditBottomSheet extends StatelessWidget {
                     ),
                     const SizedBox(width: 5),
                     Text(
-                      '100',
+                      '$bookmarkCount',
                       style: kTextTheme.bodyText2!.copyWith(color: kRichBlack),
                     ),
                   ],

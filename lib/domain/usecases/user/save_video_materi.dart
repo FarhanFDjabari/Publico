@@ -8,7 +8,7 @@ class SaveVideoMateri {
 
   SaveVideoMateri(this.repository);
 
-  Future<Either<Failure, String>> execute(VideoMateri video) async {
-    return repository.saveVideoMateriToBookmark(video);
+  Future<Either<Failure, String>> execute(VideoMateri video, String id) async {
+    return repository.saveVideoMateriToBookmark(video, id);
   }
 }

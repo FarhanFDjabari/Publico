@@ -7,6 +7,7 @@ class Infographic extends Equatable {
   final String themeId;
   final String themeName;
   final String type;
+  final int bookmarkCount;
   final List<dynamic> sources;
 
   const Infographic({
@@ -16,6 +17,7 @@ class Infographic extends Equatable {
     required this.themeId,
     required this.themeName,
     required this.type,
+    required this.bookmarkCount,
     required this.sources,
   });
 
@@ -26,9 +28,11 @@ class Infographic extends Equatable {
     required this.themeId,
     required this.themeName,
     required this.type,
+    required this.bookmarkCount,
     required this.sources,
   });
 
   @override
-  List<Object?> get props => [id, title, adminId, themeId, type, sources];
+  List<Object?> get props =>
+      [id, title, adminId, themeId, type, bookmarkCount, sources];
 }

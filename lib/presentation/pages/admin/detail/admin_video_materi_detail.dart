@@ -72,6 +72,7 @@ class _AdminVideoMateriDetailPageState
                 isDismissible: true,
                 builder: (_) => PublicoMateriEditBottomSheet(
                   parentContext: context,
+                  bookmarkCount: widget.videoMateri.bookmarkCount,
                   onDeletePressed: () {
                     context.read<VideoMateriCubit>().deleteVideoMateriFirestore(
                           widget.videoMateri.id,

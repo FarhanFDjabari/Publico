@@ -8,7 +8,7 @@ class SaveVideoSingkat {
 
   SaveVideoSingkat(this.repository);
 
-  Future<Either<Failure, String>> execute(VideoSingkat video) async {
-    return repository.saveVideoSingkatToBookmark(video);
+  Future<Either<Failure, String>> execute(VideoSingkat video, String id) async {
+    return repository.saveVideoSingkatToBookmark(video, id);
   }
 }

@@ -77,6 +77,7 @@ class VideoMateriTable extends Equatable {
         duration: duration,
         description: description,
         videoUrl: videoUrl,
+        bookmarkCount: 0,
         thumbnailUrl: thumbnailUrl,
       );
 

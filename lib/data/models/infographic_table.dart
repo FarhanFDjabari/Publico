@@ -75,6 +75,7 @@ class InfographicTable extends Equatable {
         themeId: themeId,
         themeName: themeName,
         type: type,
+        bookmarkCount: 0,
         sources: sources);
   }
 

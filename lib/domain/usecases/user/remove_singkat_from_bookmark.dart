@@ -8,7 +8,7 @@ class RemoveSingkatFromBookmark {
 
   RemoveSingkatFromBookmark(this.repository);
 
-  Future<Either<Failure, String>> execute(VideoSingkat video) async {
-    return repository.removeVideoSingkatFromBookmark(video);
+  Future<Either<Failure, String>> execute(VideoSingkat video, String id) async {
+    return repository.removeVideoSingkatFromBookmark(video, id);
   }
 }

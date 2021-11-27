@@ -73,7 +73,10 @@ class _InfographicsDetailPageState extends State<InfographicsDetailPage> {
                   onPressed: () {
                     context
                         .read<InfographicCubit>()
-                        .removeInfographicToBookmark(widget.infographic);
+                        .removeInfographicToBookmark(
+                          widget.infographic,
+                          widget.infographic.id,
+                        );
                   },
                   icon: const Icon(
                     Icons.bookmark,
@@ -85,7 +88,10 @@ class _InfographicsDetailPageState extends State<InfographicsDetailPage> {
                   onPressed: () {
                     context
                         .read<InfographicCubit>()
-                        .insertInfographicToBookmark(widget.infographic);
+                        .insertInfographicToBookmark(
+                          widget.infographic,
+                          widget.infographic.id,
+                        );
                   },
                   icon: const Icon(
                     Icons.bookmark_outline_rounded,

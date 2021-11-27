@@ -325,7 +325,7 @@ class RepositoryImpl extends Repository {
           for (var illustrationFile in source['illustration']) {
             String filename = basename(illustrationFile.path);
             String filePath =
-                "illustrations/${DateTime.now().microsecondsSinceEpoch}-${const Uuid().v4()}-${filename.toLowerCase().replaceAll(" ", "_")}";
+                "infographics/${DateTime.now().microsecondsSinceEpoch}-${const Uuid().v4()}-${filename.toLowerCase().replaceAll(" ", "_")}";
             final uploadTask = await remoteDataSources.uploadFiletoStorage(
                 filePath, illustrationFile);
             await uploadTask.whenComplete(() async {
@@ -498,8 +498,10 @@ class RepositoryImpl extends Repository {
 
   @override
   Future<Either<Failure, String>> removeVideoMateriFromBookmark(
-      VideoMateri video) async {
+      VideoMateri video, String id) async {
     try {
+      await remoteDataSources.removeFromBookmarkCountFirebase(
+          'video_materi', id);
       final result = await localDataSources
           .removeVideoMateriFromBookmark(VideoMateriTable.fromEntity(video));
       return Right(result);
@@ -526,8 +528,9 @@ class RepositoryImpl extends Repository {
 
   @override
   Future<Either<Failure, String>> saveVideoMateriToBookmark(
-      VideoMateri video) async {
+      VideoMateri video, String id) async {
     try {
+      await remoteDataSources.addToBookmarkCountFirebase('video_materi', id);
       final result = await localDataSources
           .insertVideoMateriToBookmark(VideoMateriTable.fromEntity(video));
       return Right(result);
@@ -540,8 +543,9 @@ class RepositoryImpl extends Repository {
 
   @override
   Future<Either<Failure, String>> saveInfographicToBookmark(
-      Infographic infographic) async {
+      Infographic infographic, String id) async {
     try {
+      await remoteDataSources.addToBookmarkCountFirebase('infographics', id);
       final result = await localDataSources.insertInfographicToBookmark(
           InfographicTable.fromEntity(infographic));
       return Right(result);
@@ -554,8 +558,9 @@ class RepositoryImpl extends Repository {
 
   @override
   Future<Either<Failure, String>> saveVideoSingkatToBookmark(
-      VideoSingkat video) async {
+      VideoSingkat video, String id) async {
     try {
+      await remoteDataSources.addToBookmarkCountFirebase('video_singkat', id);
       final result = await localDataSources
           .insertVideoSingkatToBookmark(VideoSingkatTable.fromEntity(video));
       return Right(result);
@@ -623,8 +628,10 @@ class RepositoryImpl extends Repository {
 
   @override
   Future<Either<Failure, String>> removeInfographicFromBookmark(
-      Infographic infographic) async {
+      Infographic infographic, String id) async {
     try {
+      await remoteDataSources.removeFromBookmarkCountFirebase(
+          'infographics', id);
       final result = await localDataSources.removeInfographicFromBookmark(
           InfographicTable.fromEntity(infographic));
       return Right(result);
@@ -635,8 +642,10 @@ class RepositoryImpl extends Repository {
 
   @override
   Future<Either<Failure, String>> removeVideoSingkatFromBookmark(
-      VideoSingkat video) async {
+      VideoSingkat video, String id) async {
     try {
+      await remoteDataSources.removeFromBookmarkCountFirebase(
+          'video_singkat', id);
       final result = await localDataSources
           .removeVideoSingkatFromBookmark(VideoSingkatTable.fromEntity(video));
       return Right(result);

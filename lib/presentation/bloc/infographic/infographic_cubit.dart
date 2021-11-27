@@ -141,9 +141,9 @@ class InfographicCubit extends Cubit<InfographicState> {
     );
   }
 
-  void insertInfographicToBookmark(Infographic infographic) async {
+  void insertInfographicToBookmark(Infographic infographic, String id) async {
     emit(InfographicLoading());
-    final result = await saveInfographic.execute(infographic);
+    final result = await saveInfographic.execute(infographic, id);
     result.fold(
       (l) => emit(InfographicError(l.message)),
       (r) => emit(
@@ -151,9 +151,9 @@ class InfographicCubit extends Cubit<InfographicState> {
     );
   }
 
-  void removeInfographicToBookmark(Infographic infographic) async {
+  void removeInfographicToBookmark(Infographic infographic, String id) async {
     emit(InfographicLoading());
-    final result = await removeInfographicFromBookmark.execute(infographic);
+    final result = await removeInfographicFromBookmark.execute(infographic, id);
     result.fold(
       (l) => emit(InfographicError(l.message)),
       (r) =>
