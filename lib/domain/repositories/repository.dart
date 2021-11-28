@@ -65,7 +65,6 @@ abstract class Repository {
     String themeId,
     String themeName,
     String? title,
-    List<dynamic> oldSources,
     List<dynamic>? newSources,
   );
   Future<Either<Failure, void>> editVideoMateri(

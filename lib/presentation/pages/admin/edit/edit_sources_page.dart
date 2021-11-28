@@ -6,6 +6,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:get/get.dart';
+import 'package:http/http.dart' as http;
 import 'package:publico/presentation/widgets/primary_button.dart';
 import 'package:publico/presentation/widgets/publico_snackbar.dart';
 import 'package:publico/styles/colors.dart';
@@ -23,9 +24,10 @@ class EditSourcesPage extends StatefulWidget {
 class _EditSourcesPageState extends State<EditSourcesPage> {
   final _sumberController = TextEditingController();
   final _deskripsiController = TextEditingController();
+  final _imageUrlController = TextEditingController();
   List illustrations = [];
   bool isValidate = false;
-  bool isLoadLocal = false;
+  bool showImageField = false;
 
   @override
   void initState() {
@@ -242,43 +244,51 @@ class _EditSourcesPageState extends State<EditSourcesPage> {
                         ))
                     .toList(),
               ),
-              OutlinedButton(
-                onPressed: isLoadLocal
-                    ? null
-                    : () async {
-                        await Future.delayed(const Duration(milliseconds: 500));
-                        await FilePicker.platform
-                            .pickFiles(
-                          type: FileType.image,
-                          withData: false,
-                          allowMultiple: false,
-                          onFileLoading: (status) {
+              const SizedBox(height: 15),
+              showImageField
+                  ? TextField(
+                      controller: _imageUrlController,
+                      autofocus: false,
+                      decoration: InputDecoration(
+                        hintText: 'Masukkan URL ',
+                        isDense: true,
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10),
+                          borderSide: const BorderSide(
+                            color: kMikadoOrange,
+                          ),
+                        ),
+                      ),
+                      onSubmitted: (value) async {
+                        try {
+                          final response = await http.get(Uri.parse(value));
+                          if (response.statusCode == 200) {
                             setState(() {
-                              isLoadLocal = true;
+                              illustrations.add(value);
+                              _imageUrlController.clear();
                             });
-                          },
-                        )
-                            .then((value) async {
-                          if (value != null) {
-                            if (await imageProcessing(value)) {
-                              setState(() {
-                                isLoadLocal = false;
-                                formCheck();
-                                value.files.clear();
-                              });
-                            } else {
-                              setState(() {
-                                isLoadLocal = false;
-                              });
-                              Get.showSnackbar(PublicoSnackbar(
-                                message:
-                                    'Ukuran file tidak boleh lebih dari 2.5 MB',
-                              ));
-                              value.files.clear();
-                            }
                           }
-                        });
+                        } catch (e) {
+                          Get.showSnackbar(PublicoSnackbar(
+                            message: "Url ilustrasi tidak ditemukan",
+                          ));
+                        }
                       },
+                      style: kTextTheme.bodyText2!.copyWith(
+                        color: kRichBlack,
+                      ),
+                    )
+                  : Container(),
+              const SizedBox(height: 15),
+              OutlinedButton(
+                onPressed: () {
+                  setState(() {
+                    showImageField = true;
+                  });
+                },
                 style: OutlinedButton.styleFrom(
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10),
@@ -289,27 +299,16 @@ class _EditSourcesPageState extends State<EditSourcesPage> {
                 ),
                 child: SizedBox(
                   height: 45,
-                  child: isLoadLocal
-                      ? const Center(
-                          child: SizedBox(
-                            width: 20,
-                            height: 20,
-                            child: CircularProgressIndicator(
-                              color: kMikadoOrange,
-                            ),
-                          ),
-                        )
-                      : Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            const Icon(Icons.add,
-                                color: kMikadoOrange, size: 16),
-                            Text(
-                              ' Tambah Ilustrasi',
-                              style: kTextTheme.button!,
-                            ),
-                          ],
-                        ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Icon(Icons.add, color: kMikadoOrange, size: 16),
+                      Text(
+                        ' Tambah Ilustrasi',
+                        style: kTextTheme.button!,
+                      ),
+                    ],
+                  ),
                 ),
               ),
               const SizedBox(height: 15),

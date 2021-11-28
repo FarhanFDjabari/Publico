@@ -112,10 +112,10 @@ class InfographicCubit extends Cubit<InfographicState> {
   }
 
   void editInfographicFirestore(String id, String themeId, String themeName,
-      String? title, List oldSources, List? newSources) async {
+      String? title, List? newSources) async {
     emit(InfographicLoading());
     final result = await editInfographicPost.execute(
-        id, themeId, themeName, title, oldSources, newSources);
+        id, themeId, themeName, title, newSources);
     result.fold(
       (l) => emit(InfographicError(l.message)),
       (r) =>

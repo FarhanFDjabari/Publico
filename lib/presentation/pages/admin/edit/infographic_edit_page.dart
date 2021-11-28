@@ -271,6 +271,7 @@ class _InfographicEditPageState extends State<InfographicEditPage> {
                     );
                   } else if (state is EditInfographicPostSuccess) {
                     Navigator.pop(context);
+                    Navigator.pop(context);
                     Get.showSnackbar(
                       PublicoSnackbar(
                         message: state.message,
@@ -322,7 +323,6 @@ class _InfographicEditPageState extends State<InfographicEditPage> {
                                   widget.infographic.themeId,
                                   widget.infographic.themeName,
                                   _titleController.text,
-                                  widget.infographic.sources,
                                   sources,
                                 );
                           },
