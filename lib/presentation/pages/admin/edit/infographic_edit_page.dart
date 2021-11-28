@@ -38,9 +38,7 @@ class _InfographicEditPageState extends State<InfographicEditPage> {
   }
 
   void formCheck() {
-    if (_titleController.text.isNotEmpty &&
-        sources.isNotEmpty &&
-        selectedTheme != null) {
+    if (sources.isNotEmpty && selectedTheme != null) {
       if (isValidate) {
         return;
       } else {
@@ -72,7 +70,7 @@ class _InfographicEditPageState extends State<InfographicEditPage> {
           ),
         ),
         title: Text(
-          'Tambah Infografis',
+          'Edit Infografis',
           style: kTextTheme.subtitle1!.copyWith(
             fontSize: 16,
             color: kRichBlack,
@@ -272,7 +270,6 @@ class _InfographicEditPageState extends State<InfographicEditPage> {
                       ),
                     );
                   } else if (state is EditInfographicPostSuccess) {
-                    Navigator.pop(context);
                     Navigator.pop(context);
                     Get.showSnackbar(
                       PublicoSnackbar(

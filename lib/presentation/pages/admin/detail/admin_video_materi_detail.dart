@@ -82,7 +82,7 @@ class _AdminVideoMateriDetailPageState
                         );
                   },
                   onEditPressed: () {
-                    Navigator.pushNamed(
+                    Navigator.pushReplacementNamed(
                       context,
                       VideoMateriEditPage.routeName,
                       arguments: widget.videoMateri,

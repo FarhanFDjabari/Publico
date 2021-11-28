@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:expandable_page_view/expandable_page_view.dart';
 import 'package:flutter/material.dart';
+import 'package:publico/presentation/widgets/photo_viewer.dart';
 import 'package:publico/styles/colors.dart';
 import 'package:publico/styles/text_styles.dart';
 
@@ -36,37 +37,51 @@ class _InfographicTileState extends State<InfographicTile>
                   },
                   itemCount: widget.source['illustrations'].length,
                   itemBuilder: (_, index) {
-                    return Container(
-                      padding: const EdgeInsets.all(0),
-                      margin: const EdgeInsets.symmetric(horizontal: 2),
-                      decoration: BoxDecoration(
-                        color: kLightGrey,
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      alignment: Alignment.center,
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(10),
-                        child: CachedNetworkImage(
-                          imageUrl: widget.source['illustrations'][index],
-                          imageBuilder: (_, provider) {
-                            return Image.network(
-                              widget.source['illustrations'][index],
-                              fit: BoxFit.cover,
-                            );
-                          },
-                          progressIndicatorBuilder: (context, value, progress) {
-                            return SizedBox(
-                              height: MediaQuery.of(context).size.height * 0.45,
-                              child: Center(
-                                child: CircularProgressIndicator(
-                                  color: kMikadoOrange,
-                                  value: progress.progress,
-                                  backgroundColor: kGrey,
-                                  strokeWidth: 3,
-                                ),
+                    return InkWell(
+                      borderRadius: BorderRadius.circular(10),
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (_) => PhotoViewer(
+                                imageUrl: widget.source['illustrations'][index],
                               ),
-                            );
-                          },
+                            ));
+                      },
+                      child: Container(
+                        padding: const EdgeInsets.all(0),
+                        margin: const EdgeInsets.symmetric(horizontal: 2),
+                        decoration: BoxDecoration(
+                          color: kLightGrey,
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        alignment: Alignment.center,
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(10),
+                          child: CachedNetworkImage(
+                            imageUrl: widget.source['illustrations'][index],
+                            imageBuilder: (_, provider) {
+                              return Image.network(
+                                widget.source['illustrations'][index],
+                                fit: BoxFit.cover,
+                              );
+                            },
+                            progressIndicatorBuilder:
+                                (context, value, progress) {
+                              return SizedBox(
+                                height:
+                                    MediaQuery.of(context).size.height * 0.45,
+                                child: Center(
+                                  child: CircularProgressIndicator(
+                                    color: kMikadoOrange,
+                                    value: progress.progress,
+                                    backgroundColor: kGrey,
+                                    strokeWidth: 3,
+                                  ),
+                                ),
+                              );
+                            },
+                          ),
                         ),
                       ),
                     );

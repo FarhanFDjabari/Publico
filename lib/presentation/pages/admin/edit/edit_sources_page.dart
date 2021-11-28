@@ -33,6 +33,7 @@ class _EditSourcesPageState extends State<EditSourcesPage> {
     _sumberController.text = widget.source['source_name'];
     _deskripsiController.text = widget.source['description'];
     illustrations = widget.source['illustrations'];
+    formCheck();
   }
 
   void formCheck() {
@@ -110,7 +111,7 @@ class _EditSourcesPageState extends State<EditSourcesPage> {
           ),
         ),
         title: Text(
-          'Tambah Sumber',
+          'Edit Sumber',
           style: kTextTheme.subtitle1!.copyWith(
             fontSize: 16,
             color: kRichBlack,

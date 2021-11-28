@@ -64,29 +64,29 @@ abstract class Repository {
     String id,
     String themeId,
     String themeName,
-    String title,
+    String? title,
     List<dynamic> oldSources,
-    List<dynamic> newSources,
+    List<dynamic>? newSources,
   );
   Future<Either<Failure, void>> editVideoMateri(
       String id,
-      String title,
-      String description,
+      String? title,
+      String? description,
       String oldVideoUrl,
       String oldThumbnailUrl,
-      File newVideoFile,
-      File newThumbnailFile,
-      int duration);
+      File? newVideoFile,
+      File? newThumbnailFile,
+      int? duration);
   Future<Either<Failure, void>> editVideoSingkat(
       String id,
-      String title,
-      String description,
+      String? title,
+      String? description,
       String oldVideoUrl,
       String oldThumbnailUrl,
-      File newVideoFile,
-      File newThumbnailFile,
-      String tiktokUrl,
-      int duration);
+      File? newVideoFile,
+      File? newThumbnailFile,
+      String? tiktokUrl,
+      int? duration);
 
   Future<Either<Failure, List<dynamic>>> getExplore();
   Future<Either<Failure, String>> saveVideoMateriToBookmark(

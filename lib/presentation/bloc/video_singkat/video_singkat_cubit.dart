@@ -69,14 +69,14 @@ class VideoSingkatCubit extends Cubit<VideoSingkatState> {
 
   void editVideoSingkatFirestore(
       String id,
-      String title,
-      String description,
+      String? title,
+      String? description,
       String oldVideoUrl,
       String oldThumbnailUrl,
-      File newVideoFile,
-      File newThumbnailFile,
-      String tiktokUrl,
-      int duration) async {
+      File? newVideoFile,
+      File? newThumbnailFile,
+      String? tiktokUrl,
+      int? duration) async {
     emit(VideoSingkatLoading());
     final result = await editVideoSingkatPost.execute(
         id,

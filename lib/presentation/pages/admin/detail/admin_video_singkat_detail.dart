@@ -87,7 +87,7 @@ class _AdminVideoSingkatDetailPageState
                         );
                   },
                   onEditPressed: () {
-                    Navigator.pushNamed(
+                    Navigator.pushReplacementNamed(
                       context,
                       VideoSingkatEditPage.routeName,
                       arguments: widget.videoSingkat,

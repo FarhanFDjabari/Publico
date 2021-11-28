@@ -101,13 +101,13 @@ class VideoMateriCubit extends Cubit<VideoMateriState> {
 
   void editVideoMateriFirestore(
       String id,
-      String title,
-      String description,
+      String? title,
+      String? description,
       String oldVideoUrl,
       String oldThumbnailUrl,
-      File newVideoFile,
-      File newThumbnailFile,
-      int duration) async {
+      File? newVideoFile,
+      File? newThumbnailFile,
+      int? duration) async {
     emit(VideoMateriLoading());
     final result = await editVideoMateriPost.execute(id, title, description,
         oldVideoUrl, oldThumbnailUrl, newVideoFile, newThumbnailFile, duration);

@@ -310,35 +310,42 @@ class RepositoryImpl extends Repository {
   }
 
   @override
-  Future<Either<Failure, void>> editInfographic(String id, String themeId,
-      String themeName, String title, List oldSources, List newSources) async {
+  Future<Either<Failure, void>> editInfographic(
+      String id,
+      String themeId,
+      String themeName,
+      String? title,
+      List oldSources,
+      List? newSources) async {
     try {
       List<Map<String, dynamic>> _sources = [];
-      for (var source in oldSources) {
-        for (var illustrationUrl in source['illustrations']) {
-          await remoteDataSources.deleteFromStorage(illustrationUrl);
+      if (newSources != null) {
+        for (var source in oldSources) {
+          for (var illustrationUrl in source['illustrations']) {
+            await remoteDataSources.deleteFromStorage(illustrationUrl);
+          }
         }
-      }
-      for (var source in newSources) {
-        if (source['illustration'] != null) {
-          List<String> illustrationList = [];
-          for (var illustrationFile in source['illustration']) {
-            String filename = basename(illustrationFile.path);
-            String filePath =
-                "infographics/${DateTime.now().microsecondsSinceEpoch}-${const Uuid().v4()}-${filename.toLowerCase().replaceAll(" ", "_")}";
-            final uploadTask = await remoteDataSources.uploadFiletoStorage(
-                filePath, illustrationFile);
-            await uploadTask.whenComplete(() async {
-              String illustrationUrl =
-                  await uploadTask.snapshot.ref.getDownloadURL();
-              illustrationList.add(illustrationUrl);
+        for (var source in newSources) {
+          if (source['illustration'] != null) {
+            List<String> illustrationList = [];
+            for (var illustrationFile in source['illustration']) {
+              String filename = basename(illustrationFile.path);
+              String filePath =
+                  "infographics/${DateTime.now().microsecondsSinceEpoch}-${const Uuid().v4()}-${filename.toLowerCase().replaceAll(" ", "_")}";
+              final uploadTask = await remoteDataSources.uploadFiletoStorage(
+                  filePath, illustrationFile);
+              await uploadTask.whenComplete(() async {
+                String illustrationUrl =
+                    await uploadTask.snapshot.ref.getDownloadURL();
+                illustrationList.add(illustrationUrl);
+              });
+            }
+            _sources.add({
+              "source_name": source['source'],
+              "description": source['description'],
+              "illustrations": illustrationList
             });
           }
-          _sources.add({
-            "source_name": source['source'],
-            "description": source['description'],
-            "illustrations": illustrationList
-          });
         }
       }
 
@@ -355,35 +362,38 @@ class RepositoryImpl extends Repository {
   @override
   Future<Either<Failure, void>> editVideoMateri(
     String id,
-    String title,
-    String description,
+    String? title,
+    String? description,
     String oldVideoUrl,
     String oldThumbnailUrl,
-    File newVideoFile,
-    File newThumbnailFile,
-    int duration,
+    File? newVideoFile,
+    File? newThumbnailFile,
+    int? duration,
   ) async {
     try {
-      await remoteDataSources.deleteFromStorage(oldVideoUrl);
-      await remoteDataSources.deleteFromStorage(oldThumbnailUrl);
-      final videoFilename = basename(newVideoFile.path);
-      final thumbnailFilename = basename(newThumbnailFile.path);
-      final videoPath =
-          "video_materi/${DateTime.now().microsecondsSinceEpoch}-${const Uuid().v4()}-${videoFilename.toLowerCase().replaceAll(" ", "_")}";
-      final thumbnailPath =
-          "video_materi_thumbnail/${DateTime.now().microsecondsSinceEpoch}-${const Uuid().v4()}-${thumbnailFilename.toLowerCase().replaceAll(" ", "_")}";
-      final videoUploadTask =
-          await remoteDataSources.uploadFiletoStorage(videoPath, newVideoFile);
-      final thumbnailUploadTask = await remoteDataSources.uploadFiletoStorage(
-          thumbnailPath, newThumbnailFile);
-      String videoUrl = '';
-      String thumbnailUrl = '';
-      await videoUploadTask.whenComplete(() async {
-        videoUrl = await videoUploadTask.snapshot.ref.getDownloadURL();
-      });
-      await thumbnailUploadTask.whenComplete(() async {
-        thumbnailUrl = await thumbnailUploadTask.snapshot.ref.getDownloadURL();
-      });
+      String? videoUrl;
+      String? thumbnailUrl;
+      if (newVideoFile != null && newThumbnailFile != null) {
+        await remoteDataSources.deleteFromStorage(oldVideoUrl);
+        await remoteDataSources.deleteFromStorage(oldThumbnailUrl);
+        final videoFilename = basename(newVideoFile.path);
+        final thumbnailFilename = basename(newThumbnailFile.path);
+        final videoPath =
+            "video_materi/${DateTime.now().microsecondsSinceEpoch}-${const Uuid().v4()}-${videoFilename.toLowerCase().replaceAll(" ", "_")}";
+        final thumbnailPath =
+            "video_materi_thumbnail/${DateTime.now().microsecondsSinceEpoch}-${const Uuid().v4()}-${thumbnailFilename.toLowerCase().replaceAll(" ", "_")}";
+        final videoUploadTask = await remoteDataSources.uploadFiletoStorage(
+            videoPath, newVideoFile);
+        final thumbnailUploadTask = await remoteDataSources.uploadFiletoStorage(
+            thumbnailPath, newThumbnailFile);
+        await videoUploadTask.whenComplete(() async {
+          videoUrl = await videoUploadTask.snapshot.ref.getDownloadURL();
+        });
+        await thumbnailUploadTask.whenComplete(() async {
+          thumbnailUrl =
+              await thumbnailUploadTask.snapshot.ref.getDownloadURL();
+        });
+      }
 
       remoteDataSources.updateVideoMateri(
           id, title, description, videoUrl, thumbnailUrl, duration);
@@ -398,35 +408,38 @@ class RepositoryImpl extends Repository {
   @override
   Future<Either<Failure, void>> editVideoSingkat(
       String id,
-      String title,
-      String description,
+      String? title,
+      String? description,
       String oldVideoUrl,
       String oldThumbnailUrl,
-      File newVideoFile,
-      File newThumbnailFile,
-      String tiktokUrl,
-      int duration) async {
+      File? newVideoFile,
+      File? newThumbnailFile,
+      String? tiktokUrl,
+      int? duration) async {
     try {
-      await remoteDataSources.deleteFromStorage(oldVideoUrl);
-      await remoteDataSources.deleteFromStorage(oldThumbnailUrl);
-      final videoFilename = basename(newVideoFile.path);
-      final thumbnailFilename = basename(newThumbnailFile.path);
-      final videoPath =
-          "video_singkat/${DateTime.now().microsecondsSinceEpoch}-${const Uuid().v4()}-${videoFilename.toLowerCase().replaceAll(" ", "_")}";
-      final thumbnailPath =
-          "video_singkat_thumbnail/${DateTime.now().microsecondsSinceEpoch}-${const Uuid().v4()}-${thumbnailFilename.toLowerCase().replaceAll(" ", "_")}";
-      final videoUploadTask =
-          await remoteDataSources.uploadFiletoStorage(videoPath, newVideoFile);
-      final thumbnailUploadTask = await remoteDataSources.uploadFiletoStorage(
-          thumbnailPath, newThumbnailFile);
-      String videoUrl = '';
-      String thumbnailUrl = '';
-      await videoUploadTask.whenComplete(() async {
-        videoUrl = await videoUploadTask.snapshot.ref.getDownloadURL();
-      });
-      await thumbnailUploadTask.whenComplete(() async {
-        thumbnailUrl = await thumbnailUploadTask.snapshot.ref.getDownloadURL();
-      });
+      String? videoUrl;
+      String? thumbnailUrl;
+      if (newVideoFile != null && newThumbnailFile != null) {
+        await remoteDataSources.deleteFromStorage(oldVideoUrl);
+        await remoteDataSources.deleteFromStorage(oldThumbnailUrl);
+        final videoFilename = basename(newVideoFile.path);
+        final thumbnailFilename = basename(newThumbnailFile.path);
+        final videoPath =
+            "video_singkat/${DateTime.now().microsecondsSinceEpoch}-${const Uuid().v4()}-${videoFilename.toLowerCase().replaceAll(" ", "_")}";
+        final thumbnailPath =
+            "video_singkat_thumbnail/${DateTime.now().microsecondsSinceEpoch}-${const Uuid().v4()}-${thumbnailFilename.toLowerCase().replaceAll(" ", "_")}";
+        final videoUploadTask = await remoteDataSources.uploadFiletoStorage(
+            videoPath, newVideoFile);
+        final thumbnailUploadTask = await remoteDataSources.uploadFiletoStorage(
+            thumbnailPath, newThumbnailFile);
+        await videoUploadTask.whenComplete(() async {
+          videoUrl = await videoUploadTask.snapshot.ref.getDownloadURL();
+        });
+        await thumbnailUploadTask.whenComplete(() async {
+          thumbnailUrl =
+              await thumbnailUploadTask.snapshot.ref.getDownloadURL();
+        });
+      }
 
       remoteDataSources.updateVideoSingkat(
           id, title, description, videoUrl, thumbnailUrl, tiktokUrl, duration);
