@@ -89,6 +89,7 @@ abstract class Repository {
       int? duration);
 
   Future<Either<Failure, List<dynamic>>> getExplore();
+  Future<Either<Failure, List<dynamic>>> getAllByQuery(String query);
   Future<Either<Failure, String>> saveVideoMateriToBookmark(
       VideoMateri video, String id);
   Future<Either<Failure, String>> saveVideoSingkatToBookmark(

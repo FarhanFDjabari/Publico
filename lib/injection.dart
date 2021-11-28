@@ -27,6 +27,7 @@ import 'package:publico/domain/usecases/user/check_infographic_bookmark.dart';
 import 'package:publico/domain/usecases/user/check_video_materi_bookmark.dart';
 import 'package:publico/domain/usecases/user/check_video_singkat_bookmark.dart';
 import 'package:publico/domain/usecases/user/get_all_bookmark.dart';
+import 'package:publico/domain/usecases/user/get_all_search.dart';
 import 'package:publico/domain/usecases/user/get_explore.dart';
 import 'package:publico/domain/usecases/user/get_infographic_bookmark.dart';
 import 'package:publico/domain/usecases/user/get_infographic_bookmark_status.dart';
@@ -135,6 +136,10 @@ void init() {
       getVideoMateriByQuery: locator(),
       getInfographicByQuery: locator(),
       getVideoSingkatByQuery: locator(),
+      getAllSearch: locator(),
+      checkInfographicBookmark: locator(),
+      checkVideoMateriBookmark: locator(),
+      checkVideoSingkatBookmark: locator(),
     ),
   );
 
@@ -187,6 +192,7 @@ void init() {
   locator.registerLazySingleton(() => CheckVideoSingkatBookmark(locator()));
 
   locator.registerLazySingleton(() => GetAllBookmark(locator()));
+  locator.registerLazySingleton(() => GetAllSearch(locator()));
 
   // repository
   locator.registerLazySingleton<Repository>(

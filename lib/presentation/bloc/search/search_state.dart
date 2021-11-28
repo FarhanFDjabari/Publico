@@ -21,7 +21,9 @@ class SearchError extends SearchState {
 
 class GetVideoMateriSearchSuccess extends SearchState {
   final List<VideoMateri> videoMateriList;
-  const GetVideoMateriSearchSuccess(this.videoMateriList);
+  final List<bool> videoMateriLabel;
+  const GetVideoMateriSearchSuccess(
+      this.videoMateriList, this.videoMateriLabel);
 
   @override
   List<Object> get props => [videoMateriList];
@@ -29,7 +31,9 @@ class GetVideoMateriSearchSuccess extends SearchState {
 
 class GetInfographicSearchSuccess extends SearchState {
   final List<Infographic> infographicList;
-  const GetInfographicSearchSuccess(this.infographicList);
+  final List<bool> infographicLabel;
+  const GetInfographicSearchSuccess(
+      this.infographicList, this.infographicLabel);
 
   @override
   List<Object> get props => [infographicList];
@@ -37,16 +41,19 @@ class GetInfographicSearchSuccess extends SearchState {
 
 class GetVideoSingkatSearchSuccess extends SearchState {
   final List<VideoSingkat> videoSingkatList;
-  const GetVideoSingkatSearchSuccess(this.videoSingkatList);
+  final List<bool> videoSingkatLabel;
+  const GetVideoSingkatSearchSuccess(
+      this.videoSingkatList, this.videoSingkatLabel);
 
   @override
   List<Object> get props => [videoSingkatList];
 }
 
 class GetAllSearchSuccess extends SearchState {
-  final List<dynamic> bookmarks;
-  const GetAllSearchSuccess(this.bookmarks);
+  final List<dynamic> allList;
+  final List<bool> itemLabel;
+  const GetAllSearchSuccess(this.allList, this.itemLabel);
 
   @override
-  List<Object> get props => [bookmarks];
+  List<Object> get props => [allList];
 }

@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+import 'package:publico/domain/entities/infographic.dart';
+import 'package:publico/domain/entities/video_materi.dart';
+import 'package:publico/domain/entities/video_singkat.dart';
 import 'package:publico/presentation/bloc/search/search_cubit.dart';
 import 'package:publico/presentation/pages/detail/infographics_detail_page.dart';
 import 'package:publico/presentation/pages/detail/video_materi_detail_page.dart';
@@ -32,7 +35,11 @@ class _SearchPageState extends State<SearchPage> {
   Widget build(BuildContext context) {
     switch (_selectedIndex) {
       case 0:
-        {}
+        {
+          context
+              .read<SearchCubit>()
+              .getAllFromSearch(_searchQueryController.text.toLowerCase());
+        }
         break;
       case 1:
         {
@@ -156,7 +163,10 @@ class _SearchPageState extends State<SearchPage> {
               onSubmitted: (value) {
                 switch (_selectedIndex) {
                   case 0:
-                    {}
+                    {
+                      context.read<SearchCubit>().getAllFromSearch(
+                          _searchQueryController.text.toLowerCase());
+                    }
                     break;
                   case 1:
                     {
@@ -183,7 +193,69 @@ class _SearchPageState extends State<SearchPage> {
             Expanded(
               child: BlocBuilder<SearchCubit, SearchState>(
                 builder: (context, state) {
-                  if (state is GetInfographicSearchSuccess) {
+                  if (state is GetAllSearchSuccess) {
+                    if (state.allList == []) {
+                      return Center(
+                        child: Text(
+                          'Hasil pencarian tidak ditemukan',
+                          style:
+                              kTextTheme.bodyText1!.copyWith(color: kRichBlack),
+                        ),
+                      );
+                    } else {
+                      return StaggeredGridView.countBuilder(
+                        crossAxisCount: 4,
+                        itemCount: state.allList.length,
+                        itemBuilder: (BuildContext itemContext, int index) {
+                          final imageUrl = state.allList[index] is Infographic
+                              ? state.allList[index].sources
+                                  .first['illustrations'][0]
+                              : state.allList[index].thumbnailUrl;
+                          final sourceCount =
+                              state.allList[index] is Infographic
+                                  ? state.allList[index].sources.length
+                                  : state.allList[index].duration;
+                          return InkWell(
+                            onTap: () {
+                              if (state.allList[index] is Infographic) {
+                                Navigator.pushNamed(
+                                  context,
+                                  InfographicsDetailPage.routeName,
+                                  arguments: state.allList[index],
+                                );
+                              } else if (state.allList[index] is VideoMateri) {
+                                Navigator.pushNamed(
+                                  context,
+                                  VideoMateriDetailPage.routeName,
+                                  arguments: state.allList[index],
+                                );
+                              } else if (state.allList[index] is VideoSingkat) {
+                                Navigator.pushNamed(
+                                  context,
+                                  VideoSingkatDetailPage.routeName,
+                                  arguments: state.allList[index],
+                                );
+                              }
+                            },
+                            borderRadius: BorderRadius.circular(10),
+                            child: PublicoStaggeredTile(
+                              tileIndex: index,
+                              duration: 2,
+                              title: state.allList[index].title,
+                              imageUrl: imageUrl,
+                              sourcesCount: sourceCount,
+                              category: state.allList[index].type,
+                              isBookmarked: state.itemLabel[index],
+                            ),
+                          );
+                        },
+                        staggeredTileBuilder: (int index) =>
+                            const StaggeredTile.fit(2),
+                        mainAxisSpacing: 15.0,
+                        crossAxisSpacing: 8.0,
+                      );
+                    }
+                  } else if (state is GetInfographicSearchSuccess) {
                     if (state.infographicList == []) {
                       return Center(
                         child: Text(
@@ -212,8 +284,10 @@ class _SearchPageState extends State<SearchPage> {
                               title: state.infographicList[index].title,
                               imageUrl: state.infographicList[index].sources
                                   .first['illustrations'][0],
-                              sourcesCount: 1,
+                              sourcesCount:
+                                  state.infographicList[index].sources.length,
                               category: 'Infografis',
+                              isBookmarked: state.infographicLabel[index],
                             ),
                           );
                         },
@@ -255,6 +329,7 @@ class _SearchPageState extends State<SearchPage> {
                               sourcesCount:
                                   state.videoMateriList[index].duration,
                               category: state.videoMateriList[index].type,
+                              isBookmarked: state.videoMateriLabel[index],
                             ),
                           );
                         },
@@ -274,7 +349,6 @@ class _SearchPageState extends State<SearchPage> {
                         ),
                       );
                     } else {
-                      print('false');
                       return StaggeredGridView.countBuilder(
                         crossAxisCount: 4,
                         itemCount: state.videoSingkatList.length,
@@ -297,6 +371,7 @@ class _SearchPageState extends State<SearchPage> {
                               sourcesCount:
                                   state.videoSingkatList[index].duration,
                               category: state.videoSingkatList[index].type,
+                              isBookmarked: state.videoSingkatLabel[index],
                             ),
                           );
                         },

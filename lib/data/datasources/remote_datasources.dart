@@ -44,6 +44,7 @@ abstract class RemoteDataSources {
       String collectionName, String id);
 
   Future<Map<String, dynamic>> getExplore();
+  Future<Map<String, dynamic>> getAllByQuery(String query);
   Future<List<VideoMateriModel>> getVideoMateriPosts(String query);
   Future<List<VideoSingkatModel>> getVideoSingkatPosts(String query);
   Future<List<InfographicModel>> getInfographicPosts(String query);
@@ -326,6 +327,41 @@ class RemoteDataSourcesImpl extends RemoteDataSources {
       final infographicsRef = firebaseFirestore.collection('infographics');
       final videoMateriRef = firebaseFirestore.collection('video_materi');
       final videoSingkatRef = firebaseFirestore.collection('video_singkat');
+      final resultInfographics = await infographicsRef.get();
+      final resultVideoMateri = await videoMateriRef.get();
+      final resultVideoSingkat = await videoSingkatRef.get();
+
+      final infographicModels = resultInfographics.docs
+          .map((doc) => InfographicModel.fromSnapshot(doc))
+          .toList();
+      final videoMateriModels = resultVideoMateri.docs
+          .map((doc) => VideoMateriModel.fromSnapshot(doc))
+          .toList();
+      final videoSingkatModels = resultVideoSingkat.docs
+          .map((doc) => VideoSingkatModel.fromSnapshot(doc))
+          .toList();
+      return {
+        'infographic_models': infographicModels,
+        'video_materi_models': videoMateriModels,
+        'video_singkat_models': videoSingkatModels,
+      };
+    } catch (error) {
+      throw ServerException(error.toString());
+    }
+  }
+
+  @override
+  Future<Map<String, dynamic>> getAllByQuery(String query) async {
+    try {
+      final infographicsRef = firebaseFirestore
+          .collection('infographics')
+          .where('query', isGreaterThanOrEqualTo: query);
+      final videoMateriRef = firebaseFirestore
+          .collection('video_materi')
+          .where('query', isGreaterThanOrEqualTo: query);
+      final videoSingkatRef = firebaseFirestore
+          .collection('video_singkat')
+          .where('query', isGreaterThanOrEqualTo: query);
       final resultInfographics = await infographicsRef.get();
       final resultVideoMateri = await videoMateriRef.get();
       final resultVideoSingkat = await videoSingkatRef.get();
