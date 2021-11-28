@@ -44,9 +44,22 @@ class _PostThemePageState extends State<PostThemePage> {
 
   Future<File?> compressFile(File file) async {
     final filePath = file.absolute.path;
+    int? lastIndex;
 
-    final lastIndex = filePath.lastIndexOf(RegExp(r'.jp'));
-    final outPath = "output_${filePath.substring(lastIndex)}";
+    if (filePath.lastIndexOf(RegExp(r'.jp')) >= 0) {
+      lastIndex = filePath.lastIndexOf(RegExp(r'.jp'));
+    } else if (filePath.lastIndexOf(RegExp(r'.pn')) >= 0) {
+      lastIndex = filePath.lastIndexOf(RegExp(r'.pn'));
+    } else if (filePath.lastIndexOf(RegExp(r'.he')) >= 0) {
+      lastIndex = filePath.lastIndexOf(RegExp(r'.he'));
+    } else if (filePath.lastIndexOf(RegExp(r'.we')) >= 0) {
+      lastIndex = filePath.lastIndexOf(RegExp(r'.we'));
+    } else {
+      return null;
+    }
+
+    final splitted = filePath.substring(0, (lastIndex));
+    final outPath = "${splitted}_out${filePath.substring(lastIndex)}";
     var result = await FlutterImageCompress.compressAndGetFile(
       file.absolute.path,
       outPath,

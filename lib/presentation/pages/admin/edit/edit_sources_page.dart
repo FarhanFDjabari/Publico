@@ -1,10 +1,7 @@
 import 'dart:async';
-import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:publico/presentation/widgets/primary_button.dart';
@@ -53,38 +50,6 @@ class _EditSourcesPageState extends State<EditSourcesPage> {
       setState(() {
         isValidate = false;
       });
-    }
-  }
-
-  Future<File?> compressFile(File file) async {
-    final filePath = file.absolute.path;
-
-    final lastIndex = filePath.lastIndexOf(RegExp(r'.jp'));
-    final outPath = "output_${filePath.substring(lastIndex)}";
-    var result = await FlutterImageCompress.compressAndGetFile(
-      file.absolute.path,
-      outPath,
-      quality: 50,
-    );
-
-    if (result != null) {
-      return result;
-    }
-
-    return null;
-  }
-
-  Future<bool> imageProcessing(FilePickerResult? file) async {
-    if (file != null) {
-      if (file.files.first.size < 2500000) {
-        File? _imageFile = await compressFile(File(file.files.first.path!));
-        illustrations.add(_imageFile);
-        return true;
-      } else {
-        return false;
-      }
-    } else {
-      return false;
     }
   }
 
