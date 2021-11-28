@@ -150,8 +150,9 @@ class MyApp extends StatelessWidget {
                 settings: settings,
               );
             case AddSourcePage.routeName:
+              final fromEdit = settings.arguments as bool;
               return CupertinoPageRoute(
-                builder: (_) => const AddSourcePage(),
+                builder: (_) => AddSourcePage(fromEdit: fromEdit),
               );
             case VideoMateriDetailPage.routeName:
               final videoMateri = settings.arguments as VideoMateri;

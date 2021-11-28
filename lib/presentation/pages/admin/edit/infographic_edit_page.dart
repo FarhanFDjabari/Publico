@@ -231,9 +231,13 @@ class _InfographicEditPageState extends State<InfographicEditPage> {
                   Navigator.pushNamed(
                     context,
                     AddSourcePage.routeName,
+                    arguments: true,
                   ).then((value) {
                     if (value != null) {
-                      setState(() => sources.add(value));
+                      final valueMap = value as Map<String, dynamic>;
+                      setState(() {
+                        sources.add(valueMap);
+                      });
                       formCheck();
                     }
                   });

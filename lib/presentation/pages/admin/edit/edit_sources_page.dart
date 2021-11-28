@@ -270,6 +270,7 @@ class _EditSourcesPageState extends State<EditSourcesPage> {
                               illustrations.add(value);
                               _imageUrlController.clear();
                             });
+                            formCheck();
                           }
                         } catch (e) {
                           Get.showSnackbar(PublicoSnackbar(

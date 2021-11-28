@@ -249,7 +249,7 @@ class RepositoryImpl extends Repository {
       List<Map<String, dynamic>> _sources = [];
       for (var source in sources) {
         List<String> illustrationList = [];
-        for (var illustrationFile in source['illustration']) {
+        for (var illustrationFile in source['illustrations']) {
           String filename = basename(illustrationFile.path);
           String filePath =
               "$destination/${DateTime.now().microsecondsSinceEpoch}-${const Uuid().v4()}-${filename.toLowerCase().replaceAll(" ", "_")}";
@@ -262,7 +262,7 @@ class RepositoryImpl extends Repository {
           });
         }
         _sources.add({
-          "source_name": source['source'],
+          "source_name": source['source_name'],
           "description": source['description'],
           "illustrations": illustrationList
         });

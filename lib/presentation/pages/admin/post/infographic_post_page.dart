@@ -188,7 +188,7 @@ class _InfographicPostPageState extends State<InfographicPostPage> {
                           readOnly: true,
                           onTap: () {},
                           controller: TextEditingController(
-                            text: source['source'],
+                            text: source['source_name'],
                           ),
                           decoration: InputDecoration(
                             isDense: true,
@@ -219,6 +219,7 @@ class _InfographicPostPageState extends State<InfographicPostPage> {
                   Navigator.pushNamed(
                     context,
                     AddSourcePage.routeName,
+                    arguments: false,
                   ).then((value) {
                     if (value != null) {
                       setState(() => sources.add(value));
