@@ -48,8 +48,7 @@ class _VideoSingkatEditPageState extends State<VideoSingkatEditPage> {
   void formCheck() {
     if (_titleController.text.isNotEmpty &&
         _descriptionController.text.isNotEmpty &&
-        _tautanController.text.isNotEmpty &&
-        videoFile != null) {
+        _tautanController.text.isNotEmpty) {
       if (isValidate) {
         return;
       } else {
@@ -373,7 +372,6 @@ class _VideoSingkatEditPageState extends State<VideoSingkatEditPage> {
                     );
                   } else if (state is EditVideoSingkatSuccess) {
                     Navigator.pop(context);
-                    Navigator.pop(context);
                     Get.showSnackbar(
                       PublicoSnackbar(
                         message: state.message,
@@ -428,10 +426,10 @@ class _VideoSingkatEditPageState extends State<VideoSingkatEditPage> {
                                       _descriptionController.text,
                                       widget.videoSingkat.videoUrl,
                                       widget.videoSingkat.thumbnailUrl,
-                                      videoFile!,
-                                      thumbnailImage!,
+                                      videoFile,
+                                      thumbnailImage,
                                       'https://www.${_tautanController.text}',
-                                      duration!);
+                                      duration);
                             } else {
                               builderContext
                                   .read<VideoSingkatCubit>()
@@ -441,10 +439,10 @@ class _VideoSingkatEditPageState extends State<VideoSingkatEditPage> {
                                       _descriptionController.text,
                                       widget.videoSingkat.videoUrl,
                                       widget.videoSingkat.thumbnailUrl,
-                                      videoFile!,
-                                      thumbnailImage!,
+                                      videoFile,
+                                      thumbnailImage,
                                       _tautanController.text,
-                                      duration!);
+                                      duration);
                             }
                           },
                   );

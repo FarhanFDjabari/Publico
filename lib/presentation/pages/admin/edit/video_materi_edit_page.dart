@@ -45,8 +45,7 @@ class _VideoMateriEditPageState extends State<VideoMateriEditPage> {
 
   void formCheck() {
     if (_titleController.text.isNotEmpty &&
-        _descriptionController.text.isNotEmpty &&
-        videoFile != null) {
+        _descriptionController.text.isNotEmpty) {
       if (isValidate) {
         return;
       } else {
@@ -345,7 +344,6 @@ class _VideoMateriEditPageState extends State<VideoMateriEditPage> {
                     );
                   } else if (state is EditVideoMateriSuccess) {
                     Navigator.pop(context);
-                    Navigator.pop(context);
                     Get.showSnackbar(
                       PublicoSnackbar(
                         message: state.message,
@@ -398,9 +396,9 @@ class _VideoMateriEditPageState extends State<VideoMateriEditPage> {
                                     _descriptionController.text,
                                     widget.videoMateri.videoUrl,
                                     widget.videoMateri.thumbnailUrl,
-                                    videoFile!,
-                                    thumbnailImage!,
-                                    duration!);
+                                    videoFile,
+                                    thumbnailImage,
+                                    duration);
                           },
                   );
                 },

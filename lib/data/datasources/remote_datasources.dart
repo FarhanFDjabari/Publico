@@ -18,12 +18,12 @@ abstract class RemoteDataSources {
   Future<void> logout();
   Future<void> postVideoSingkat(String title, String description,
       String videoUrl, String thumbnailUrl, String tiktokUrl, int duration);
-  Future<void> updateVideoSingkat(String id, String title, String description,
-      String videoUrl, String thumbnailUrl, String tiktokUrl, int duration);
+  Future<void> updateVideoSingkat(String id, String? title, String? description,
+      String? videoUrl, String? thumbnailUrl, String? tiktokUrl, int? duration);
   Future<void> postVideoMateri(String title, String description,
       String videoUrl, String thumbnailUrl, int duration);
-  Future<void> updateVideoMateri(String id, String title, String description,
-      String videoUrl, String thumbnailUrl, int duration);
+  Future<void> updateVideoMateri(String id, String? title, String? description,
+      String? videoUrl, String? thumbnailUrl, int? duration);
   Future<List<VideoSingkatModel>> getVideoSingkatPostsByUid(String uid);
   Future<List<VideoSingkatModel>> getVideoSingkatPostsByUidQuery(
       String uid, String query);
@@ -37,8 +37,8 @@ abstract class RemoteDataSources {
   Future<void> deletePost(String id, String collectionName);
   Future<void> postInfographic(
       String themeId, String themeName, String title, List sources);
-  Future<void> updateInfographic(
-      String id, String themeId, String themeName, String title, List sources);
+  Future<void> updateInfographic(String id, String themeId, String themeName,
+      String? title, List? sources);
   Future<void> addToBookmarkCountFirebase(String collectionName, String id);
   Future<void> removeFromBookmarkCountFirebase(
       String collectionName, String id);
@@ -351,15 +351,16 @@ class RemoteDataSourcesImpl extends RemoteDataSources {
 
   @override
   Future<void> updateInfographic(String id, String themeId, String themeName,
-      String title, List<dynamic> sources) async {
+      String? title, List<dynamic>? sources) async {
     try {
       final ref = firebaseFirestore.collection('infographics').doc(id);
+      final oldData = await ref.get();
       await ref.update({
         'theme_id': themeId,
         'theme_name': themeName,
-        'title': title,
-        'query': title.toLowerCase(),
-        'sources': sources,
+        'title': title ?? oldData.data()!['title'],
+        'query': title?.toLowerCase() ?? oldData.data()!['query'],
+        'sources': sources ?? oldData.data()!['sources'],
         'admin_id': GetStorage().read('uid'),
         'type': 'Infografis'
       });
@@ -369,18 +370,19 @@ class RemoteDataSourcesImpl extends RemoteDataSources {
   }
 
   @override
-  Future<void> updateVideoMateri(String id, String title, String description,
-      String videoUrl, String thumbnailUrl, int duration) async {
+  Future<void> updateVideoMateri(String id, String? title, String? description,
+      String? videoUrl, String? thumbnailUrl, int? duration) async {
     try {
       final ref = firebaseFirestore.collection('video_materi').doc(id);
+      final oldData = await ref.get();
       await ref.update({
         'type': 'Video Materi',
-        'title': title,
-        'query': title.toLowerCase(),
-        'description': description,
-        'video_url': videoUrl,
-        'thumbnail_url': thumbnailUrl,
-        'duration': duration,
+        'title': title ?? oldData.data()!['title'],
+        'query': title?.toLowerCase() ?? oldData.data()!['query'],
+        'description': description ?? oldData.data()!['description'],
+        'video_url': videoUrl ?? oldData.data()!['video_url'],
+        'thumbnail_url': thumbnailUrl ?? oldData.data()!['thumbnail_url'],
+        'duration': duration ?? oldData.data()!['duration'],
         'admin_id': GetStorage().read('uid'),
       });
     } catch (error) {
@@ -391,23 +393,24 @@ class RemoteDataSourcesImpl extends RemoteDataSources {
   @override
   Future<void> updateVideoSingkat(
       String id,
-      String title,
-      String description,
-      String videoUrl,
-      String thumbnailUrl,
-      String tiktokUrl,
-      int duration) async {
+      String? title,
+      String? description,
+      String? videoUrl,
+      String? thumbnailUrl,
+      String? tiktokUrl,
+      int? duration) async {
     try {
       final ref = firebaseFirestore.collection('video_singkat').doc(id);
+      final oldData = await ref.get();
       await ref.update({
         'type': 'Video Singkat',
-        'title': title,
-        'query': title.toLowerCase(),
-        'description': description,
-        'video_url': videoUrl,
-        'thumbnail_url': thumbnailUrl,
-        'tiktok_url': tiktokUrl,
-        'duration': duration,
+        'title': title ?? oldData.data()!['title'],
+        'query': title?.toLowerCase() ?? oldData.data()!['query'],
+        'description': description ?? oldData.data()!['description'],
+        'video_url': videoUrl ?? oldData.data()!['video_url'],
+        'thumbnail_url': thumbnailUrl ?? oldData.data()!['thumbnail_url'],
+        'tiktok_url': tiktokUrl ?? oldData.data()!['tiktok_url'],
+        'duration': duration ?? oldData.data()!['duration'],
         'admin_id': GetStorage().read('uid'),
       });
     } catch (error) {

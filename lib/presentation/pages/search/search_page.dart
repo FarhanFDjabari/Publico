@@ -32,10 +32,7 @@ class _SearchPageState extends State<SearchPage> {
   Widget build(BuildContext context) {
     switch (_selectedIndex) {
       case 0:
-        {
-          context.read<SearchCubit>().getInfographicFromSearch(
-              _searchQueryController.text.toLowerCase());
-        }
+        {}
         break;
       case 1:
         {

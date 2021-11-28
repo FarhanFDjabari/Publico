@@ -209,7 +209,61 @@ class _InfographicsTabState extends State<InfographicsTab> {
                     )
                   : BlocBuilder<InfographicCubit, InfographicState>(
                       builder: (context, state) {
-                        if (state is GetInfographicThemesByUidSuccess) {
+                        if (state is GetInfographicsByUidQuerySuccess) {
+                          if (state.infographicList.isNotEmpty) {
+                            return StaggeredGridView.countBuilder(
+                              crossAxisCount: 4,
+                              itemCount: state.infographicList.length,
+                              itemBuilder:
+                                  (BuildContext itemContext, int index) {
+                                return InkWell(
+                                  onTap: () {
+                                    Navigator.pushNamed(
+                                      context,
+                                      AdminInfographicsDetailPage.routeName,
+                                      arguments: state.infographicList[index],
+                                    ).then((_) {
+                                      if (themeClicked) {
+                                        context
+                                            .read<InfographicCubit>()
+                                            .getInfographicsByThemeIdFirestore(
+                                                selectedTheme);
+                                      } else {
+                                        context
+                                            .read<InfographicCubit>()
+                                            .getInfographicThemesByUidFirestore(
+                                                GetStorage().read('uid'));
+                                      }
+                                    });
+                                  },
+                                  borderRadius: BorderRadius.circular(10),
+                                  child: PublicoStaggeredTileAdmin(
+                                    tileIndex: index,
+                                    duration: 2,
+                                    title: state.infographicList[index].title,
+                                    imageUrl: state.infographicList[index]
+                                        .sources.first['illustrations'][0],
+                                    sourcesCount: state
+                                        .infographicList[index].sources.length,
+                                    category: 'Infografis',
+                                  ),
+                                );
+                              },
+                              staggeredTileBuilder: (int index) =>
+                                  const StaggeredTile.fit(2),
+                              mainAxisSpacing: 15.0,
+                              crossAxisSpacing: 8.0,
+                            );
+                          } else {
+                            return Center(
+                              child: Text(
+                                'Infografis tidak ditemukan',
+                                style: kTextTheme.bodyText2!
+                                    .copyWith(color: kRichBlack),
+                              ),
+                            );
+                          }
+                        } else if (state is GetInfographicThemesByUidSuccess) {
                           themeList = state.themeList;
                           if (themeList.isNotEmpty) {
                             return GridView.builder(
@@ -291,7 +345,7 @@ class _InfographicsTabState extends State<InfographicsTab> {
                           } else {
                             return Center(
                               child: Text(
-                                'Belum ada infografis yang tersedia',
+                                'Belum ada tema infografis yang tersedia',
                                 style: kTextTheme.bodyText2!
                                     .copyWith(color: kRichBlack),
                               ),
