@@ -1,14 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:get/get.dart';
+import 'package:new_version/new_version.dart';
 import 'package:publico/presentation/bloc/auth/auth_cubit.dart';
 import 'package:publico/presentation/pages/admin/infographics_tab.dart';
 import 'package:publico/presentation/pages/admin/video_materi_tab.dart';
 import 'package:publico/presentation/pages/admin/video_singkat_tab.dart';
 import 'package:publico/presentation/pages/splash_screen.dart';
 import 'package:publico/presentation/widgets/chip_button.dart';
+import 'package:publico/presentation/widgets/primary_button.dart';
 import 'package:publico/presentation/widgets/publico_setting_bottom_sheet.dart';
+import 'package:publico/presentation/widgets/publico_snackbar.dart';
 import 'package:publico/styles/colors.dart';
+import 'package:publico/styles/text_styles.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class HomePageAdmin extends StatefulWidget {
   static const routeName = '/home-admin';
@@ -28,6 +34,56 @@ class _HomePageAdminState extends State<HomePageAdmin>
   void initState() {
     tabController = TabController(length: 3, vsync: this, initialIndex: 0);
     super.initState();
+    _checkVersion();
+  }
+
+  void _checkVersion() async {
+    final newVersion = NewVersion(
+      androidId: 'com.publico.publico',
+      iOSAppStoreCountry: 'id',
+      iOSId: 'com.publico.publico',
+    );
+    final status = await newVersion.getVersionStatus();
+    if (status != null && status.canUpdate) {
+      showDialog(
+          context: context,
+          barrierDismissible: false,
+          builder: (_) {
+            return AlertDialog(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10),
+              ),
+              backgroundColor: kRichWhite.withOpacity(0.85),
+              title: Text('Update v${status.storeVersion}'),
+              titleTextStyle: kTextTheme.headline6!.copyWith(
+                color: kRichBlack,
+              ),
+              actionsOverflowButtonSpacing: 20,
+              content: Text(
+                  'Aplikasi ini (v${status.localVersion}) memiliki update terbaru'),
+              contentTextStyle: kTextTheme.subtitle1!.copyWith(
+                color: kRichBlack,
+              ),
+              actions: [
+                PrimaryButton(
+                  child: Text(
+                    'Update',
+                    style: kTextTheme.button!.copyWith(color: kRichWhite),
+                  ),
+                  onPressed: () async {
+                    if (!await launch(status.appStoreLink)) {
+                      Get.showSnackbar(
+                        PublicoSnackbar(
+                          message: 'Can\'t launch url',
+                        ),
+                      );
+                    }
+                  },
+                ),
+              ],
+            );
+          });
+    }
   }
 
   @override
