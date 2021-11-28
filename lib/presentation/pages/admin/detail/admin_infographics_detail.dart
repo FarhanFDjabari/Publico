@@ -65,7 +65,7 @@ class _AdminInfographicsDetailPageState
                             illustrationsUrl, 'infographics');
                   },
                   onEditPressed: () {
-                    Navigator.pushReplacementNamed(
+                    Navigator.pushNamed(
                       context,
                       InfographicEditPage.routeName,
                       arguments: widget.infographic,

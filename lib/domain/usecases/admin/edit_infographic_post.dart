@@ -8,8 +8,8 @@ class EditInfographicPost {
   const EditInfographicPost(this.repository);
 
   Future<Either<Failure, void>> execute(
-      id, themeId, themeName, title, oldSources, newSources) async {
+      id, themeId, themeName, title, newSources) async {
     return repository.editInfographic(
-        id, themeId, themeName, title, oldSources, newSources);
+        id, themeId, themeName, title, newSources);
   }
 }
