@@ -298,7 +298,10 @@ class RepositoryImpl extends Repository {
       String id, List<dynamic> illustrationsUrl, String collectionPath) async {
     try {
       for (var url in illustrationsUrl) {
-        await remoteDataSources.deleteFromStorage(url);
+        if ((url as String)
+            .contains('https://firebasestorage.googleapis.com', 0)) {
+          await remoteDataSources.deleteFromStorage(url);
+        }
       }
       await remoteDataSources.deletePost(id, collectionPath);
       return const Right(null);

@@ -149,7 +149,13 @@ class _HomePageAdminState extends State<HomePageAdmin>
                         onExitPressed: () {
                           builderContext.read<AuthCubit>().logoutApp();
                         },
-                        onHelpPressed: () {},
+                        onHelpPressed: () async {
+                          if (await canLaunch(
+                              'https://play.google.com/store/apps/details?id=com.publico.publico')) {
+                            await launch(
+                                'https://play.google.com/store/apps/details?id=com.publico.publico');
+                          }
+                        },
                       ),
                     );
                   },
