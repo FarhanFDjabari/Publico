@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:new_version/new_version.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:publico/presentation/bloc/auth/auth_cubit.dart';
 import 'package:publico/presentation/pages/admin/infographics_tab.dart';
 import 'package:publico/presentation/pages/admin/video_materi_tab.dart';
@@ -35,6 +36,16 @@ class _HomePageAdminState extends State<HomePageAdmin>
     tabController = TabController(length: 3, vsync: this, initialIndex: 0);
     super.initState();
     _checkVersion();
+    _checkPermission();
+  }
+
+  void _checkPermission() async {
+    if (await Permission.storage.isRestricted) {
+      await Permission.storage.request();
+    }
+    if (await Permission.mediaLibrary.isRestricted) {
+      await Permission.mediaLibrary.request();
+    }
   }
 
   void _checkVersion() async {

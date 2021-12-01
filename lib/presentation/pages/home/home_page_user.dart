@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:publico/presentation/pages/bookmark/bookmark_page.dart';
 import 'package:publico/presentation/pages/explore/explore_page.dart';
 import 'package:publico/presentation/pages/search/search_page.dart';
@@ -23,6 +24,16 @@ class _HomePageUserState extends State<HomePageUser> {
   void initState() {
     super.initState();
     _pageController = PageController();
+    _checkPermission();
+  }
+
+  void _checkPermission() async {
+    if (await Permission.storage.isRestricted) {
+      await Permission.storage.request();
+    }
+    if (await Permission.mediaLibrary.isRestricted) {
+      await Permission.mediaLibrary.request();
+    }
   }
 
   @override
