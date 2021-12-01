@@ -1,11 +1,11 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:get/get.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:publico/presentation/bloc/infographic/infographic_cubit.dart';
 import 'package:publico/presentation/widgets/loading_button.dart';
 import 'package:publico/presentation/widgets/primary_button.dart';
@@ -76,7 +76,6 @@ class _PostThemePageState extends State<PostThemePage> {
   @override
   void dispose() {
     imageFile?.deleteSync();
-    FilePicker.platform.clearTemporaryFiles();
     super.dispose();
   }
 
@@ -138,15 +137,14 @@ class _PostThemePageState extends State<PostThemePage> {
               InkWell(
                 onTap: () async {
                   await Future.delayed(const Duration(milliseconds: 500));
-                  await FilePicker.platform
-                      .pickFiles(
-                    type: FileType.image,
+                  await ImagePicker()
+                      .pickImage(
+                    source: ImageSource.gallery,
                   )
                       .then(
                     (value) async {
                       if (value != null) {
-                        imageFile =
-                            await compressFile(File(value.files.first.path!));
+                        imageFile = await compressFile(File(value.path));
                         formCheck();
                       }
                     },

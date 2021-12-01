@@ -2,12 +2,12 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:file_picker/file_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
+import 'package:image_picker/image_picker.dart';
 import 'package:publico/presentation/widgets/primary_button.dart';
 import 'package:publico/presentation/widgets/publico_snackbar.dart';
 import 'package:publico/styles/colors.dart';
@@ -80,10 +80,10 @@ class _AddSourcePageState extends State<AddSourcePage> {
     return null;
   }
 
-  Future<bool> imageProcessing(FilePickerResult? file) async {
+  Future<bool> imageProcessing(XFile? file) async {
     if (file != null) {
-      if (file.files.first.size < 2500000) {
-        File? _imageFile = await compressFile(File(file.files.first.path!));
+      if (await file.length() < 2500000) {
+        File? _imageFile = await compressFile(File(file.path));
         if (_imageFile != null) {
           illustrations.add(_imageFile);
           return true;
@@ -365,32 +365,26 @@ class _AddSourcePageState extends State<AddSourcePage> {
                       onPressed: isLoadLocal
                           ? null
                           : () async {
+                              setState(() {
+                                isLoadLocal = true;
+                              });
                               await Future.delayed(
                                   const Duration(milliseconds: 500));
-                              await FilePicker.platform
-                                  .pickFiles(
-                                type: FileType.image,
-                                withData: false,
-                                allowMultiple: false,
-                                onFileLoading: (status) {
-                                  setState(() {
-                                    isLoadLocal = true;
-                                  });
-                                },
+                              await ImagePicker()
+                                  .pickImage(
+                                source: ImageSource.gallery,
                               )
                                   .then((value) async {
                                 if (value != null) {
                                   if (await imageProcessing(value)) {
                                     setState(() {
                                       formCheck();
-                                      value.files.clear();
                                     });
                                   } else {
                                     Get.showSnackbar(PublicoSnackbar(
                                       message:
                                           'Ukuran file tidak boleh lebih dari 2.5 MB',
                                     ));
-                                    value.files.clear();
                                   }
                                 }
                                 setState(() {

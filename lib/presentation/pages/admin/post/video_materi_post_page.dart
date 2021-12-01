@@ -1,10 +1,10 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:publico/presentation/bloc/video_materi/video_materi_cubit.dart';
 import 'package:publico/presentation/widgets/loading_button.dart';
 import 'package:publico/presentation/widgets/primary_button.dart';
@@ -70,9 +70,9 @@ class _VideoMateriPostPageState extends State<VideoMateriPostPage> {
     thumbnailImage = File(thumbnailPath!);
   }
 
-  Future<bool> videoProcessing(FilePickerResult value) async {
-    if (value.files.first.size < 21000000) {
-      videoFile = File(value.files.first.path!);
+  Future<bool> videoProcessing(XFile value) async {
+    if (await value.length() < 21000000) {
+      videoFile = File(value.path);
       await videoPlayerInit(videoFile!);
       return true;
     }
@@ -82,7 +82,6 @@ class _VideoMateriPostPageState extends State<VideoMateriPostPage> {
   @override
   void dispose() {
     Future.delayed(Duration.zero, () async {
-      await FilePicker.platform.clearTemporaryFiles();
       await _videoController?.dispose();
     });
     super.dispose();
@@ -221,8 +220,6 @@ class _VideoMateriPostPageState extends State<VideoMateriPostPage> {
                                         setState(() {
                                           _videoController = null;
                                         });
-                                        await FilePicker.platform
-                                            .clearTemporaryFiles();
                                       },
                                       icon: const Icon(
                                         Icons.cancel_rounded,
@@ -246,19 +243,15 @@ class _VideoMateriPostPageState extends State<VideoMateriPostPage> {
                         onTap: isLoadLocal
                             ? null
                             : () async {
+                                setState(() {
+                                  isLoadLocal = true;
+                                });
                                 await Future.delayed(
                                     const Duration(milliseconds: 500));
-                                await FilePicker.platform
-                                    .pickFiles(
-                                  type: FileType.video,
-                                  withData: false,
-                                  allowMultiple: false,
-                                  allowCompression: true,
-                                  onFileLoading: (status) {
-                                    setState(() {
-                                      isLoadLocal = true;
-                                    });
-                                  },
+                                await ImagePicker()
+                                    .pickVideo(
+                                  source: ImageSource.gallery,
+                                  maxDuration: const Duration(minutes: 7),
                                 )
                                     .then(
                                   (value) async {
@@ -268,16 +261,12 @@ class _VideoMateriPostPageState extends State<VideoMateriPostPage> {
                                     if (value != null) {
                                       if (await videoProcessing(value)) {
                                         formCheck();
-                                        value.files.clear();
                                       } else {
                                         videoFile = null;
                                         Get.showSnackbar(PublicoSnackbar(
                                           message:
                                               'Ukuran file tidak boleh lebih dari 20 MB',
                                         ));
-                                        await FilePicker.platform
-                                            .clearTemporaryFiles();
-                                        value.files.clear();
                                       }
                                     }
                                   },

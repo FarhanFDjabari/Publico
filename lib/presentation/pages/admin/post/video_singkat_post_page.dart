@@ -1,10 +1,10 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:publico/presentation/bloc/video_singkat/video_singkat_cubit.dart';
 import 'package:publico/presentation/widgets/loading_button.dart';
 import 'package:publico/presentation/widgets/primary_button.dart';
@@ -74,9 +74,9 @@ class _VideoSingkatPostPageState extends State<VideoSingkatPostPage> {
     }
   }
 
-  Future<bool> videoProcessing(FilePickerResult value) async {
-    if (value.files.first.size < 4000000) {
-      videoFile = File(value.files.first.path!);
+  Future<bool> videoProcessing(XFile value) async {
+    if (await value.length() < 4000000) {
+      videoFile = File(value.path);
       await videoPlayerInit(videoFile!);
       return true;
     }
@@ -86,7 +86,6 @@ class _VideoSingkatPostPageState extends State<VideoSingkatPostPage> {
   @override
   void dispose() async {
     Future.delayed(Duration.zero, () async {
-      await FilePicker.platform.clearTemporaryFiles();
       await _videoController?.dispose();
     });
     super.dispose();
@@ -250,8 +249,6 @@ class _VideoSingkatPostPageState extends State<VideoSingkatPostPage> {
                                         setState(() {
                                           _videoController = null;
                                         });
-                                        await FilePicker.platform
-                                            .clearTemporaryFiles();
                                       },
                                       icon: const Icon(
                                         Icons.cancel_rounded,
@@ -275,18 +272,16 @@ class _VideoSingkatPostPageState extends State<VideoSingkatPostPage> {
                         onTap: isLoadLocal
                             ? null
                             : () async {
+                                setState(() {
+                                  isLoadLocal = true;
+                                });
                                 await Future.delayed(
                                     const Duration(milliseconds: 500));
-                                await FilePicker.platform
-                                    .pickFiles(
-                                        type: FileType.video,
-                                        withData: false,
-                                        allowMultiple: false,
-                                        onFileLoading: (status) {
-                                          setState(() {
-                                            isLoadLocal = true;
-                                          });
-                                        })
+                                await ImagePicker()
+                                    .pickVideo(
+                                  source: ImageSource.gallery,
+                                  maxDuration: const Duration(minutes: 5),
+                                )
                                     .then(
                                   (value) async {
                                     setState(() {
@@ -295,16 +290,12 @@ class _VideoSingkatPostPageState extends State<VideoSingkatPostPage> {
                                     if (value != null) {
                                       if (await videoProcessing(value)) {
                                         formCheck();
-                                        value.files.clear();
                                       } else {
                                         videoFile = null;
                                         Get.showSnackbar(PublicoSnackbar(
                                           message:
                                               'Ukuran file tidak boleh lebih dari 3 MB',
                                         ));
-                                        await FilePicker.platform
-                                            .clearTemporaryFiles();
-                                        value.files.clear();
                                       }
                                     }
                                   },
@@ -329,7 +320,7 @@ class _VideoSingkatPostPageState extends State<VideoSingkatPostPage> {
                                       size: 35,
                                     ),
                                     Text(
-                                      'Unggah Video\nMaks 60 Detik',
+                                      'Unggah Video\nMaks 5 Menit',
                                       textAlign: TextAlign.center,
                                       style: kTextTheme.bodyText2!.copyWith(
                                         color: kLightGrey,
