@@ -28,8 +28,8 @@ class _HomePageUserState extends State<HomePageUser> {
   }
 
   void _checkPermission() async {
-    if (await Permission.manageExternalStorage.isRestricted) {
-      await Permission.manageExternalStorage.request();
+    if (await Permission.storage.isRestricted) {
+      await Permission.storage.request();
     }
     if (await Permission.mediaLibrary.isRestricted) {
       await Permission.mediaLibrary.request();
