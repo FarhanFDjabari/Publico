@@ -320,7 +320,7 @@ class _VideoSingkatPostPageState extends State<VideoSingkatPostPage> {
                                       size: 35,
                                     ),
                                     Text(
-                                      'Unggah Video\nMaks 5 Menit',
+                                      'Unggah Video\nMaks 1 Menit',
                                       textAlign: TextAlign.center,
                                       style: kTextTheme.bodyText2!.copyWith(
                                         color: kLightGrey,
@@ -405,34 +405,18 @@ class _VideoSingkatPostPageState extends State<VideoSingkatPostPage> {
                     onPressed: !isValidate
                         ? null
                         : () {
-                            if (!_tautanController.text
-                                .contains('https://www.')) {
-                              builderContext
-                                  .read<VideoSingkatCubit>()
-                                  .postVideoSingkatFirestore(
-                                    _titleController.text,
-                                    _descriptionController.text,
-                                    'https://www.${_tautanController.text}',
-                                    'video_singkat',
-                                    'video_singkat_thumbnail',
-                                    videoFile!,
-                                    thumbnailImage!,
-                                    duration!,
-                                  );
-                            } else {
-                              builderContext
-                                  .read<VideoSingkatCubit>()
-                                  .postVideoSingkatFirestore(
-                                    _titleController.text,
-                                    _descriptionController.text,
-                                    _tautanController.text,
-                                    'video_singkat',
-                                    'video_singkat_thumbnail',
-                                    videoFile!,
-                                    thumbnailImage!,
-                                    duration!,
-                                  );
-                            }
+                            builderContext
+                                .read<VideoSingkatCubit>()
+                                .postVideoSingkatFirestore(
+                                  _titleController.text,
+                                  _descriptionController.text,
+                                  _tautanController.text,
+                                  'video_singkat',
+                                  'video_singkat_thumbnail',
+                                  videoFile!,
+                                  thumbnailImage!,
+                                  duration!,
+                                );
                           },
                   );
                 },

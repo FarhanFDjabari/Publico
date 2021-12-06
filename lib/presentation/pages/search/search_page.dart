@@ -322,12 +322,11 @@ class _SearchPageState extends State<SearchPage> {
                             borderRadius: BorderRadius.circular(10),
                             child: PublicoStaggeredTile(
                               tileIndex: index,
-                              duration: 2,
+                              duration: state.videoMateriList[index].duration,
                               title: state.videoMateriList[index].title,
                               imageUrl:
                                   state.videoMateriList[index].thumbnailUrl,
-                              sourcesCount:
-                                  state.videoMateriList[index].duration,
+                              sourcesCount: 0,
                               category: state.videoMateriList[index].type,
                               isBookmarked: state.videoMateriLabel[index],
                             ),
@@ -364,12 +363,11 @@ class _SearchPageState extends State<SearchPage> {
                             borderRadius: BorderRadius.circular(10),
                             child: PublicoStaggeredTile(
                               tileIndex: index,
-                              duration: 2,
+                              duration: state.videoSingkatList[index].duration,
                               title: state.videoSingkatList[index].title,
                               imageUrl:
                                   state.videoSingkatList[index].thumbnailUrl,
-                              sourcesCount:
-                                  state.videoSingkatList[index].duration,
+                              sourcesCount: 0,
                               category: state.videoSingkatList[index].type,
                               isBookmarked: state.videoSingkatLabel[index],
                             ),
