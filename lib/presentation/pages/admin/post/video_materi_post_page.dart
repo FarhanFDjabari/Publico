@@ -71,7 +71,7 @@ class _VideoMateriPostPageState extends State<VideoMateriPostPage> {
   }
 
   Future<bool> videoProcessing(XFile value) async {
-    if (await value.length() < 21000000) {
+    if (await value.length() < 41000000) {
       videoFile = File(value.path);
       await videoPlayerInit(videoFile!);
       return true;
@@ -265,7 +265,7 @@ class _VideoMateriPostPageState extends State<VideoMateriPostPage> {
                                         videoFile = null;
                                         Get.showSnackbar(PublicoSnackbar(
                                           message:
-                                              'Ukuran file tidak boleh lebih dari 20 MB',
+                                              'Ukuran file tidak boleh lebih dari 40 MB',
                                         ));
                                       }
                                     }
