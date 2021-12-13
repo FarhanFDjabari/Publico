@@ -140,7 +140,7 @@ class _InfographicTileState extends State<InfographicTile>
                 radius: 18,
                 backgroundColor: kMikadoOrange,
                 child: Icon(
-                  Icons.twenty_three_mp_rounded,
+                  Icons.source_rounded,
                   color: kRichWhite,
                   size: 18,
                 ),
