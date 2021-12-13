@@ -30,7 +30,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
     {
       'title': 'Video Lengkap Materi',
       'subtitle':
-          'Ingin memahami materi lebih lanjut? lihat video lengkap materi berdurasi 5 hingga 7 menit dari aplikasi Publico',
+          'Ingin memahami materi lebih lanjut? lihat video lengkap materi berdurasi 5 hingga 10 menit dari aplikasi Publico',
       'imagePath': 'assets/images/onboard_img_2.png'
     },
     {

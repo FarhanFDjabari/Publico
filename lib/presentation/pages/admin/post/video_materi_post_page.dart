@@ -71,7 +71,7 @@ class _VideoMateriPostPageState extends State<VideoMateriPostPage> {
   }
 
   Future<bool> videoProcessing(XFile value) async {
-    if (await value.length() < 41000000) {
+    if (await value.length() < 125000000) {
       videoFile = File(value.path);
       await videoPlayerInit(videoFile!);
       return true;
@@ -251,7 +251,7 @@ class _VideoMateriPostPageState extends State<VideoMateriPostPage> {
                                 await ImagePicker()
                                     .pickVideo(
                                   source: ImageSource.gallery,
-                                  maxDuration: const Duration(minutes: 7),
+                                  maxDuration: const Duration(minutes: 10),
                                 )
                                     .then(
                                   (value) async {
@@ -265,7 +265,7 @@ class _VideoMateriPostPageState extends State<VideoMateriPostPage> {
                                         videoFile = null;
                                         Get.showSnackbar(PublicoSnackbar(
                                           message:
-                                              'Ukuran file tidak boleh lebih dari 40 MB',
+                                              'Ukuran file tidak boleh lebih dari 120 MB, Video tidak boleh lebih dari 10 menit',
                                         ));
                                       }
                                     }
@@ -291,7 +291,7 @@ class _VideoMateriPostPageState extends State<VideoMateriPostPage> {
                                       size: 35,
                                     ),
                                     Text(
-                                      'Unggah Video\nMaks 7 Menit',
+                                      'Unggah Video\nMaks 10 Menit',
                                       textAlign: TextAlign.center,
                                       style: kTextTheme.bodyText2!.copyWith(
                                         color: kLightGrey,
